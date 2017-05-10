@@ -10,7 +10,7 @@ namespace Finis.Models
     {
         [Display(Name = "Cadastro Nacional de Pessoas Jurídicas (CNPJ)")]
         [StringLength(50, ErrorMessage = "O número do documento é muito longo")]
-        string cnpj { get; set; }
+        public string cnpj { get; set; }
 
         public bool ValidaCnpj()
         {

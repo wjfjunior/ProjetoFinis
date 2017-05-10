@@ -18,7 +18,7 @@ namespace Finis.Models
 
         [Key]
         [Editable(false)]
-        private int? id { get; set; }
+        public int? id { get; set; }
 
         private string _user_insert;
         private string _user_update;

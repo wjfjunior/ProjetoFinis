@@ -21,23 +21,23 @@ namespace Finis.Models
         [DisplayFormat(DataFormatString = "mm/dd/yyyy")]
         [Required(ErrorMessage = "Por favor insira uma data")]
         [DataType(DataType.Date, ErrorMessage = "Por favor insira uma data válida")]
-        DateTime dataEntrada;
+        public DateTime dataEntrada;
 
         [Display(Name = "Quantidade de exemplares")]
         [Required(ErrorMessage = "Por favor insira um número")]
-        int quantidadeExemplares;
+        public int quantidadeExemplares;
 
         [Display(Name = "Crédito especial")]
         [DataType(DataType.Currency, ErrorMessage = "Por favor insira um valor válido")]
-        decimal creditoEspecial;
+        public decimal creditoEspecial;
 
         [Display(Name = "Crédito parcial")]
         [DataType(DataType.Currency, ErrorMessage = "Por favor insira um valor válido")]
-        decimal creditoParcial;
+        public decimal creditoParcial;
 
         [Display(Name = "Situação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
-        situacaoAvaliacao situacao;
+        public situacaoAvaliacao situacao;
 
         [NotMapped]
         public String situacaoString

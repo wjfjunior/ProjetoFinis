@@ -12,12 +12,12 @@ namespace Finis.Models
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        string nome;
+        public string nome;
 
         [Display(Name = "Sigla")]
         [Required(ErrorMessage = "Por favor insira uma sigla")]
         [StringLength(2, ErrorMessage = "O tamanho máximo é de 2 caracteres")]
-        string sigla;
+        public string sigla;
     }
 
     public class Estado : EntidadeAbstrata
@@ -25,17 +25,17 @@ namespace Finis.Models
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        string nome;
+        public string nome;
 
         [Display(Name = "Sigla")]
         [Required(ErrorMessage = "Por favor insira uma sigla")]
         [StringLength(2, ErrorMessage = "O tamanho máximo é de 2 caracteres")]
-        string sigla;
+        public string sigla;
 
         [ForeignKey("Pais")]
         [Display(Name = "País")]
         [Required(ErrorMessage = "Por favor selecione um país")]
-        int paisId;
+        public int paisId;
 
         public virtual Pais pais { get; set; }
     }
@@ -45,12 +45,12 @@ namespace Finis.Models
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        string nome;
+        public string nome;
 
         [ForeignKey("Estado")]
         [Display(Name = "Estado")]
         [Required(ErrorMessage = "Por favor selecione um estado")]
-        int estadoId;
+        public int estadoId;
 
         public virtual Estado estado { get; set; }
     }
@@ -60,28 +60,28 @@ namespace Finis.Models
         [Display(Name = "Logradouro")]
         [Required(ErrorMessage = "Por favor insira um logradouro")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        string logradouro;
+        public string logradouro;
         
         [Display(Name = "Número")]
         [Required(ErrorMessage = "Por favor insira um número")]
-        int numero;
+        public int numero;
 
         [Display(Name = "Complemento")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        string complemento;
+        public string complemento;
 
         [Display(Name = "Bairro")]
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
         [Required(ErrorMessage = "Por favor insira um bairro")]
-        string bairro;
+        public string bairro;
 
         [Display(Name = "CEP")]
-        int cep;
+        public int cep;
 
         [ForeignKey("Cidade")]
         [Display(Name = "Cidade")]
         [Required(ErrorMessage = "Por favor selecione uma cidade")]
-        int cidadeId;
+        public int cidadeId;
 
         public virtual Cidade cidade { get; set; }
     }

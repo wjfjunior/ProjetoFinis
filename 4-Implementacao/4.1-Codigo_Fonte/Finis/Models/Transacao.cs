@@ -18,22 +18,22 @@ namespace Finis.Models
         [Display(Name = "Valor")]
         [Required(ErrorMessage = "Por favor insira um valor")]
         [DataType(DataType.Currency, ErrorMessage = "Por favor insira um valor válido")]
-        decimal valor { get; set; }
+        public decimal valor { get; set; }
 
         [Display(Name = "Data da transação")]
         [DisplayFormat(DataFormatString = "mm/dd/yyyy")]
         [Required(ErrorMessage = "Por favor insira uma data")]
         [DataType(DataType.Date, ErrorMessage = "Por favor insira uma data válida")]
-        DateTime data { get; set; }
+        public DateTime data { get; set; }
 
         [Display(Name = "Tipo de transação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
-        TipoTransacao tipoTransacao { get; set; }
+        public TipoTransacao tipoTransacao { get; set; }
 
         [ForeignKey("Cliente")]
         [Display(Name = "Cliente")]
         [Required(ErrorMessage = "Por favor selecione um cliente")]
-        int clienteId;
+        public int clienteId;
 
         public virtual Cliente cliente { get; set; }
 
