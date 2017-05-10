@@ -152,6 +152,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="DAL\Contexto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -160,6 +161,7 @@
     <Compile Include="Models\Endereco.cs" />
     <Compile Include="Models\EntidadeAbstrata.cs" />
     <Compile Include="Models\Exemplar.cs" />
+    <Compile Include="Models\Fornecedor.cs" />
     <Compile Include="Models\Pessoa.cs" />
     <Compile Include="Models\Transacao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -274,7 +276,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="DAL\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
