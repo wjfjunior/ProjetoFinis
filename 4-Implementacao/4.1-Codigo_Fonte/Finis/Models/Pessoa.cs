@@ -7,12 +7,8 @@ using System.Web;
 
 namespace Finis.Models
 {
-    public class Pessoa
+    public class Pessoa : EntidadeAbstrata
     {
-        [Key]
-        [Editable(false)]
-        public int? id { get; set; }
-
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(50, ErrorMessage = "O nome é muito longo")]
@@ -37,7 +33,7 @@ namespace Finis.Models
         [ForeignKey("Endereco")]
         [Display(Name = "Endereço")]
         [Required(ErrorMessage = "Por favor selecione um endereço")]
-        int cidadeId;
+        int enderecoId;
 
         public virtual Endereco endereco { get; set; }
     }

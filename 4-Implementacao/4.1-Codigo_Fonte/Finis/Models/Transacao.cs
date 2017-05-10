@@ -13,7 +13,7 @@ namespace Finis.Models
         SAIDA = 2,
     }
 
-    public class Transacao
+    public class Transacao : EntidadeAbstrata
     {
         [Display(Name = "Valor")]
         [Required(ErrorMessage = "Por favor insira um valor")]
@@ -36,5 +36,19 @@ namespace Finis.Models
         int clienteId;
 
         public virtual Cliente cliente { get; set; }
+
+        [NotMapped]
+        public String tipoTransacaoString
+        {
+            get
+            {
+                if (this.tipoTransacao == TipoTransacao.ENTRADA)
+                    return "Entrada";
+                else if (this.tipoTransacao == TipoTransacao.SAIDA)
+                    return "Saída";
+
+                else return "";
+            }
+        }
     }
 }

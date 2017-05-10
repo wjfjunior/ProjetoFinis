@@ -12,7 +12,7 @@ namespace Finis.Models
         USADO = 2,
     }
 
-    public class Exemplar
+    public class Exemplar : EntidadeAbstrata
     {
         //Normalizar elementos para adicionar
 
@@ -38,5 +38,32 @@ namespace Finis.Models
         [Display(Name = "Preço")]
         [Required(ErrorMessage = "Por favor insira um preço")]
         decimal preco;
+
+        [Display(Name = "Descrição")]
+        [StringLength(200, ErrorMessage = "A descrição é muito longa")]
+        string descricao { get; set; }
+
+        [Display(Name = "Peso")]
+        decimal peso;
+
+        [Display(Name = "Disponibilizar para venda na internet?")]
+        bool vendaOnline { get; set; }
+
+        [Display(Name = "Quantidade")]
+        [Required(ErrorMessage = "Por favor insira a quantidade disponível")]
+        int quantidade;
+
+        public String conservacaoString
+        {
+            get
+            {
+                if (this.conservacao == Conservacao.NOVO)
+                    return "Novo";
+                else if (this.conservacao == Conservacao.USADO)
+                    return "Usado";
+
+                else return "";
+            }
+        }
     }
 }

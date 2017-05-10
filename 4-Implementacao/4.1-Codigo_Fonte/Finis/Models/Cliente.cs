@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -32,11 +33,30 @@ namespace Finis.Models
 
         [Display(Name = "Sexo")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
-        TipoGenero sexo { get; set; }
+        TipoGenero genero { get; set; }
 
         [Display(Name = "Registro Geral (RG)")]
         [Required(ErrorMessage = "Por favor um número de documento")]
         [StringLength(50, ErrorMessage = "O número do documento é muito longo")]
         string rg { get; set; }
+
+        [NotMapped]
+        public String generoString
+        {
+            get
+            {
+                if (this.genero == TipoGenero.FEMININO)
+                    return "Feminino";
+                else if (this.genero == TipoGenero.MASCULINO)
+                    return "Masculino";
+
+                else return "";
+            }
+        }
+
+        public void EmitirCartao(Cliente cliente)
+        {
+
+        }
     }
 }

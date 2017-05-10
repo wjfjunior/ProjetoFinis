@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Finis.Models
 {
-    public class Pais
+    public class Pais : EntidadeAbstrata
     {
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
@@ -20,7 +20,7 @@ namespace Finis.Models
         string sigla;
     }
 
-    public class Estado
+    public class Estado : EntidadeAbstrata
     {
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
@@ -40,7 +40,7 @@ namespace Finis.Models
         public virtual Pais pais { get; set; }
     }
 
-    public class Cidade
+    public class Cidade : EntidadeAbstrata
     {
         [Display(Name = "Nome")]
         [Required(ErrorMessage = "Por favor insira um nome")]
@@ -55,7 +55,7 @@ namespace Finis.Models
         public virtual Estado estado { get; set; }
     }
 
-    public class Endereco
+    public class Endereco : EntidadeAbstrata
     {
         [Display(Name = "Logradouro")]
         [Required(ErrorMessage = "Por favor insira um logradouro")]
