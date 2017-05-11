@@ -12,7 +12,7 @@ namespace Finis.DAL
     {
         public Contexto() : base("Contexto")
         {
-
+            Database.SetInitializer<Contexto>(new CreateDatabaseIfNotExists<Contexto>());
         }
 
         public DbSet<Avaliacao> Avaliacao { get; set; }

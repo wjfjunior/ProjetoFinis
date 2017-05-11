@@ -154,7 +154,7 @@
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\Contexto.cs" />
-    <Compile Include="DAL\Incializador.cs" />
+    <Compile Include="DAL\Inicializador.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

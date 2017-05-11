@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Finis.DAL
 {
-    public class Incializador : System.Data.Entity.DropCreateDatabaseIfModelChanges<Contexto> 
+    public class Incializador : System.Data.Entity.CreateDatabaseIfNotExists<Contexto>
     {
         protected override void Seed(Contexto contexto)
         {
@@ -22,3 +22,5 @@ namespace Finis.DAL
         }
     }
 }
+
+//http://www.entityframeworktutorial.net/code-first/database-initialization-strategy-in-code-first.aspx
