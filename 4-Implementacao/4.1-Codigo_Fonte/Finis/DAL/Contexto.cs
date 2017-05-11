@@ -10,7 +10,10 @@ namespace Finis.DAL
 {
     public class Contexto : DbContext
     {
-        
+        public Contexto() : base("Contexto")
+        {
+
+        }
 
         public DbSet<Avaliacao> Avaliacao { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
