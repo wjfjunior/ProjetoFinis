@@ -78,6 +78,7 @@ namespace Finis.Models
 
         [Display(Name = "Descrição")]
         [StringLength(200, ErrorMessage = "A descrição é muito longa")]
+        [DataType(DataType.MultilineText)]
         public string descricao { get; set; }
 
         [Display(Name = "Peso")]

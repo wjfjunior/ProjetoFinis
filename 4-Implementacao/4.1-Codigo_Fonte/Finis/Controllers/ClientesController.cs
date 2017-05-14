@@ -33,7 +33,40 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
-            return View(cliente);
+            return PartialView(cliente);
+        }
+
+        // GET: Clientes/Details/5
+        public JsonResult Detalhes(int? id)
+        {
+            bool sucesso;
+            string resultado;
+
+            if (id == null)
+            {
+                sucesso = false;
+                resultado = "Não encontrado!";
+            }
+            else
+            {
+                Cliente cliente = db.Cliente.Find(id);
+                if (cliente == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    sucesso = true;
+                    resultado = cliente.Serializar();
+                }
+            }
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Clientes/Create
@@ -114,6 +147,18 @@ namespace Finis.Controllers
             db.Cliente.Remove(cliente);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Clientes/Delete/5
+        public JsonResult DeletarRegistro(int? id)
+        {
+            if(id != null)
+            {
+                Cliente cliente = db.Cliente.Find(id);
+                db.Cliente.Remove(cliente);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

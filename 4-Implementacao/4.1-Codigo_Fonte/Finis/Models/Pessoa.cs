@@ -25,12 +25,10 @@ namespace Finis.Models
         public string email { get; set; }
 
         [Display(Name = "Telefone")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Por favor insira um número de telefone válido")]
-        public int telefone { get; set; }
+        public string telefone { get; set; }
 
         [Display(Name = "Celular")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Por favor insira um número de celular válido")]
-        public int celular { get; set; }
+        public string celular { get; set; }
 
         [ForeignKey("Endereco")]
         [Display(Name = "Endereço")]

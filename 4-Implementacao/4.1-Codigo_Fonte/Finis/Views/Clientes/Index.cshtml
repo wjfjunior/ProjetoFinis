@@ -1,80 +1,99 @@
 ﻿@model IEnumerable<Finis.Models.Cliente>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cadastro de clientes";
 }
 
-<h2>Index</h2>
+<script>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.saldoCreditoParcial)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.saldoCreditoEspecial)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.dataNascimento)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.genero)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.rg)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.nome)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.telefone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.celular)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_insert)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_update)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.date_insert)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.date_update)
-        </th>
-        <th></th>
-    </tr>
+    function deletaRegistro(id) {
+        
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("DeletarRegistro", "Clientes")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
 
-@foreach (var item in Model) {
+    function carregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Clientes")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     preencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function preencheModalDetalhes(obj) {
+
+        document.getElementById('nome').innerHTML = obj.nome;
+        document.getElementById('dtaNascimento').innerHTML = FormataDataJSON(obj.dataNascimento);
+        document.getElementById('genero').innerHTML = obj.generoString;
+        document.getElementById('rg').innerHTML = obj.rg;
+        document.getElementById('telefone').innerHTML = obj.telefone;
+        document.getElementById('celular').innerHTML = obj.celular;
+        document.getElementById('email').innerHTML = obj.email;
+        document.getElementById('saldoParcial').innerHTML = obj.saldoCreditoParcial;
+        document.getElementById('saldoEspecial').innerHTML = obj.saldoCreditoEspecial;
+    }
+
+    function FormataDataJSON(data) {
+
+        var dateString = data.substr(6);
+        var currentTime = new Date(parseInt(dateString));
+        var month = currentTime.getMonth() + 1;
+        var day = currentTime.getDate();
+        var year = currentTime.getFullYear();
+        var date = day + "/" + month + "/" + year;
+
+        return date;
+    }
+
+</script>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="Create">
+        <i class="material-icons">add</i>
+    </a>
+    <ul>
+        <li><a class="btn-floating btn-large green" href="Index"><i class="material-icons">repeat</i></a></li>
+    </ul>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.celular)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.saldoCreditoParcial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.saldoCreditoEspecial)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+@foreach (var item in Model)
+{
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.saldoCreditoParcial)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.saldoCreditoEspecial)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dataNascimento)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.genero)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rg)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.email)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.telefone)
@@ -83,23 +102,122 @@
             @Html.DisplayFor(modelItem => item.celular)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.user_insert)
+            @Html.DisplayFor(modelItem => item.saldoCreditoParcial)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.user_update)
+            @Html.DisplayFor(modelItem => item.saldoCreditoEspecial)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.date_insert)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.date_update)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            <a class="btn-floating blue" href="Clientes/Edit/@item.id"><i class="material-icons">mode_edit</i></a>
+            <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+                <i class="fa fa-info" aria-hidden="true"></i>
+            </a>
+            <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
         </td>
     </tr>
 }
-
 </table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do cliente</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>Nome:</label>
+            </div>
+            <div class="col s4">
+                <label>Data de nascimento:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="dtaNascimento">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label>Gênero:</label>
+            </div>
+            <div class="col s3">
+                <label>Registro geral (RG):</label>
+            </div>
+            <div class="col s3">
+                <label>Telefone:</label>
+            </div>
+            <div class="col s3">
+                <label>Celular:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label class="texto-detalhes" id="genero">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="rg">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="telefone">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="celular">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s6">
+                <label>E-mail:</label>
+            </div>
+            <div class="col s3">
+                <label>Saldo parcial:</label>
+            </div>
+            <div class="col s3">
+                <label>Saldo especial:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s6">
+                <label class="texto-detalhes" id="email">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="saldoParcial">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="saldoEspecial">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"> <hr/>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este cliente?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript">
+
+    function showModal(id, modal) {
+        $('#' + modal).openModal();
+        $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); deletaRegistro(id); });
+    }
+    
+    $(document).ready(function () {
+
+        $('.modal-trigger').leanModal();
+    });
+    
+</script>
+}

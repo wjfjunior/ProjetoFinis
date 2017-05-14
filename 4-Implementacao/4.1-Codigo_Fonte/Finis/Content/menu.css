@@ -9,3 +9,11 @@
     padding-left: 3%;
     font-size: x-large;
 }
+
+#logo-menu {
+    width: 70%;
+}
+
+nav {
+    background-color: #03A9F4;
+}

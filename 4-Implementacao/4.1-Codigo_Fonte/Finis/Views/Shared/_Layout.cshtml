@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="~/Content/menu.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar-fixed">
@@ -16,7 +17,9 @@
             <div class="nav-wrapper">
                 <div class="nav-content">
                     <span id="titulo-pagina" class="nav-title">@ViewBag.Title</span>
-                    <a href="#" class="brand-logo center">Logo</a> 
+                    <a href="#" class="brand-logo center">
+                        <img src="~/Content/imagens/logo.png" id="logo-menu" />
+                    </a> 
                     <ul class="right">
                         <li><a href="#"><i class="material-icons">input</i></a></li>
                     </ul>
@@ -65,9 +68,19 @@
             </div>
         </nav>
     </div>
-    @RenderBody()
+    <div class="conteudo">
+        @RenderBody()
+    </div>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    <script src="https://use.fontawesome.com/9e29277c40.js"></script>
+
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/inputmask.extensions.min.js"></script>
+    <script src="~/Scripts/inputmask.numeric.extensions.min.js"></script>
+    
+    @RenderSection("Scripts", required: false)
     <script>
         $(".button-collapse").sideNav({
             menuWidth: 300, // Default is 240
