@@ -1,0 +1,62 @@
+﻿@model Finis.Models.Estado
+
+@{
+    ViewBag.Title = "Novo Estado";
+}
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container" id="formulario">
+        <form class="col s12">
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "validate" })
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.LabelFor(model => model.nome)
+                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.LabelFor(model => model.sigla)
+                        @Html.EditorFor(model => model.sigla, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.sigla, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.DropDownListFor(model => model.paisId, (SelectList) ViewBag.Paises, "Selecione o país", htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.paisId, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" onClick="location.href='Index'" type="button" name="action">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        Voltar
+                    </button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Salvar
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+     <script type="text/javascript">
+
+         $(document).ready(function () {
+             $('select').material_select();
+         });
+
+     </script>
+}

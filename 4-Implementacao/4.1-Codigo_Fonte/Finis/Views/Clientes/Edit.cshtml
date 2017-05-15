@@ -1,7 +1,7 @@
 ﻿@model Finis.Models.Cliente
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar cliente";
 }
 
 @using (Html.BeginForm())
@@ -12,6 +12,7 @@
         <form class="col s12">
             <div class="row">
 
+                @Html.HiddenFor(model => model.id)
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
 
                 <div class="row">
@@ -103,8 +104,6 @@
 
             $("#telefone").mask("(99)9999-9999");
             $("#celular").mask("(99)99999-9999");
-            $("#creditoParcial").inputmask("mask", { "mask": "(99)99999-9999" });
-            $("#creditoEspecial").inputmask("(999) 999-9999", { removeMaskOnSubmit: true });
         });
 
         $('.datepicker').pickadate({

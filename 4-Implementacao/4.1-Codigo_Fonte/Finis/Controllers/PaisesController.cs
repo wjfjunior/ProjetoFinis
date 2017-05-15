@@ -11,14 +11,14 @@ using Finis.Models;
 
 namespace Finis.Controllers
 {
-    public class ClientesController : Controller
+    public class PaisesController : Controller
     {
         private Contexto db = new Contexto();
 
-        // GET: Clientes
+        // GET: Paises
         public ActionResult Index()
         {
-            return View(db.Cliente.ToList());
+            return View(db.Pais.ToList());
         }
 
         // GET: Clientes
@@ -27,19 +27,19 @@ namespace Finis.Controllers
             return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
         }
 
-        // GET: Clientes/Details/5
+        // GET: Paises/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Cliente.Find(id);
-            if (cliente == null)
+            Pais pais = db.Pais.Find(id);
+            if (pais == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(cliente);
+            return View(pais);
         }
 
         // GET: Clientes/Details/5
@@ -55,8 +55,8 @@ namespace Finis.Controllers
             }
             else
             {
-                Cliente cliente = db.Cliente.Find(id);
-                if (cliente == null)
+                Pais pais = db.Pais.Find(id);
+                if (pais == null)
                 {
                     sucesso = false;
                     resultado = "Não encontrado!";
@@ -64,7 +64,7 @@ namespace Finis.Controllers
                 else
                 {
                     sucesso = true;
-                    resultado = cliente.Serializar();
+                    resultado = pais.Serializar();
                 }
             }
             var obj = new
@@ -75,82 +75,82 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Clientes/Create
+        // GET: Paises/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Clientes/Create
+        // POST: Paises/Create
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,saldoCreditoParcial,saldoCreditoEspecial,dataNascimento,genero,rg,nome,email,telefone,celular,user_insert,user_update,date_insert,date_update")] Cliente cliente)
+        public ActionResult Create(Pais model)
         {
             if (ModelState.IsValid)
             {
-                db.Cliente.Add(cliente);
+                db.Pais.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(cliente);
+            return View(model);
         }
 
-        // GET: Clientes/Edit/5
+        // GET: Paises/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Cliente.Find(id);
-            if (cliente == null)
+            Pais pais = db.Pais.Find(id);
+            if (pais == null)
             {
                 return HttpNotFound();
             }
-            return View(cliente);
+            return View(pais);
         }
 
-        // POST: Clientes/Edit/5
+        // POST: Paises/Edit/5
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,saldoCreditoParcial,saldoCreditoEspecial,dataNascimento,genero,rg,nome,email,telefone,celular,user_insert,user_update,date_insert,date_update")] Cliente cliente)
+        public ActionResult Edit([Bind(Include = "id,nome,sigla")] Pais pais)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cliente).State = EntityState.Modified;
+                db.Entry(pais).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(cliente);
+            return View(pais);
         }
 
-        // GET: Clientes/Delete/5
+        // GET: Paises/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Cliente.Find(id);
-            if (cliente == null)
+            Pais pais = db.Pais.Find(id);
+            if (pais == null)
             {
                 return HttpNotFound();
             }
-            return View(cliente);
+            return View(pais);
         }
 
-        // POST: Clientes/Delete/5
+        // POST: Paises/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Cliente cliente = db.Cliente.Find(id);
-            db.Cliente.Remove(cliente);
+            Pais pais = db.Pais.Find(id);
+            db.Pais.Remove(pais);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -158,10 +158,10 @@ namespace Finis.Controllers
         // GET: Clientes/Delete/5
         public JsonResult DeletarRegistro(int? id)
         {
-            if(id != null)
+            if (id != null)
             {
-                Cliente cliente = db.Cliente.Find(id);
-                db.Cliente.Remove(cliente);
+                Pais pais = db.Pais.Find(id);
+                db.Pais.Remove(pais);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

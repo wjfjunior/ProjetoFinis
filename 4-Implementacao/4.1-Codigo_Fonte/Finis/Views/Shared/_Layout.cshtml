@@ -16,13 +16,13 @@
         <nav>
             <div class="nav-wrapper">
                 <div class="nav-content">
+                    <ul class="right" style="float:right" ;>
+                        <li><a href="#"><i class="material-icons">input</i></a></li>
+                    </ul>
                     <span id="titulo-pagina" class="nav-title">@ViewBag.Title</span>
                     <a href="#" class="brand-logo center">
                         <img src="~/Content/imagens/logo.png" id="logo-menu" />
-                    </a> 
-                    <ul class="right">
-                        <li><a href="#"><i class="material-icons">input</i></a></li>
-                    </ul>
+                    </a>
                     <a href="#" data-activates="menu-lateral" class="button-collapse show-on-large">
                         <i id="icone-menu" class="material-icons">menu</i>
                     </a>
@@ -77,8 +77,6 @@
 
     <script src="~/Scripts/jquery.mask.min.js"></script>
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
-    <script src="~/Scripts/inputmask.extensions.min.js"></script>
-    <script src="~/Scripts/inputmask.numeric.extensions.min.js"></script>
     
     @RenderSection("Scripts", required: false)
     <script>

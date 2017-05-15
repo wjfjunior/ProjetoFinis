@@ -11,7 +11,7 @@ namespace Finis.Models
     {
         public Pessoa()
         {
-
+            this.endereco = new Endereco();
         }
 
         [Display(Name = "Nome")]
