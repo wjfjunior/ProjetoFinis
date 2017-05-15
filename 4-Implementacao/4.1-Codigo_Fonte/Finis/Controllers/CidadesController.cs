@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using Newtonsoft.Json;
 
 namespace Finis.Controllers
 {
@@ -36,9 +37,43 @@ namespace Finis.Controllers
             return View(cidade);
         }
 
+        // GET: Clientes/Details/5
+        public JsonResult Detalhes(int? id)
+        {
+            bool sucesso;
+            string resultado;
+
+            if (id == null)
+            {
+                sucesso = false;
+                resultado = "Não encontrado!";
+            }
+            else
+            {
+                Cidade cidade = db.Cidade.Find(id);
+                if (cidade == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    sucesso = true;
+                    resultado = JsonConvert.SerializeObject(cidade);
+                }
+            }
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Cidades/Create
         public ActionResult Create()
         {
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View();
         }
 
@@ -47,16 +82,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,user_insert,user_update,date_insert,date_update")] Cidade cidade)
+        public ActionResult Create(Cidade model)
         {
             if (ModelState.IsValid)
             {
-                db.Cidade.Add(cidade);
+                db.Cidade.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(cidade);
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
+            return View(model);
         }
 
         // GET: Cidades/Edit/5
@@ -71,6 +106,7 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(cidade);
         }
 
@@ -79,15 +115,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,user_insert,user_update,date_insert,date_update")] Cidade cidade)
+        public ActionResult Edit(Cidade model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cidade).State = EntityState.Modified;
+                db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(cidade);
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
+            return View(model);
         }
 
         // GET: Cidades/Delete/5
@@ -102,6 +139,7 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(cidade);
         }
 
@@ -114,6 +152,18 @@ namespace Finis.Controllers
             db.Cidade.Remove(cidade);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Clientes/Delete/5
+        public JsonResult DeletarRegistro(int? id)
+        {
+            if (id != null)
+            {
+                Cidade cidade = db.Cidade.Find(id);
+                db.Cidade.Remove(cidade);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

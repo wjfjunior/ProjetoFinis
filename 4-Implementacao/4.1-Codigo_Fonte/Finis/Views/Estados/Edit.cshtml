@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Editar Estado";
 }
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -12,6 +13,8 @@
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
+                @Html.HiddenFor(model => model.id)
+                @Html.HiddenFor(model => model.paisId)
 
                 <div class="row">
                     <div class="input-field col s12">
@@ -29,13 +32,12 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
-                        @Html.LabelFor(model => model.sigla)
-                        @Html.DropDownListFor(model => model.paisId, (SelectList)ViewBag.Paises, htmlAttributes: new { @class = "validate" })
+                        @Html.DropDownListFor(model => model.paisId, (SelectList)ViewBag.Paises, "Selecione o país", htmlAttributes: new { @class = "validate" })
                         @Html.ValidationMessageFor(model => model.paisId, "", new { @class = "validate" })
                     </div>
                 </div>
                 <div class="row">
-                    <button class="btn waves-effect waves-light" onClick="location.href='Index'" type="button" name="action">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Estados")'" type="button" name="action">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         Voltar
                     </button>
@@ -51,4 +53,12 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+
+    </script>
 }

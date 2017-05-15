@@ -20,7 +20,7 @@ namespace Finis.Models
     {
         public Cliente()
         {
-
+            //this.endereco = new Endereco();
         }
 
         [Display(Name = "Saldo de crédito parcial")]

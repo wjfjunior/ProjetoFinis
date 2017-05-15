@@ -20,7 +20,7 @@
                         <li><a href="#"><i class="material-icons">input</i></a></li>
                     </ul>
                     <span id="titulo-pagina" class="nav-title">@ViewBag.Title</span>
-                    <a href="#" class="brand-logo center">
+                    <a href="@Url.Action("Index","Home")" class="brand-logo center">
                         <img src="~/Content/imagens/logo.png" id="logo-menu" />
                     </a>
                     <a href="#" data-activates="menu-lateral" class="button-collapse show-on-large">
@@ -31,17 +31,21 @@
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
                             <li class="bold">
-                                <a class="collapsible-header  waves-effect waves-teal active">Dropdown 1</a>
+                                <a class="collapsible-header  waves-effect waves-teal active">Página inicial</a>
+                            </li>
+                            <li class="bold">
+                                <a class="collapsible-header  waves-effect waves-teal">Cadastros</a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a href="#">Link1</a></li>
-                                        <li><a href="#">link2</a></li>
-                                        <li><a href="#">link3</a></li>
+                                        <li><a href="@Url.Action("Index","Paises")">Países</a></li>
+                                        <li><a href="@Url.Action("Index","Estados")">Estados</a></li>
+                                        <li><a href="@Url.Action("Index","Cidades")">Cidades</a></li>
+                                        <li><a href="@Url.Action("Index","Clientes")">Clientes</a></li>
                                     </ul>
                                 </div>
                             </li>
                             <li class="bold">
-                                <a class="collapsible-header  waves-effect waves-teal">Dropdown 2</a>
+                                <a class="collapsible-header  waves-effect waves-teal disabled">Avaliações</a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="#">link1</a></li>
@@ -51,7 +55,7 @@
                                 </div>
                             </li>
                             <li class="bold">
-                                <a class="collapsible-header  waves-effect waves-teal">Dropdown 3</a>
+                                <a class="collapsible-header  waves-effect waves-teal">Exemplares</a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="#">link1</a></li>
@@ -60,8 +64,8 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 1</a></li>
-                            <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 2</a></li>
+                            @*<li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 1</a></li>
+                            <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Normal link 2</a></li>*@
                         </ul>
                     </li>
                 </ul>

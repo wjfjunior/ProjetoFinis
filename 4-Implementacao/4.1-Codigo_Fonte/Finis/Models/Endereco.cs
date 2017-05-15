@@ -29,7 +29,7 @@ namespace Finis.Models
     {
         public Estado()
         {
-            this.pais = new Pais();
+            //this.pais = new Pais();
         }
 
         [Display(Name = "Nome do estado")]
@@ -54,7 +54,7 @@ namespace Finis.Models
     {
         public Cidade()
         {
-            this.estado = new Estado();
+            //this.estado = new Estado();
         }
 
         [Display(Name = "Nome da cidade")]
@@ -73,7 +73,7 @@ namespace Finis.Models
     {
         public Endereco()
         {
-            this.cidade = new Cidade();
+            //this.cidade = new Cidade();
         }
 
         [Display(Name = "Logradouro")]

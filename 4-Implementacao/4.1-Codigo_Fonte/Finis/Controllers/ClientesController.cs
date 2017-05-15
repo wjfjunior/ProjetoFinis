@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using Newtonsoft.Json;
 
 namespace Finis.Controllers
 {
@@ -42,6 +43,16 @@ namespace Finis.Controllers
             return PartialView(cliente);
         }
 
+        private Endereco RecuperaEndereco(int? id)
+        {
+            if(id != null)
+            {
+                Endereco endereco = db.Endereco.Find(id);
+                return endereco;
+            }
+            return new Endereco();
+        }
+
         // GET: Clientes/Details/5
         public JsonResult Detalhes(int? id)
         {
@@ -63,8 +74,9 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    cliente.endereco = RecuperaEndereco(cliente.enderecoId);
                     sucesso = true;
-                    resultado = cliente.Serializar();
+                    resultado = JsonConvert.SerializeObject(cliente);
                 }
             }
             var obj = new
@@ -78,6 +90,7 @@ namespace Finis.Controllers
         // GET: Clientes/Create
         public ActionResult Create()
         {
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View();
         }
 
@@ -86,16 +99,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,saldoCreditoParcial,saldoCreditoEspecial,dataNascimento,genero,rg,nome,email,telefone,celular,user_insert,user_update,date_insert,date_update")] Cliente cliente)
+        public ActionResult Create(Cliente model)
         {
             if (ModelState.IsValid)
             {
-                db.Cliente.Add(cliente);
+                db.Cliente.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(cliente);
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            return View(model);
         }
 
         // GET: Clientes/Edit/5
@@ -110,6 +123,8 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
             return View(cliente);
         }
 
@@ -118,15 +133,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,saldoCreditoParcial,saldoCreditoEspecial,dataNascimento,genero,rg,nome,email,telefone,celular,user_insert,user_update,date_insert,date_update")] Cliente cliente)
+        public ActionResult Edit(Cliente model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(cliente).State = EntityState.Modified;
+                db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(cliente);
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            return View(model);
         }
 
         // GET: Clientes/Delete/5
@@ -141,6 +157,7 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(cliente);
         }
 
@@ -150,6 +167,11 @@ namespace Finis.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Cliente cliente = db.Cliente.Find(id);
+            if (cliente.enderecoId != null)
+            {
+                Endereco endereco = db.Endereco.Find(cliente.enderecoId);
+                db.Endereco.Remove(endereco);
+            }
             db.Cliente.Remove(cliente);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -161,6 +183,11 @@ namespace Finis.Controllers
             if(id != null)
             {
                 Cliente cliente = db.Cliente.Find(id);
+                if(cliente.enderecoId != null)
+                {
+                    Endereco endereco = db.Endereco.Find(cliente.enderecoId);
+                    db.Endereco.Remove(endereco);
+                }
                 db.Cliente.Remove(cliente);
                 db.SaveChanges();
             }
