@@ -63,6 +63,39 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s5">
+                        @Html.LabelFor(model => model.endereco.logradouro)
+                        @Html.EditorFor(model => model.endereco.logradouro, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.endereco.logradouro, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s2">
+                        @Html.LabelFor(model => model.endereco.numero)
+                        @Html.EditorFor(model => model.endereco.numero, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.endereco.numero, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s3">
+                        @Html.LabelFor(model => model.endereco.complemento)
+                        @Html.EditorFor(model => model.endereco.complemento, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.endereco.complemento, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s3">
+                        @Html.LabelFor(model => model.endereco.bairro)
+                        @Html.EditorFor(model => model.endereco.bairro, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.endereco.bairro, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s3">
+                        @Html.LabelFor(model => model.endereco.cep)
+                        @Html.EditorFor(model => model.endereco.cep, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.endereco.cep, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s4">
+                        @Html.DropDownListFor(model => model.endereco.cidadeId, (SelectList)ViewBag.Cidades, "Selecione a cidade", htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.endereco.cidadeId, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
                         @Html.LabelFor(model => model.saldoCreditoParcial)
                         @{ Html.EnableClientValidation(false); }
                         @Html.EditorFor(model => model.saldoCreditoParcial, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
@@ -78,7 +111,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button class="btn waves-effect waves-light" onClick="location.href='Index'" type="button" name="action">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Clientes")'" type="button" name="action">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         Voltar
                     </button>
@@ -103,8 +136,8 @@
 
             $("#telefone").mask("(99)9999-9999");
             $("#celular").mask("(99)99999-9999");
-            $("#creditoParcial").inputmask("mask", { "mask": "(99)99999-9999" });
-            $("#creditoEspecial").inputmask("(999) 999-9999", { removeMaskOnSubmit: true });
+            //$("#creditoParcial").inputmask("mask", { "mask": "(99)99999-9999" });
+            //$("#creditoEspecial").inputmask("(999) 999-9999", { removeMaskOnSubmit: true });
         });
         
         $('.datepicker').pickadate({

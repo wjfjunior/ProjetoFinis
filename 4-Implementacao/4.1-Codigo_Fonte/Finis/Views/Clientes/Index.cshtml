@@ -44,6 +44,13 @@
         document.getElementById('email').innerHTML = obj.email;
         document.getElementById('saldoParcial').innerHTML = obj.saldoCreditoParcial;
         document.getElementById('saldoEspecial').innerHTML = obj.saldoCreditoEspecial;
+
+        document.getElementById('logradouro').innerHTML = obj.endereco.logradouro;
+        document.getElementById('numero').innerHTML = obj.endereco.numero;
+        document.getElementById('complemento').innerHTML = obj.endereco.complemento;
+        document.getElementById('bairro').innerHTML = obj.endereco.bairro;
+        document.getElementById('cep').innerHTML = obj.endereco.cep;
+        document.getElementById('cidade').innerHTML = obj.endereco.cidade.nome;
     }
 
     function FormataDataJSON(data) {
@@ -60,7 +67,7 @@
 
 </script>
 
-<nav>
+@*<nav>
     <div class="nav-wrapper">
         <form>
             <div class="input-field">
@@ -70,13 +77,13 @@
             </div>
         </form>
     </div>
-</nav>
+</nav>*@
 <div class="fixed-action-btn">
-    <a class="btn-floating btn-large red" href="Create">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Clientes")">
         <i class="material-icons">add</i>
     </a>
     <ul>
-        <li><a class="btn-floating btn-large green" href="Index"><i class="material-icons">repeat</i></a></li>
+        <li><a class="btn-floating btn-large green" href="@Url.Action("Index","Clientes")"><i class="material-icons">repeat</i></a></li>
     </ul>
 </div>
 <table class="highlight">
@@ -119,7 +126,7 @@
             @Html.DisplayFor(modelItem => item.saldoCreditoEspecial)
         </td>
         <td>
-            <a class="btn-floating blue" href="Clientes/Edit/@item.id"><i class="material-icons">mode_edit</i></a>
+            <a class="btn-floating blue" href="@Url.Action("Edit", "Clientes", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
             <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
                 <i class="fa fa-info" aria-hidden="true"></i>
             </a>
@@ -178,6 +185,50 @@
             </div>
         </div>
         <div class="row" id="linha-detalhes">
+            <div class="col s5">
+                <label>Logradouro:</label>
+            </div>
+            <div class="col s2">
+                <label>Número:</label>
+            </div>
+            <div class="col s3">
+                <label>Complemento:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s5">
+                <label class="texto-detalhes" id="logradouro">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="numero">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="complemento">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label>CEP:</label>
+            </div>
+            <div class="col s3">
+                <label>Bairro:</label>
+            </div>
+            <div class="col s4">
+                <label>Cidade:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label class="texto-detalhes" id="cep">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="bairro">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="cidade">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
             <div class="col s6">
                 <label>E-mail:</label>
             </div>
@@ -204,7 +255,6 @@
         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
     </div>
 </div>
-
 
 <div id="md1" class="modal">
     <div class="modal-content">

@@ -36,6 +36,39 @@ namespace Finis.Controllers
             return View(estado);
         }
 
+        // GET: Clientes/Details/5
+        public JsonResult Detalhes(int? id)
+        {
+            bool sucesso;
+            string resultado;
+
+            if (id == null)
+            {
+                sucesso = false;
+                resultado = "Não encontrado!";
+            }
+            else
+            {
+                Estado estado = db.Estado.Find(id);
+                if (estado == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    sucesso = true;
+                    resultado = estado.Serializar();
+                }
+            }
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Estados/Create
         public ActionResult Create()
         {
@@ -72,6 +105,7 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
             return View(estado);
         }
 
@@ -80,15 +114,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,user_insert,user_update,date_insert,date_update")] Estado estado)
+        public ActionResult Edit(Estado model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(estado).State = EntityState.Modified;
+                db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(estado);
+            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            return View(model);
         }
 
         // GET: Estados/Delete/5
@@ -115,6 +150,18 @@ namespace Finis.Controllers
             db.Estado.Remove(estado);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Clientes/Delete/5
+        public JsonResult DeletarRegistro(int? id)
+        {
+            if (id != null)
+            {
+                Estado estado = db.Estado.Find(id);
+                db.Estado.Remove(estado);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

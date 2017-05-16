@@ -29,11 +29,10 @@ namespace Finis.Models
 
         [Display(Name = "Celular")]
         public string celular { get; set; }
-
-        [ForeignKey("Endereco")]
+        
         [Display(Name = "Endereço")]
-        public int enderecoId;
-
+        public int? enderecoId { get; set; }
+        [ForeignKey("enderecoId")]
         public virtual Endereco endereco { get; set; }
     }
 }

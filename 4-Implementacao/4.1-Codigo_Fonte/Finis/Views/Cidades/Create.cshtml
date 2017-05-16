@@ -1,64 +1,55 @@
 ﻿@model Finis.Models.Cidade
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Nova Cidade";
 }
 
-<h2>Create</h2>
-
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Cidade</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.user_insert, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user_insert, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.user_insert, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.user_update, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.user_update, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.user_update, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="container" id="formulario">
+        <form class="col s12">
+            <div class="row">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.date_insert, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.date_insert, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.date_insert, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                @Html.ValidationSummary(true, "", new { @class = "validate" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.date_update, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.date_update, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.date_update, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.LabelFor(model => model.nome)
+                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.DropDownListFor(model => model.estadoId, (SelectList)ViewBag.Estados, "Selecione o estado", htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.estadoId, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Cidades")'" type="button" name="action">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        Voltar
+                    </button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Salvar
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+        </form>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+         $(document).ready(function () {
+             $('select').material_select();
+         });
+
+    </script>
 }
