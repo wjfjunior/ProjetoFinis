@@ -17,6 +17,7 @@ namespace Finis.Models
         [Display(Name = "Nome do país")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
+        //[Index("NomeIndex", IsUnique = true)]
         public string nome { get; set; }
 
         [Display(Name = "Sigla")]
@@ -35,6 +36,7 @@ namespace Finis.Models
         [Display(Name = "Nome do estado")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
+        //[Index("NomeIndex", IsUnique = true)]
         public string nome { get; set; }
 
         [Display(Name = "Sigla")]
@@ -77,7 +79,7 @@ namespace Finis.Models
         }
 
         [Display(Name = "Logradouro")]
-        [Required(ErrorMessage = "Por favor insira um logradouro")]
+        //[Required(ErrorMessage = "Por favor insira um logradouro")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
         public string logradouro { get; set; }
 
@@ -91,15 +93,15 @@ namespace Finis.Models
 
         [Display(Name = "Bairro")]
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
-        [Required(ErrorMessage = "Por favor insira um bairro")]
+        //[Required(ErrorMessage = "Por favor insira um bairro")]
         public string bairro { get; set; }
 
         [Display(Name = "CEP")]
-        public int cep { get; set; }
+        public Nullable<int> cep { get; set; }
         
         [Display(Name = "Cidade")]
-        [Required(ErrorMessage = "Por favor selecione uma cidade")]
-        public int cidadeId { get; set; }
+        //[Required(ErrorMessage = "Por favor selecione uma cidade")]
+        public int? cidadeId { get; set; }
         [ForeignKey("cidadeId")]
         public virtual Cidade cidade { get; set; }
     }

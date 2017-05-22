@@ -76,7 +76,7 @@ namespace Finis.Controllers
                 {
                     cliente.endereco = RecuperaEndereco(cliente.enderecoId);
                     sucesso = true;
-                    resultado = JsonConvert.SerializeObject(cliente);
+                    resultado = cliente.Serializar();
                 }
             }
             var obj = new
@@ -124,7 +124,9 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            var enderecoID = cliente.enderecoId;
             cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
+            cliente.enderecoId = enderecoID;
             return View(cliente);
         }
 
@@ -137,6 +139,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.endereco.id = model.enderecoId;
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -167,11 +170,6 @@ namespace Finis.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Cliente cliente = db.Cliente.Find(id);
-            if (cliente.enderecoId != null)
-            {
-                Endereco endereco = db.Endereco.Find(cliente.enderecoId);
-                db.Endereco.Remove(endereco);
-            }
             db.Cliente.Remove(cliente);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -183,12 +181,9 @@ namespace Finis.Controllers
             if(id != null)
             {
                 Cliente cliente = db.Cliente.Find(id);
-                if(cliente.enderecoId != null)
-                {
-                    Endereco endereco = db.Endereco.Find(cliente.enderecoId);
-                    db.Endereco.Remove(endereco);
-                }
+                Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
                 db.Cliente.Remove(cliente);
+                db.Endereco.Remove(endereco);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

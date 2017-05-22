@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -84,7 +85,7 @@ namespace Finis.Models
 
         public string Serializar()
         {
-            return this.SerializeJson();
+            return JsonConvert.SerializeObject(this);
         }
 
         private string SerializeJson()

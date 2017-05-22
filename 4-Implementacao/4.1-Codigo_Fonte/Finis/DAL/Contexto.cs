@@ -30,14 +30,6 @@ namespace Finis.DAL
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
-
-            //modelBuilder.Entity<Cliente>()
-            //    .HasOptional<Endereco>(c => c.endereco)
-            //    .WithMany()
-            //    .HasForeignKey(c => c.enderecoId)
-            //    .WillCascadeOnDelete(true);
-
             modelBuilder.Entity<Avaliacao>().ToTable("Avaliacoes");
             modelBuilder.Entity<Exemplar>().ToTable("Exemplares");
             modelBuilder.Entity<Fornecedor>().ToTable("Fornecedores");

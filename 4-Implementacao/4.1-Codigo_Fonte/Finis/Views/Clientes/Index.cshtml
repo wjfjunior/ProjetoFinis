@@ -41,16 +41,24 @@
         document.getElementById('rg').innerHTML = obj.rg;
         document.getElementById('telefone').innerHTML = obj.telefone;
         document.getElementById('celular').innerHTML = obj.celular;
-        document.getElementById('email').innerHTML = obj.email;
+        document.getElementById('email').innerHTML = SubstituirCampoNulo(obj.email);
         document.getElementById('saldoParcial').innerHTML = obj.saldoCreditoParcial;
         document.getElementById('saldoEspecial').innerHTML = obj.saldoCreditoEspecial;
 
         document.getElementById('logradouro').innerHTML = obj.endereco.logradouro;
         document.getElementById('numero').innerHTML = obj.endereco.numero;
-        document.getElementById('complemento').innerHTML = obj.endereco.complemento;
-        document.getElementById('bairro').innerHTML = obj.endereco.bairro;
-        document.getElementById('cep').innerHTML = obj.endereco.cep;
+        document.getElementById('complemento').innerHTML = SubstituirCampoNulo(obj.endereco.complemento);
+        document.getElementById('bairro').innerHTML = SubstituirCampoNulo(obj.endereco.bairro);
+        document.getElementById('cep').innerHTML = SubstituirCampoNulo(obj.endereco.cep);
         document.getElementById('cidade').innerHTML = obj.endereco.cidade.nome;
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null)
+            return " - "
+        else
+            return campo;
     }
 
     function FormataDataJSON(data) {

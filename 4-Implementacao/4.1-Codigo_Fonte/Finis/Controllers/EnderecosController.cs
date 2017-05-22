@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -43,7 +43,7 @@ namespace Finis.Controllers
         }
 
         // POST: Enderecoes/Create
-        // Para se proteger de mais ataques, ative as propriedades especÃ­ficas a que vocÃª quer se conectar. Para 
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -75,7 +75,7 @@ namespace Finis.Controllers
         }
 
         // POST: Enderecoes/Edit/5
-        // Para se proteger de mais ataques, ative as propriedades especÃ­ficas a que vocÃª quer se conectar. Para 
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
