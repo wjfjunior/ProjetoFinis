@@ -155,6 +155,7 @@
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\EnderecosController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
+    <Compile Include="Controllers\ExemplaresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
     <Compile Include="DAL\Contexto.cs" />
@@ -162,6 +163,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705261257471_InitialCreate.cs" />
+    <Compile Include="Migrations\201705261257471_InitialCreate.Designer.cs">
+      <DependentUpon>201705261257471_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705261415342_IncluirExemplar.cs" />
+    <Compile Include="Migrations\201705261415342_IncluirExemplar.Designer.cs">
+      <DependentUpon>201705261415342_IncluirExemplar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705261902436_AtualizaExemplar_1.cs" />
+    <Compile Include="Migrations\201705261902436_AtualizaExemplar_1.Designer.cs">
+      <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Endereco.cs" />
@@ -313,6 +327,11 @@
     <Content Include="Views\Paises\Edit.cshtml" />
     <Content Include="Views\Paises\Index.cshtml" />
     <Content Include="Views\Enderecos\Create.cshtml" />
+    <Content Include="Views\Exemplares\Form.cshtml" />
+    <Content Include="Views\Exemplares\Delete.cshtml" />
+    <Content Include="Views\Exemplares\Details.cshtml" />
+    <Content Include="Views\Exemplares\Edit.cshtml" />
+    <Content Include="Views\Exemplares\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,6 +347,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201705261257471_InitialCreate.resx">
+      <DependentUpon>201705261257471_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705261415342_IncluirExemplar.resx">
+      <DependentUpon>201705261415342_IncluirExemplar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705261902436_AtualizaExemplar_1.resx">
+      <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

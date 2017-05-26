@@ -10,7 +10,10 @@ namespace Finis.Models
 {
     public enum Conservacao
     {
+        [Display(Name = "Novo")]
         NOVO = 1,
+
+        [Display(Name = "Usado")]
         USADO = 2,
     }
 
@@ -31,11 +34,11 @@ namespace Finis.Models
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
         public string nome { get; set; }
 
-        [ForeignKey("Pais")]
+       
         [Display(Name = "País")]
         [Required(ErrorMessage = "Por favor selecione um país")]
-        public int paisId;
-
+        public int paisId { get; set; }
+        [ForeignKey("paisId")]
         public virtual Pais pais { get; set; }
     }
 
@@ -46,13 +49,20 @@ namespace Finis.Models
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
         public string nome { get; set; }
 
-        [Display(Name = "Prateleira")]
-        [Required(ErrorMessage = "Por favor insira o número da prateleira")]
-        public int prateleira;
+        
+        [Display(Name = "Subsessao")]
+        public Nullable<int> subsessaoId { get; set; }
+        [ForeignKey("subsessaoId")]
+        public virtual Sessao sessao { get; set; }
     }
 
     public class Exemplar : EntidadeAbstrata
     {
+        public Exemplar()
+        {
+            this.vendaOnline = true;
+        }
+
         [Display(Name = "Título")]
         [Required(ErrorMessage = "Por favor insira um título")]
         [StringLength(30, ErrorMessage = "O título é muito longo")]
@@ -63,18 +73,22 @@ namespace Finis.Models
         public Conservacao conservacao { get; set; }
 
         [Display(Name = "ISBN")]
-        public int isbn;
+        public int isbn { get; set; }
 
         [Display(Name = "Ano")]
         [DisplayFormat(DataFormatString = "yyyy")]
         public DateTime ano { get; set; }
 
         [Display(Name = "Edição")]
-        public int edicao;
+        public int edicao { get; set; }
 
-        [Display(Name = "Preço")]
-        [Required(ErrorMessage = "Por favor insira um preço")]
-        public decimal preco;
+        [Display(Name = "Preço de Compra")]
+        [Required(ErrorMessage = "Por favor insira um valor")]
+        public decimal precoCompra { get; set; }
+
+        [Display(Name = "Preço de Venda")]
+        [Required(ErrorMessage = "Por favor insira um valor")]
+        public decimal precoVenda { get; set; }
 
         [Display(Name = "Descrição")]
         [StringLength(200, ErrorMessage = "A descrição é muito longa")]
@@ -82,40 +96,39 @@ namespace Finis.Models
         public string descricao { get; set; }
 
         [Display(Name = "Peso")]
-        public decimal peso;
+        public decimal peso { get; set; }
 
-        [Display(Name = "Disponibilizar para venda na internet?")]
+        [Display(Name = "Disponibilizar para venda na internet")]
         public bool vendaOnline { get; set; }
 
         [Display(Name = "Quantidade")]
         [Required(ErrorMessage = "Por favor insira a quantidade disponível")]
-        public int quantidade;
-        
+        public int quantidade { get; set; }
+
+        //[InverseProperty("Exemplar")]
         [InverseProperty("Exemplar")]
         [ScriptIgnore]
-        public virtual ICollection<Autor> Autor { get; set; }
-
-        [ForeignKey("Editora")]
+        public virtual ICollection<Autor> Autores { get; set; }
+        
         [Display(Name = "Editora")]
         [Required(ErrorMessage = "Por favor selecione uma editora")]
-        public int editoraId;
-
+        public int editoraId { get; set; }
+        [ForeignKey("editoraId")]
         public virtual Editora editora { get; set; }
-
-        [ForeignKey("Idioma")]
+        
         [Display(Name = "Idioma")]
         [Required(ErrorMessage = "Por favor selecione um idioma")]
-        public int idiomaId;
-
+        public int idiomaId { get; set; }
+        [ForeignKey("idiomaId")]
         public virtual Idioma idioma { get; set; }
-
-        [ForeignKey("Sessao")]
+        
         [Display(Name = "Sessão")]
         [Required(ErrorMessage = "Por favor selecione uma sessão")]
-        public int sessaoId;
-
+        public int sessaoId { get; set; }
+        [ForeignKey("sessaoId")]
         public virtual Sessao sessao { get; set; }
 
+        [NotMapped]
         public String conservacaoString
         {
             get

@@ -12,9 +12,9 @@ namespace Finis.DAL
     {
         public Contexto() : base("Contexto")
         {
-            Database.SetInitializer<Contexto>(new DropCreateDatabaseIfModelChanges<Contexto>());
+            Database.SetInitializer<Contexto>(null);
         }
-
+        
         public DbSet<Avaliacao> Avaliacao { get; set; }
         public DbSet<Cliente> Cliente { get; set; }
         public DbSet<Endereco> Endereco { get; set; }
@@ -40,5 +40,9 @@ namespace Finis.DAL
             modelBuilder.Entity<Endereco>().ToTable("Enderecos");
             modelBuilder.Entity<Sessao>().ToTable("Sessoes");
         }
+
+        public System.Data.Entity.DbSet<Finis.Models.Idioma> Idiomas { get; set; }
+
+        public System.Data.Entity.DbSet<Finis.Models.Sessao> Sessaos { get; set; }
     }
 }
