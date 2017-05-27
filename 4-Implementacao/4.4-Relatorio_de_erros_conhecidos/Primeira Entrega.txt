@@ -1,18 +1,23 @@
 RELATÓRIO DE ERROS CONHECIDOS
 
-	- Erro no SaveChanges() ao excluir um cliente (remover cliente e endereço em seguida)
 	- Calendário de datas com nomes em inglês;
 	- Inserir máscara no campo de saldo;
 	- Erro apresentado no console durante o download de fontes;
 	- Inserir máscara no campo CEP
 	- Logradouro e Bairro voltar como obrigatorio
 
-	- Fazer configuração One-to-one em endereço-cliente
-	(http://www.entityframeworktutorial.net/code-first/configure-one-to-one-relationship-in-code-first.aspx)
-
 SUGESTÕES DE IMPLEMENTAÇÕES
+
+	- Exemplares => Adicionar botão para chamada de Modal para Criação de Autor;
+	- Exemplares => Adicionar botão para chamada de Modal para Criação de Sessão;
+	- Exemplares => Adicionar botão para chamada de Modal para Criação de Idioma;
+	- Exemplares => Adicionar tela de consulta para o usuário Cliente
+
+	- Clientes => Unificar formulários CREATE e EDIT 
 
 	- Permitir digitar para selecionar registro no combobox;
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
-	- Setar Unique Key manualmente na classe de inicialização 
-		(http://stackoverflow.com/questions/5701608/unique-key-with-ef-code-first)
+
+	
+	-> Transações: Adicionar extrato no cadastro de cliente
+	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente
