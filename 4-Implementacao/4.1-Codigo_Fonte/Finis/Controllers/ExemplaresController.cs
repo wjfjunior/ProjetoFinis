@@ -19,7 +19,6 @@ namespace Finis.Controllers
         public ActionResult Index()
         {
             var exemplars = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
-            ViewBag.Title = "Cadastro de Exemplares";
             return View(exemplars.ToList());
         }
 
@@ -58,9 +57,9 @@ namespace Finis.Controllers
         }
 
         // GET: Exemplares/Create
-        public ActionResult Form()
+        public ActionResult Create()
         {
-            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj");
+            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome");
             ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome");
             ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome");
             ViewBag.Title = "Inserir Exemplar";
@@ -72,7 +71,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Form([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,preco,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
+        public ActionResult Create([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,preco,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +80,7 @@ namespace Finis.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
+            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
             ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
             ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
@@ -99,11 +98,11 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
+            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
             ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
             ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             ViewBag.Title = "Editar Exemplar";
-            return View("Form", exemplar);
+            return View(exemplar);
         }
 
         // POST: Exemplares/Edit/5
@@ -119,10 +118,10 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
+            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
             ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
             ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
-            return View("Form", exemplar);
+            return View(exemplar);
         }
 
         // GET: Clientes/Delete/5

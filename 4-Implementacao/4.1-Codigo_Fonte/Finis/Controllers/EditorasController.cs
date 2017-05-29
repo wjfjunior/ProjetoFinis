@@ -22,7 +22,7 @@ namespace Finis.Controllers
         }
 
         // GET: Editoras/Create
-        public ActionResult Form()
+        public ActionResult Create()
         {
             ViewBag.Title = "Nova Editora";
             return View();
@@ -33,18 +33,27 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Form(Editora editora)
+        public ActionResult Create(Editora editora)
         {
             if (ModelState.IsValid)
             {
-                if(editora.id == 0)
-                {
-                    db.Editora.Add(editora);
-                }
-                else
-                {
-                    db.Entry(editora).State = EntityState.Modified;
-                }
+                db.Editora.Add(editora);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(editora);
+        }
+
+        // POST: Editoras/Edit
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
+        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Editora editora)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(editora).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -52,7 +61,7 @@ namespace Finis.Controllers
         }
 
         // GET: Editoras/Edit/5
-        public ActionResult Form(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {

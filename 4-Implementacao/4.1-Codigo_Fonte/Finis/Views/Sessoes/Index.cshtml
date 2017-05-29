@@ -48,7 +48,7 @@
 
 </script>
 <div class="fixed-action-btn">
-    <a class="btn-floating btn-large red" href="@Url.Action("Form","Sessoes")">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Sessoes")">
         <i class="material-icons">add</i>
     </a>
 </div>
@@ -68,7 +68,7 @@
                     @Html.DisplayFor(modelItem => item.nome)
                 </td>
                 <td>
-                    <a class="btn-floating blue" href="@Url.Action("Form", "Sessoes", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating blue" href="@Url.Action("Edit", "Sessoes", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
                     <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
                         <i class="fa fa-info" aria-hidden="true"></i>
                     </a>

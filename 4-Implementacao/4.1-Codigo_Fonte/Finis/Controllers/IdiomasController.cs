@@ -23,10 +23,10 @@ namespace Finis.Controllers
         }
 
         // GET: Idiomas/Create
-        public ActionResult Form()
+        public ActionResult Create()
         {
             ViewBag.paisId = new SelectList(db.Pais, "id", "nome");
-            ViewBag.Title = "Cadastro de Idiomas";
+            ViewBag.Title = "Novo Idioma";
             return View();
         }
 
@@ -35,29 +35,34 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Form([Bind(Include = "id,nome,paisId,user_insert,user_update,date_insert,date_update")] Idioma idioma)
+        public ActionResult Create(Idioma idioma)
         {
             if (ModelState.IsValid)
             {
-                if(idioma.id == 0)
-                {
-                    db.Idioma.Add(idioma);
-                }
-                else
-                {
-                    db.Entry(idioma).State = EntityState.Modified;
-                }
+                db.Idioma.Add(idioma);
                 db.SaveChanges();
-                ViewBag.Title = "Cadastro de Idiomas";
                 return RedirectToAction("Index");
             }
+            ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
+            return View(idioma);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Idioma idioma)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(idioma).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
             ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
             return View(idioma);
         }
 
         // GET: Idiomas/Edit/5
-        public ActionResult Form(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {

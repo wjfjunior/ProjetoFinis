@@ -21,24 +21,10 @@ namespace Finis.Controllers
             return View(db.Sessao.ToList());
         }
 
-        // GET: Sessoes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Sessao sessao = db.Sessao.Find(id);
-            if (sessao == null)
-            {
-                return HttpNotFound();
-            }
-            return View(sessao);
-        }
-
         // GET: Sessoes/Create
         public ActionResult Create()
         {
+            ViewBag.Title = "Nova Sessão";
             return View();
         }
 
@@ -71,6 +57,7 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Title = "Editar Sessão";
             return View(sessao);
         }
 
@@ -90,30 +77,49 @@ namespace Finis.Controllers
             return View(sessao);
         }
 
-        // GET: Sessoes/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: Clientes/Details/5
+        public JsonResult Detalhes(int? id)
         {
+            bool sucesso;
+            string resultado;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                sucesso = false;
+                resultado = "Não encontrado!";
             }
-            Sessao sessao = db.Sessao.Find(id);
-            if (sessao == null)
+            else
             {
-                return HttpNotFound();
+                Sessao sessao = db.Sessao.Find(id);
+                if (sessao == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    sucesso = true;
+                    resultado = sessao.Serializar();
+                }
             }
-            return View(sessao);
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: Sessoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        // GET: Clientes/Delete/5
+        public JsonResult DeletarRegistro(int? id)
         {
-            Sessao sessao = db.Sessao.Find(id);
-            db.Sessao.Remove(sessao);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (id != null)
+            {
+                Sessao sessao = db.Sessao.Find(id);
+                db.Sessao.Remove(sessao);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
