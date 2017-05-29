@@ -48,12 +48,6 @@ namespace Finis.Models
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
         public string nome { get; set; }
-
-        
-        [Display(Name = "Subsessao")]
-        public Nullable<int> subsessaoId { get; set; }
-        [ForeignKey("subsessaoId")]
-        public virtual Sessao sessao { get; set; }
     }
 
     public class Exemplar : EntidadeAbstrata
@@ -137,6 +131,20 @@ namespace Finis.Models
                     return "Novo";
                 else if (this.conservacao == Conservacao.USADO)
                     return "Usado";
+
+                else return "";
+            }
+        }
+
+        [NotMapped]
+        public String vendaOnlineString
+        {
+            get
+            {
+                if (this.vendaOnline)
+                    return "Sim";
+                else if (!this.vendaOnline)
+                    return "Não";
 
                 else return "";
             }

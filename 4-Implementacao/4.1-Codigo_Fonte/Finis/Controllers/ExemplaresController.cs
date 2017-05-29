@@ -23,27 +23,46 @@ namespace Finis.Controllers
             return View(exemplars.ToList());
         }
 
-        // GET: Exemplares/Details/5
-        public ActionResult Details(int? id)
+        // GET: Clientes/Details/5
+        public JsonResult Detalhes(int? id)
         {
+            bool sucesso;
+            string resultado;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                sucesso = false;
+                resultado = "Não encontrado!";
             }
-            Exemplar exemplar = db.Exemplar.Find(id);
-            if (exemplar == null)
+            else
             {
-                return HttpNotFound();
+                Exemplar exemplar = db.Exemplar.Find(id);
+                if (exemplar == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    //exemplar.endereco = RecuperaEndereco(cliente.enderecoId);
+                    sucesso = true;
+                    resultado = exemplar.Serializar();
+                }
             }
-            return View(exemplar);
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Exemplares/Create
         public ActionResult Form()
         {
             ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj");
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome");
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome");
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome");
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome");
             ViewBag.Title = "Inserir Exemplar";
             return View();
         }
@@ -63,8 +82,8 @@ namespace Finis.Controllers
             }
 
             ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -81,8 +100,8 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             ViewBag.Title = "Editar Exemplar";
             return View("Form", exemplar);
         }
@@ -101,35 +120,9 @@ namespace Finis.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "cnpj", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             return View("Form", exemplar);
-        }
-
-        // GET: Exemplares/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Exemplar exemplar = db.Exemplar.Find(id);
-            if (exemplar == null)
-            {
-                return HttpNotFound();
-            }
-            return View(exemplar);
-        }
-
-        // POST: Exemplares/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Exemplar exemplar = db.Exemplar.Find(id);
-            db.Exemplar.Remove(exemplar);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         // GET: Clientes/Delete/5

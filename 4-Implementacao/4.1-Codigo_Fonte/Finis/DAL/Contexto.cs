@@ -25,6 +25,9 @@ namespace Finis.DAL
         public DbSet<Fornecedor> Fornecedor { get; set; }
         public DbSet<Autor> Autor { get; set; }
         public DbSet<Transacao> Transacao { get; set; }
+        public DbSet<Editora> Editora { get; set; }
+        public DbSet<Sessao> Sessao { get; set; }
+        public DbSet<Idioma> Idioma { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -39,10 +42,6 @@ namespace Finis.DAL
             modelBuilder.Entity<Estado>().ToTable("Estados");
             modelBuilder.Entity<Endereco>().ToTable("Enderecos");
             modelBuilder.Entity<Sessao>().ToTable("Sessoes");
-        }
-
-        public System.Data.Entity.DbSet<Finis.Models.Idioma> Idiomas { get; set; }
-
-        public System.Data.Entity.DbSet<Finis.Models.Sessao> Sessaos { get; set; }
+        } 
     }
 }

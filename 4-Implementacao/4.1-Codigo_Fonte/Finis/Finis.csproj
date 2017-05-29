@@ -153,11 +153,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CidadesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
+    <Compile Include="Controllers\EditorasController.cs" />
     <Compile Include="Controllers\EnderecosController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\ExemplaresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IdiomasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
+    <Compile Include="Controllers\SessoesController.cs" />
     <Compile Include="DAL\Contexto.cs" />
     <Compile Include="DAL\Inicializador.cs" />
     <Compile Include="Global.asax.cs">
@@ -175,6 +178,10 @@
     <Compile Include="Migrations\201705261902436_AtualizaExemplar_1.Designer.cs">
       <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705290242389_ModificarSessoes.cs" />
+    <Compile Include="Migrations\201705290242389_ModificarSessoes.Designer.cs">
+      <DependentUpon>201705290242389_ModificarSessoes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -190,6 +197,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\imagens\books-background.jpg" />
     <Content Include="Content\imagens\logo.png" />
     <Content Include="Content\materialize\css\materialize.css" />
     <Content Include="Content\materialize\css\materialize.min.css" />
@@ -328,10 +336,13 @@
     <Content Include="Views\Paises\Index.cshtml" />
     <Content Include="Views\Enderecos\Create.cshtml" />
     <Content Include="Views\Exemplares\Form.cshtml" />
-    <Content Include="Views\Exemplares\Delete.cshtml" />
-    <Content Include="Views\Exemplares\Details.cshtml" />
-    <Content Include="Views\Exemplares\Edit.cshtml" />
     <Content Include="Views\Exemplares\Index.cshtml" />
+    <Content Include="Views\Idiomas\Form.cshtml" />
+    <Content Include="Views\Sessoes\Form.cshtml" />
+    <Content Include="Views\Sessoes\Index.cshtml" />
+    <Content Include="Views\Editoras\Form.cshtml" />
+    <Content Include="Views\Editoras\Index.cshtml" />
+    <Content Include="Views\Idiomas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -357,6 +368,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705261902436_AtualizaExemplar_1.resx">
       <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705290242389_ModificarSessoes.resx">
+      <DependentUpon>201705290242389_ModificarSessoes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

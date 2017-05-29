@@ -1,0 +1,172 @@
+﻿@model IEnumerable<Finis.Models.Editora>
+
+@{
+    ViewBag.Title = "Cadastro de Editoras";
+}
+
+<script>
+
+    function DeletaRegistro(id) {
+
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("DeletarRegistro", "Editoras")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
+
+    function CarregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Editoras")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     PreencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function PreencheModalDetalhes(obj) {
+
+        document.getElementById('nome').innerHTML = SubstituirCampoNulo(obj.nome);
+        document.getElementById('cnpj').innerHTML = SubstituirCampoNulo(obj.cnpj);
+        document.getElementById('email').innerHTML = SubstituirCampoNulo(obj.email);
+        document.getElementById('telefone').innerHTML = SubstituirCampoNulo(obj.telefone);
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null)
+            return " - "
+        else
+            return campo;
+    }
+
+</script>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Form","Exemplares")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefone)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(model => model.nome)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(model => model.cnpj)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.telefone)
+                </td>
+                <td>
+                    <a class="btn-floating blue" href="@Url.Action("Form", "Editoras", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+                </td>
+            </tr>
+        }
+
+</table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do cliente</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>Nome:</label>
+            </div>
+            <div class="col s4">
+                <label>CNPJ:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="cnpj">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>E-mail:</label>
+            </div>
+            <div class="col s4">
+                <label>Telefone:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="email">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="telefone">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover esta editora?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}
