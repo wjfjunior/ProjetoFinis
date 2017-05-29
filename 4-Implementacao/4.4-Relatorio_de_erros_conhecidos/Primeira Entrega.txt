@@ -17,6 +17,7 @@ SUGESTÕES DE IMPLEMENTAÇÕES
 
 	- Permitir digitar para selecionar registro no combobox;
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
+	- Inserir cores nos botôes do modal de exclusão
 
 	
 	-> Transações: Adicionar extrato no cadastro de cliente
