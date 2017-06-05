@@ -1,0 +1,268 @@
+﻿@model IEnumerable<Finis.Models.Exemplar>
+
+<script type="text/javascript">
+
+    function DeletaRegistro(id) {
+
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("DeletarRegistro", "Exemplares")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
+
+    function CarregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Exemplares")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     preencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function PreencheModalDetalhes(obj) {
+
+        document.getElementById('titulo').innerHTML = obj.titulo;
+        document.getElementById('editora').innerHTML = SubstituirCampoNulo(obj.editora);
+        document.getElementById('edicao').innerHTML = obj.edicao;
+        document.getElementById('conservacao').innerHTML = obj.conservacao;
+        document.getElementById('quantidade').innerHTML = obj.quantidade;
+        document.getElementById('isbn').innerHTML = obj.isbn;
+        document.getElementById('ano').innerHTML = FormataDataJSON(obj.ano);
+        document.getElementById('precoCompra').innerHTML = obj.precoCompra;
+        document.getElementById('precoVenda').innerHTML = obj.precoVenda;
+        document.getElementById('descricao').innerHTML = obj.descricao;
+        document.getElementById('peso').innerHTML = obj.peso;
+        document.getElementById('vendaOnline').innerHTML = obj.vendaOnlineString;
+        document.getElementById('quantidade').innerHTML = obj.quantidade;
+        document.getElementById('idioma').innerHTML = obj.idioma.nome;
+        document.getElementById('sessao').innerHTML = obj.sessao.nome;
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null)
+            return " - "
+        else
+            return campo;
+    }
+
+    function FormataDataJSON(data) {
+
+        var dateString = data.substr(6);
+        var currentTime = new Date(parseInt(dateString));
+        var month = currentTime.getMonth() + 1;
+        var day = currentTime.getDate();
+        var year = currentTime.getFullYear();
+        var date = day + "/" + month + "/" + year;
+
+        return date;
+    }
+
+</script>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Form","Exemplares")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.editora.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.edicao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.conservacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.quantidade)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayNameFor(model => model.titulo)
+        </td>
+        <td>
+            @Html.DisplayNameFor(model => model.editora.nome)
+        </td>
+        <td>
+           @Html.DisplayNameFor(model => model.edicao)
+        </td>
+        <td>
+           @Html.DisplayNameFor(model => model.conservacao)
+        </td>
+        <td>
+           @Html.DisplayNameFor(model => model.quantidade)
+        </td>
+        <td>
+            <a class="btn-floating blue" href="@Url.Action("Edit", "Exemplares", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+            <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
+                <i class="fa fa-info" aria-hidden="true"></i>
+            </a>
+            <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+        </td>
+    </tr>
+}
+</table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do cliente</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>Título:</label>
+            </div>
+            <div class="col s2">
+                <label>Conservação:</label>
+            </div>
+            <div class="col s2">
+                <label>ISBN:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="conservacao">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="isbn">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s2">
+                <label>Ano:</label>
+            </div>
+            <div class="col s2">
+                <label>Edição:</label>
+            </div>
+            <div class="col s2">
+                <label>Peso:</label>
+            </div>
+            <div class="col s2">
+                <label>Preço de Compra:</label>
+            </div>
+            <div class="col s2">
+                <label>Preço de Venda:</label>
+            </div>
+            <div class="col s2">
+                <label>Quantidade:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s2">
+                <label class="texto-detalhes" id="ano">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="edicao">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="peso">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="precoCompra">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="precoVenda">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="quantidade">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s4">
+                <label>Idioma:</label>
+            </div>
+            <div class="col s4">
+                <label>Editora:</label>
+            </div>
+            <div class="col s4">
+                <label>Sessão:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s4">
+                <label class="texto-detalhes" id="idioma">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="editora">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="sessao">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Descrição:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="descricao">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Venda na internet?:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="vendaOnlina">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este exemplar?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}

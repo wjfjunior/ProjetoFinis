@@ -6,7 +6,7 @@
 
 <script>
 
-    function deletaRegistro(id) {
+    function DeletaRegistro(id) {
         
         $.ajax({
                  type: "GET",
@@ -19,7 +19,7 @@
              });
     }
 
-    function carregaDetalhes(id) {
+    function CarregaDetalhes(id) {
 
              $.ajax({
                  type: "GET",
@@ -28,12 +28,12 @@
                  dataType: "json",
                  success: function (dados) {
                      obj = JSON.parse(dados.Resultado);
-                     preencheModalDetalhes(obj);
+                     PreencheModalDetalhes(obj);
                  }
         });
     }
 
-    function preencheModalDetalhes(obj) {
+    function PreencheModalDetalhes(obj) {
 
         document.getElementById('nome').innerHTML = obj.nome;
         document.getElementById('dtaNascimento').innerHTML = FormataDataJSON(obj.dataNascimento);
@@ -90,9 +90,6 @@
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Clientes")">
         <i class="material-icons">add</i>
     </a>
-    <ul>
-        <li><a class="btn-floating btn-large green" href="@Url.Action("Index","Clientes")"><i class="material-icons">repeat</i></a></li>
-    </ul>
 </div>
 <table class="highlight">
     <thead>
@@ -135,7 +132,7 @@
         </td>
         <td>
             <a class="btn-floating blue" href="@Url.Action("Edit", "Clientes", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
-            <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+            <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
                 <i class="fa fa-info" aria-hidden="true"></i>
             </a>
             <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
@@ -280,7 +277,7 @@
 
     function showModal(id, modal) {
         $('#' + modal).openModal();
-        $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); deletaRegistro(id); });
+        $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
     }
     
     $(document).ready(function () {

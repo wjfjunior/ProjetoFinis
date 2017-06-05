@@ -8,7 +8,7 @@ namespace Finis.Models
 {
     public class Fornecedor : Pessoa
     {
-        [Display(Name = "Cadastro Nacional de Pessoas Jurídicas (CNPJ)")]
+        [Display(Name = "CNPJ")]
         [StringLength(50, ErrorMessage = "O número do documento é muito longo")]
         public string cnpj { get; set; }
 

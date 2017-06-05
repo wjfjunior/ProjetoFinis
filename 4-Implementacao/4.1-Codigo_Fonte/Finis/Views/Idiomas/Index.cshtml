@@ -1,0 +1,141 @@
+﻿@model IEnumerable<Finis.Models.Idioma>
+
+@{
+    ViewBag.Title = "Cadastro de Idiomas";
+}
+
+<script>
+
+    function DeletaRegistro(id) {
+
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("DeletarRegistro", "Idiomas")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
+
+    function CarregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Idiomas")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     PreencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function PreencheModalDetalhes(obj) {
+
+        document.getElementById('nome').innerHTML = SubstituirCampoNulo(obj.nome);
+        document.getElementById('pais').innerHTML = SubstituirCampoNulo(obj.pais.nome);
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null)
+            return " - "
+        else
+            return campo;
+    }
+
+</script>
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Idiomas")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pais.nome)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pais.nome)
+                </td>
+                <td>
+                    <a class="btn-floating blue" href="@Url.Action("Edit", "Idiomas", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+                </td>
+            </tr>
+        }
+
+</table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do idioma</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>Nome:</label>
+            </div>
+            <div class="col s4">
+                <label>País:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="pais">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este idioma?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}

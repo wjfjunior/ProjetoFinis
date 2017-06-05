@@ -19,6 +19,7 @@ namespace Finis.Controllers
         // GET: Clientes
         public ActionResult Index()
         {
+            ViewBag.Title = "Cadastro de Clientes";
             return View(db.Cliente.ToList());
         }
 
@@ -26,21 +27,6 @@ namespace Finis.Controllers
         public ActionResult Buscar(string nome)
         {
             return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
-        }
-
-        // GET: Clientes/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Cliente cliente = db.Cliente.Find(id);
-            if (cliente == null)
-            {
-                return HttpNotFound();
-            }
-            return PartialView(cliente);
         }
 
         private Endereco RecuperaEndereco(int? id)
@@ -91,6 +77,7 @@ namespace Finis.Controllers
         public ActionResult Create()
         {
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Title = "Inserir Cliente";
             return View();
         }
 
@@ -108,6 +95,7 @@ namespace Finis.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Title = "Inserir Cliente";
             return View(model);
         }
 
@@ -127,6 +115,7 @@ namespace Finis.Controllers
             var enderecoID = cliente.enderecoId;
             cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
             cliente.enderecoId = enderecoID;
+            ViewBag.Title = "Editar Cliente";
             return View(cliente);
         }
 
@@ -145,6 +134,7 @@ namespace Finis.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Title = "Editar Cliente";
             return View(model);
         }
 
@@ -162,17 +152,6 @@ namespace Finis.Controllers
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(cliente);
-        }
-
-        // POST: Clientes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Cliente cliente = db.Cliente.Find(id);
-            db.Cliente.Remove(cliente);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         // GET: Clientes/Delete/5
