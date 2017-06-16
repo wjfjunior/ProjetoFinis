@@ -4,7 +4,10 @@ RELATÓRIO DE ERROS CONHECIDOS
 	- Inserir máscara no campo de saldo;
 	- Erro apresentado no console durante o download de fontes;
 	- Inserir máscara no campo CEP
+<<<<<<< HEAD
+=======
 	- Logradouro e Bairro voltar como obrigatorio
+>>>>>>> 2d77c2f4856a5fe44b041fad6e9216995be2c86e
 
 SUGESTÕES DE IMPLEMENTAÇÕES
 
@@ -16,9 +19,13 @@ SUGESTÕES DE IMPLEMENTAÇÕES
 	- Clientes => Unificar formulários CREATE e EDIT 
 
 	- Permitir digitar para selecionar registro no combobox;
+<<<<<<< HEAD
+	- Permitir adicionar novo registro sem sair da tela de cadastro;
+=======
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
 	- Inserir cores nos botôes do modal de exclusão
 
 	
 	-> Transações: Adicionar extrato no cadastro de cliente
 	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente
+>>>>>>> 2d77c2f4856a5fe44b041fad6e9216995be2c86e

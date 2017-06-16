@@ -166,23 +166,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201705261257471_InitialCreate.cs" />
-    <Compile Include="Migrations\201705261257471_InitialCreate.Designer.cs">
-      <DependentUpon>201705261257471_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705261415342_IncluirExemplar.cs" />
-    <Compile Include="Migrations\201705261415342_IncluirExemplar.Designer.cs">
-      <DependentUpon>201705261415342_IncluirExemplar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705261902436_AtualizaExemplar_1.cs" />
-    <Compile Include="Migrations\201705261902436_AtualizaExemplar_1.Designer.cs">
-      <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201705290242389_ModificarSessoes.cs" />
-    <Compile Include="Migrations\201705290242389_ModificarSessoes.Designer.cs">
-      <DependentUpon>201705290242389_ModificarSessoes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Endereco.cs" />
@@ -352,20 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201705261257471_InitialCreate.resx">
-      <DependentUpon>201705261257471_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705261415342_IncluirExemplar.resx">
-      <DependentUpon>201705261415342_IncluirExemplar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705261902436_AtualizaExemplar_1.resx">
-      <DependentUpon>201705261902436_AtualizaExemplar_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201705290242389_ModificarSessoes.resx">
-      <DependentUpon>201705290242389_ModificarSessoes.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
