@@ -20,20 +20,20 @@ namespace Finis.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Cadastro de Clientes";
-            return View(db.Cliente.ToList());
+            return View(db.Clientes.ToList());
         }
 
         // GET: Clientes
         public ActionResult Buscar(string nome)
         {
-            return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
+            return View("Index", db.Clientes.Where(c => c.nome.Contains(nome)).ToList());
         }
 
         private Endereco RecuperaEndereco(int? id)
         {
             if(id != null)
             {
-                Endereco endereco = db.Endereco.Find(id);
+                Endereco endereco = db.Enderecos.Find(id);
                 return endereco;
             }
             return new Endereco();
@@ -52,7 +52,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Cliente cliente = db.Cliente.Find(id);
+                Cliente cliente = db.Clientes.Find(id);
                 if (cliente == null)
                 {
                     sucesso = false;
@@ -76,7 +76,7 @@ namespace Finis.Controllers
         // GET: Clientes/Create
         public ActionResult Create()
         {
-            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
             ViewBag.Title = "Inserir Cliente";
             return View();
         }
@@ -90,11 +90,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Cliente.Add(model);
+                db.Clientes.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
             ViewBag.Title = "Inserir Cliente";
             return View(model);
         }
@@ -106,12 +106,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Cliente.Find(id);
+            Cliente cliente = db.Clientes.Find(id);
             if (cliente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
             var enderecoID = cliente.enderecoId;
             cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
             cliente.enderecoId = enderecoID;
@@ -133,7 +133,7 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Cidades, "Id", "Nome", "Estado");
             ViewBag.Title = "Editar Cliente";
             return View(model);
         }
@@ -145,12 +145,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Cliente.Find(id);
+            Cliente cliente = db.Clientes.Find(id);
             if (cliente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Cidades, "Id", "Nome", "Estado");
             return View(cliente);
         }
 
@@ -159,10 +159,10 @@ namespace Finis.Controllers
         {
             if(id != null)
             {
-                Cliente cliente = db.Cliente.Find(id);
+                Cliente cliente = db.Clientes.Find(id);
                 Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
-                db.Cliente.Remove(cliente);
-                db.Endereco.Remove(endereco);
+                db.Clientes.Remove(cliente);
+                db.Enderecos.Remove(endereco);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

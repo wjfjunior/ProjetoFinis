@@ -19,7 +19,7 @@ namespace Finis.DAL
                     endereco = new Endereco{logradouro = "Rua Artico", bairro = "Jd. Espanhola", cep = 85856440, complemento = "Ap 404", numero = 123,
                         cidade = new Cidade {nome = "Curitiba", estado = new Estado {nome = "Parana", sigla = "PR", pais = new Pais { nome = "Brasil", sigla = "BR" } } } }} };
 
-            clientes.ForEach(c => contexto.Cliente.Add(c));
+            clientes.ForEach(c => contexto.Clientes.Add(c));
             contexto.SaveChanges();
         }
     }

@@ -18,7 +18,7 @@ namespace Finis.Controllers
         // GET: Editoras
         public ActionResult Index()
         {
-            return View(db.Editora.ToList());
+            return View(db.Editoras.ToList());
         }
 
         // GET: Editoras/Create
@@ -37,7 +37,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Editora.Add(editora);
+                db.Editoras.Add(editora);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -67,7 +67,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Editora editora = db.Editora.Find(id);
+            Editora editora = db.Editoras.Find(id);
             if (editora == null)
             {
                 return HttpNotFound();
@@ -89,7 +89,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Editora editora = db.Editora.Find(id);
+                Editora editora = db.Editoras.Find(id);
                 if (editora == null)
                 {
                     sucesso = false;
@@ -114,8 +114,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Editora editora = db.Editora.Find(id);
-                db.Editora.Remove(editora);
+                Editora editora = db.Editoras.Find(id);
+                db.Editoras.Remove(editora);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

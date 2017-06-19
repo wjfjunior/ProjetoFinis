@@ -18,7 +18,7 @@ namespace Finis.Controllers
         // GET: Estados
         public ActionResult Index()
         {
-            return View(db.Estado.ToList());
+            return View(db.Estados.ToList());
         }
 
         // GET: Estados/Details/5
@@ -28,7 +28,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Estado estado = db.Estado.Find(id);
+            Estado estado = db.Estados.Find(id);
             if (estado == null)
             {
                 return HttpNotFound();
@@ -49,7 +49,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Estado estado = db.Estado.Find(id);
+                Estado estado = db.Estados.Find(id);
                 if (estado == null)
                 {
                     sucesso = false;
@@ -72,7 +72,7 @@ namespace Finis.Controllers
         // GET: Estados/Create
         public ActionResult Create()
         {
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            ViewBag.Paises = new SelectList(db.Paises, "Id", "Nome", "Sigla");
             return View();
         }
 
@@ -85,11 +85,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Estado.Add(model);
+                db.Estados.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            ViewBag.Paises = new SelectList(db.Paises, "Id", "Nome", "Sigla");
             return View(model);
         }
 
@@ -100,12 +100,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Estado estado = db.Estado.Find(id);
+            Estado estado = db.Estados.Find(id);
             if (estado == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            ViewBag.Paises = new SelectList(db.Paises, "Id", "Nome", "Sigla");
             return View(estado);
         }
 
@@ -122,7 +122,7 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            ViewBag.Paises = new SelectList(db.Paises, "Id", "Nome", "Sigla");
             return View(model);
         }
 
@@ -133,7 +133,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Estado estado = db.Estado.Find(id);
+            Estado estado = db.Estados.Find(id);
             if (estado == null)
             {
                 return HttpNotFound();
@@ -146,8 +146,8 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Estado estado = db.Estado.Find(id);
-            db.Estado.Remove(estado);
+            Estado estado = db.Estados.Find(id);
+            db.Estados.Remove(estado);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -157,8 +157,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Estado estado = db.Estado.Find(id);
-                db.Estado.Remove(estado);
+                Estado estado = db.Estados.Find(id);
+                db.Estados.Remove(estado);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

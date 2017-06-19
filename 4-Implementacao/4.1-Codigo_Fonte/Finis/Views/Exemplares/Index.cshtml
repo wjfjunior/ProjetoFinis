@@ -97,32 +97,33 @@
         </tr>
     </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayNameFor(model => model.titulo)
-        </td>
-        <td>
-            @Html.DisplayNameFor(model => model.editora.nome)
-        </td>
-        <td>
-           @Html.DisplayNameFor(model => model.edicao)
-        </td>
-        <td>
-           @Html.DisplayNameFor(model => model.conservacao)
-        </td>
-        <td>
-           @Html.DisplayNameFor(model => model.quantidade)
-        </td>
-        <td>
-            <a class="btn-floating blue" href="@Url.Action("Edit", "Exemplares", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
-            <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
-                <i class="fa fa-info" aria-hidden="true"></i>
-            </a>
-            <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.titulo)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.editora.nome)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.edicao)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.conservacao)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.quantidade)
+            </td>
+            <td>
+                <a class="btn-floating blue" href="@Url.Action("Edit", "Exemplares", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </a>
+                <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+            </td>
+        </tr>
+    }
 </table>
 
 <!-- Estrutura do Modal de detalhes -->

@@ -1,9 +1,9 @@
 ﻿@model Finis.Models.Exemplar
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="container" id="formulario">
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
@@ -87,12 +87,12 @@
                 <label for="vendaOnline">Disponibilizar para venda na internet</label>
             </p>
             @*<div class="row">
-                <div class="input-field col s12">
-                    @Html.CheckBox("vendaOnline", true)
-                    @Html.LabelFor(model => model.vendaOnline, htmlAttributes: new { @class = "validate" })
-                    @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
-                </div>
-            </div>*@
+                    <div class="input-field col s12">
+                        @Html.CheckBox("vendaOnline", true)
+                        @Html.LabelFor(model => model.vendaOnline, htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
+                    </div>
+                </div>*@
             <div class="row">
                 <div class="input-field col s12">
                     @Html.LabelFor(model => model.descricao, htmlAttributes: new { @class = "validate" })
@@ -112,7 +112,7 @@
             </div>
         </form>
     </div>
-}
+                        }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -126,7 +126,7 @@
 
         $('.datepicker').pickadate({
             format: 'yyyy',
-            viewMode: "years", 
+            viewMode: "years",
             minViewMode: "years",
             autoclose: true,
         });

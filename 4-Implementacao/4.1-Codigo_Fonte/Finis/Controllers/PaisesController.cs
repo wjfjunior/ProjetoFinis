@@ -18,13 +18,13 @@ namespace Finis.Controllers
         // GET: Paises
         public ActionResult Index()
         {
-            return View(db.Pais.ToList());
+            return View(db.Paises.ToList());
         }
 
         // GET: Clientes
         public ActionResult Buscar(string nome)
         {
-            return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
+            return View("Index", db.Clientes.Where(c => c.nome.Contains(nome)).ToList());
         }
 
         // GET: Paises/Details/5
@@ -34,7 +34,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pais pais = db.Pais.Find(id);
+            Pais pais = db.Paises.Find(id);
             if (pais == null)
             {
                 return HttpNotFound();
@@ -55,7 +55,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Pais pais = db.Pais.Find(id);
+                Pais pais = db.Paises.Find(id);
                 if (pais == null)
                 {
                     sucesso = false;
@@ -90,7 +90,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Pais.Add(model);
+                db.Paises.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -105,7 +105,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pais pais = db.Pais.Find(id);
+            Pais pais = db.Paises.Find(id);
             if (pais == null)
             {
                 return HttpNotFound();
@@ -136,7 +136,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Pais pais = db.Pais.Find(id);
+            Pais pais = db.Paises.Find(id);
             if (pais == null)
             {
                 return HttpNotFound();
@@ -149,8 +149,8 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Pais pais = db.Pais.Find(id);
-            db.Pais.Remove(pais);
+            Pais pais = db.Paises.Find(id);
+            db.Paises.Remove(pais);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -160,8 +160,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Pais pais = db.Pais.Find(id);
-                db.Pais.Remove(pais);
+                Pais pais = db.Paises.Find(id);
+                db.Paises.Remove(pais);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

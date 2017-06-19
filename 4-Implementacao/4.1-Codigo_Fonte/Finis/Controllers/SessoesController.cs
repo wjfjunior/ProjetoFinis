@@ -18,7 +18,7 @@ namespace Finis.Controllers
         // GET: Sessoes
         public ActionResult Index()
         {
-            return View(db.Sessao.ToList());
+            return View(db.Sessoes.ToList());
         }
 
         // GET: Sessoes/Create
@@ -37,7 +37,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Sessao.Add(sessao);
+                db.Sessoes.Add(sessao);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -52,7 +52,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sessao sessao = db.Sessao.Find(id);
+            Sessao sessao = db.Sessoes.Find(id);
             if (sessao == null)
             {
                 return HttpNotFound();
@@ -90,7 +90,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Sessao sessao = db.Sessao.Find(id);
+                Sessao sessao = db.Sessoes.Find(id);
                 if (sessao == null)
                 {
                     sucesso = false;
@@ -115,8 +115,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Sessao sessao = db.Sessao.Find(id);
-                db.Sessao.Remove(sessao);
+                Sessao sessao = db.Sessoes.Find(id);
+                db.Sessoes.Remove(sessao);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

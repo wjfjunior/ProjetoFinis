@@ -308,8 +308,6 @@
     <Content Include="Views\Paises\Edit.cshtml" />
     <Content Include="Views\Paises\Index.cshtml" />
     <Content Include="Views\Enderecos\Create.cshtml" />
-    <Content Include="Views\Exemplares\Edit.cshtml" />
-    <Content Include="Views\Exemplares\Index.cshtml" />
     <Content Include="Views\Idiomas\Create.cshtml" />
     <Content Include="Views\Sessoes\Edit.cshtml" />
     <Content Include="Views\Sessoes\Index.cshtml" />
@@ -320,6 +318,8 @@
     <Content Include="Views\Editoras\Edit.cshtml" />
     <Content Include="Views\Sessoes\Create.cshtml" />
     <Content Include="Views\Exemplares\Create.cshtml" />
+    <Content Include="Views\Exemplares\Edit.cshtml" />
+    <Content Include="Views\Exemplares\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

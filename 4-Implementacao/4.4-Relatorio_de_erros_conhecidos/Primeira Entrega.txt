@@ -4,28 +4,30 @@ RELATÓRIO DE ERROS CONHECIDOS
 	- Inserir máscara no campo de saldo;
 	- Erro apresentado no console durante o download de fontes;
 	- Inserir máscara no campo CEP
-<<<<<<< HEAD
-=======
 	- Logradouro e Bairro voltar como obrigatorio
->>>>>>> 2d77c2f4856a5fe44b041fad6e9216995be2c86e
 
 SUGESTÕES DE IMPLEMENTAÇÕES
+	
+	- Criar validações javascript para Cliente
+	- Revisar validações com DataAnotations
+	- Implementação de Busca pode ser feota com Sobrecarga de método em index e submit {} na view
+	- Dropdown com espaço para digitar e buscar
 
 	- Exemplares => Adicionar botão para chamada de Modal para Criação de Autor;
 	- Exemplares => Adicionar botão para chamada de Modal para Criação de Sessão;
 	- Exemplares => Adicionar botão para chamada de Modal para Criação de Idioma;
-	- Exemplares => Adicionar tela de consulta para o usuário Cliente
-
-	- Clientes => Unificar formulários CREATE e EDIT 
+	- Exemplares => Adicionar tela de consulta para o usuário Cliente (clonar index)
 
 	- Permitir digitar para selecionar registro no combobox;
-<<<<<<< HEAD
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
-=======
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
 	- Inserir cores nos botôes do modal de exclusão
 
-	
+	- Pais => Não permitir salvar com o mesmo nome
+	- Cidade => Não permitir salvar com o mesmo nome e mesmo estado
+	- Estado => Não Permitir salvar com o mesmo nome e mesmo pais
+
 	-> Transações: Adicionar extrato no cadastro de cliente
 	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente
->>>>>>> 2d77c2f4856a5fe44b041fad6e9216995be2c86e
+
+	- Avaliações: Exibir cliente + rg no dropdown

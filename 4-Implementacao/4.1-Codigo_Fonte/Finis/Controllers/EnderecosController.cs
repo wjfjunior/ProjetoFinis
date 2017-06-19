@@ -18,7 +18,7 @@ namespace Finis.Controllers
         // GET: Enderecoes
         public ActionResult Index()
         {
-            return View(db.Endereco.ToList());
+            return View(db.Enderecos.ToList());
         }
 
         // GET: Enderecoes/Details/5
@@ -28,7 +28,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Endereco endereco = db.Endereco.Find(id);
+            Endereco endereco = db.Enderecos.Find(id);
             if (endereco == null)
             {
                 return HttpNotFound();
@@ -51,7 +51,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Endereco.Add(endereco);
+                db.Enderecos.Add(endereco);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -66,7 +66,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Endereco endereco = db.Endereco.Find(id);
+            Endereco endereco = db.Enderecos.Find(id);
             if (endereco == null)
             {
                 return HttpNotFound();
@@ -97,7 +97,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Endereco endereco = db.Endereco.Find(id);
+            Endereco endereco = db.Enderecos.Find(id);
             if (endereco == null)
             {
                 return HttpNotFound();
@@ -110,8 +110,8 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Endereco endereco = db.Endereco.Find(id);
-            db.Endereco.Remove(endereco);
+            Endereco endereco = db.Enderecos.Find(id);
+            db.Enderecos.Remove(endereco);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

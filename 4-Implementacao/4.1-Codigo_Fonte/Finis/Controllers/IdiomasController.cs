@@ -18,14 +18,14 @@ namespace Finis.Controllers
         // GET: Idiomas
         public ActionResult Index()
         {
-            var idiomas = db.Idioma.Include(i => i.pais);
+            var idiomas = db.Idiomas.Include(i => i.pais);
             return View(idiomas.ToList());
         }
 
         // GET: Idiomas/Create
         public ActionResult Create()
         {
-            ViewBag.paisId = new SelectList(db.Pais, "id", "nome");
+            ViewBag.paisId = new SelectList(db.Paises, "id", "nome");
             ViewBag.Title = "Novo Idioma";
             return View();
         }
@@ -39,11 +39,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Idioma.Add(idioma);
+                db.Idiomas.Add(idioma);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
+            ViewBag.paisId = new SelectList(db.Paises, "id", "nome", idioma.paisId);
             return View(idioma);
         }
 
@@ -57,7 +57,7 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
+            ViewBag.paisId = new SelectList(db.Paises, "id", "nome", idioma.paisId);
             return View(idioma);
         }
 
@@ -68,12 +68,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Idioma idioma = db.Idioma.Find(id);
+            Idioma idioma = db.Idiomas.Find(id);
             if (idioma == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
+            ViewBag.paisId = new SelectList(db.Paises, "id", "nome", idioma.paisId);
             ViewBag.Title = "Cadastro de Idiomas";
             return View(idioma);
         }
@@ -91,7 +91,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Idioma idioma = db.Idioma.Find(id);
+                Idioma idioma = db.Idiomas.Find(id);
                 if (idioma == null)
                 {
                     sucesso = false;
@@ -116,8 +116,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Idioma idioma = db.Idioma.Find(id);
-                db.Idioma.Remove(idioma);
+                Idioma idioma = db.Idiomas.Find(id);
+                db.Idiomas.Remove(idioma);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

@@ -18,8 +18,8 @@ namespace Finis.Controllers
         // GET: Exemplares
         public ActionResult Index()
         {
-            var exemplars = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
-            return View(exemplars.ToList());
+            var exemplares = db.Exemplares.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
+            return View(exemplares.ToList());
         }
 
         // GET: Clientes/Details/5
@@ -35,7 +35,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Exemplar exemplar = db.Exemplar.Find(id);
+                Exemplar exemplar = db.Exemplares.Find(id);
                 if (exemplar == null)
                 {
                     sucesso = false;
@@ -59,9 +59,9 @@ namespace Finis.Controllers
         // GET: Exemplares/Create
         public ActionResult Create()
         {
-            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome");
-            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome");
-            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome");
+            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome");
+            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome");
+            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome");
             ViewBag.Title = "Inserir Exemplar";
             return View();
         }
@@ -75,14 +75,14 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Exemplar.Add(exemplar);
+                db.Exemplares.Add(exemplar);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
+            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
+            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -93,14 +93,14 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exemplar exemplar = db.Exemplar.Find(id);
+            Exemplar exemplar = db.Exemplares.Find(id);
             if (exemplar == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
+            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
+            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
             ViewBag.Title = "Editar Exemplar";
             return View(exemplar);
         }
@@ -118,9 +118,9 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.editoraId = new SelectList(db.Editora, "id", "nome", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
+            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
+            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -129,10 +129,10 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Exemplar exemplar = db.Exemplar.Find(id);
+                Exemplar exemplar = db.Exemplares.Find(id);
                 //Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
-                db.Exemplar.Remove(exemplar);
-                //db.Endereco.Remove(endereco);
+                db.Exemplares.Remove(exemplar);
+                //db.Enderecos.Remove(endereco);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
