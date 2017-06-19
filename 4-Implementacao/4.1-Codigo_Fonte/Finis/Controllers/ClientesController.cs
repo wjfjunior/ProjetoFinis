@@ -19,21 +19,20 @@ namespace Finis.Controllers
         // GET: Clientes
         public ActionResult Index()
         {
-            ViewBag.Title = "Cadastro de Clientes";
-            return View(db.Clientes.ToList());
+            return View(db.Cliente.ToList());
         }
 
         // GET: Clientes
         public ActionResult Buscar(string nome)
         {
-            return View("Index", db.Clientes.Where(c => c.nome.Contains(nome)).ToList());
+            return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
         }
 
         private Endereco RecuperaEndereco(int? id)
         {
             if(id != null)
             {
-                Endereco endereco = db.Enderecos.Find(id);
+                Endereco endereco = db.Endereco.Find(id);
                 return endereco;
             }
             return new Endereco();
@@ -52,7 +51,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Cliente cliente = db.Clientes.Find(id);
+                Cliente cliente = db.Cliente.Find(id);
                 if (cliente == null)
                 {
                     sucesso = false;
@@ -76,8 +75,7 @@ namespace Finis.Controllers
         // GET: Clientes/Create
         public ActionResult Create()
         {
-            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
-            ViewBag.Title = "Inserir Cliente";
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View();
         }
 
@@ -90,12 +88,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Clientes.Add(model);
+                db.Cliente.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
-            ViewBag.Title = "Inserir Cliente";
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(model);
         }
 
@@ -106,16 +103,15 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Clientes.Find(id);
+            Cliente cliente = db.Cliente.Find(id);
             if (cliente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Cidades = new SelectList(db.Clientes, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             var enderecoID = cliente.enderecoId;
             cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
             cliente.enderecoId = enderecoID;
-            ViewBag.Title = "Editar Cliente";
             return View(cliente);
         }
 
@@ -133,9 +129,50 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Cidades = new SelectList(db.Cidades, "Id", "Nome", "Estado");
-            ViewBag.Title = "Editar Cliente";
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(model);
+        }
+
+        public void AtualizaSaldoEspecial(int? id, decimal creditoEspecial)
+        {
+            if(id != null)
+            {
+                Cliente cliente = db.Cliente.Find(id);
+                if (cliente != null)
+                {
+                    cliente.AtualizaSaldoEspecial(creditoEspecial);
+                    db.Entry(cliente).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void AtualizaSaldoParcial(int? id, decimal creditoParcial)
+        {
+            if (id != null)
+            {
+                Cliente cliente = db.Cliente.Find(id);
+                if (cliente != null)
+                {
+                    cliente.AtualizaSaldoParcial(creditoParcial);
+                    db.Entry(cliente).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public void NovoSaldo(int? id, decimal creditoEspecial, decimal creditoParcial)
+        {
+            if (id != null)
+            {
+                Cliente cliente = db.Cliente.Find(id);
+                if (cliente != null)
+                {
+                    cliente.NovoSaldo(creditoEspecial, creditoParcial);
+                    db.Entry(cliente).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
         }
 
         // GET: Clientes/Delete/5
@@ -145,12 +182,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cliente cliente = db.Clientes.Find(id);
+            Cliente cliente = db.Cliente.Find(id);
             if (cliente == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Cidades = new SelectList(db.Cidades, "Id", "Nome", "Estado");
+            ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(cliente);
         }
 
@@ -159,10 +196,10 @@ namespace Finis.Controllers
         {
             if(id != null)
             {
-                Cliente cliente = db.Clientes.Find(id);
+                Cliente cliente = db.Cliente.Find(id);
                 Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
-                db.Clientes.Remove(cliente);
-                db.Enderecos.Remove(endereco);
+                db.Cliente.Remove(cliente);
+                db.Endereco.Remove(endereco);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

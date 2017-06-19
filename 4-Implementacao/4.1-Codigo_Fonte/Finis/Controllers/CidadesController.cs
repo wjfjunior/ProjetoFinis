@@ -19,7 +19,7 @@ namespace Finis.Controllers
         // GET: Cidades
         public ActionResult Index()
         {
-            return View(db.Cidades.ToList());
+            return View(db.Cidade.ToList());
         }
 
         // GET: Cidades/Details/5
@@ -29,7 +29,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cidade cidade = db.Cidades.Find(id);
+            Cidade cidade = db.Cidade.Find(id);
             if (cidade == null)
             {
                 return HttpNotFound();
@@ -50,7 +50,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Cidade cidade = db.Cidades.Find(id);
+                Cidade cidade = db.Cidade.Find(id);
                 if (cidade == null)
                 {
                     sucesso = false;
@@ -73,7 +73,7 @@ namespace Finis.Controllers
         // GET: Cidades/Create
         public ActionResult Create()
         {
-            ViewBag.Estados = new SelectList(db.Cidades, "Id", "Nome", "Sigla");
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View();
         }
 
@@ -86,11 +86,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Cidades.Add(model);
+                db.Cidade.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Estados = new SelectList(db.Cidades, "Id", "Nome", "Sigla");
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(model);
         }
 
@@ -101,12 +101,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cidade cidade = db.Cidades.Find(id);
+            Cidade cidade = db.Cidade.Find(id);
             if (cidade == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Estados = new SelectList(db.Cidades, "Id", "Nome", "Sigla");
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(cidade);
         }
 
@@ -123,7 +123,7 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Estados = new SelectList(db.Cidades, "Id", "Nome", "Sigla");
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(model);
         }
 
@@ -134,12 +134,12 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cidade cidade = db.Cidades.Find(id);
+            Cidade cidade = db.Cidade.Find(id);
             if (cidade == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Estados = new SelectList(db.Estados, "Id", "Nome", "Sigla");
+            ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
             return View(cidade);
         }
 
@@ -148,8 +148,8 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Cidade cidade = db.Cidades.Find(id);
-            db.Cidades.Remove(cidade);
+            Cidade cidade = db.Cidade.Find(id);
+            db.Cidade.Remove(cidade);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -159,8 +159,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Cidade cidade = db.Cidades.Find(id);
-                db.Cidades.Remove(cidade);
+                Cidade cidade = db.Cidade.Find(id);
+                db.Cidade.Remove(cidade);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

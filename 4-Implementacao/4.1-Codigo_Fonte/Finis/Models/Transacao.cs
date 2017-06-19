@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finis.Controllers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,32 +10,49 @@ namespace Finis.Models
 {
     public enum TipoTransacao
     {
+        [Display(Name = "Entrada de créditos")]
         ENTRADA = 1,
+
+        [Display(Name = "Saída de créditos")]
         SAIDA = 2,
+    }
+
+    public enum TipoCredito
+    {
+        [Display(Name = "Parcial")]
+        PARCIAL = 1,
+
+        [Display(Name = "Especial")]
+        ESPECIAL = 2,
     }
 
     public class Transacao : EntidadeAbstrata
     {
+        public Transacao()
+        {
+            this.data = DateTime.Now;
+        }
+
         [Display(Name = "Valor")]
         [Required(ErrorMessage = "Por favor insira um valor")]
-        [DataType(DataType.Currency, ErrorMessage = "Por favor insira um valor válido")]
         public decimal valor { get; set; }
 
         [Display(Name = "Data da transação")]
-        [DisplayFormat(DataFormatString = "mm/dd/yyyy")]
         [Required(ErrorMessage = "Por favor insira uma data")]
-        [DataType(DataType.Date, ErrorMessage = "Por favor insira uma data válida")]
         public DateTime data { get; set; }
 
         [Display(Name = "Tipo de transação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
         public TipoTransacao tipoTransacao { get; set; }
 
-        [ForeignKey("Cliente")]
+        [Display(Name = "Tipo de crédito")]
+        [Required(ErrorMessage = "Por favor selecione uma opção")]
+        public TipoCredito tipoCredito { get; set; }
+
         [Display(Name = "Cliente")]
         [Required(ErrorMessage = "Por favor selecione um cliente")]
-        public int clienteId;
-
+        public int? clienteId { get; set; }
+        [ForeignKey("clienteId")]
         public virtual Cliente cliente { get; set; }
 
         [NotMapped]
@@ -49,6 +67,24 @@ namespace Finis.Models
 
                 else return "";
             }
+        }
+
+        public void NovaTransacaoEntrada(decimal valor, TipoCredito credito, int? ClienteId)
+        {
+            this.data = DateTime.Now;
+            this.valor = valor;
+            this.tipoCredito = credito;
+            this.clienteId = ClienteId;
+            this.tipoTransacao = TipoTransacao.ENTRADA;
+        }
+
+        public void NovaTransacaoSaida(decimal valor, TipoCredito credito, int? ClienteId)
+        {
+            this.data = DateTime.Now;
+            this.valor = valor;
+            this.tipoCredito = credito;
+            this.clienteId = ClienteId;
+            this.tipoTransacao = TipoTransacao.SAIDA;
         }
     }
 }

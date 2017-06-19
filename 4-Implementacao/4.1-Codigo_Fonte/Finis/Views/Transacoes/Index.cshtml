@@ -1,0 +1,189 @@
+﻿@model IEnumerable<Finis.Models.Transacao>
+
+@{
+    ViewBag.Title = "Registro de Transações";
+}
+<script>
+
+    function CarregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Transacoes")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     PreencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function PreencheModalDetalhes(obj) {
+
+        document.getElementById('valor').innerHTML = SubstituirCampoNulo(obj.valor);
+        document.getElementById('data').innerHTML = SubstituirCampoNulo(obj.data);
+        document.getElementById('tipoTransacao').innerHTML = SubstituirCampoNulo(obj.tipoTransacao);
+        document.getElementById('tipoCredito').innerHTML = SubstituirCampoNulo(obj.tipoCredito);
+        document.getElementById('clienteNome').innerHTML = SubstituirCampoNulo(obj.cliente.nome);
+        document.getElementById('clienteRg').innerHTML = SubstituirCampoNulo(obj.cliente.rg);
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null)
+            return " - "
+        else
+            return campo;
+    }
+
+</script>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Avaliacoes")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.cliente.nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cliente.rg)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipoTransacao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipoCredito)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.data)
+        </th>
+        <th>Opções</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.cliente.nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cliente.rg)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tipoTransacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tipoCredito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.data)
+            </td>
+            <td>
+                <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do registro</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label>Nome do cliente:</label>
+            </div>
+            <div class="col s4">
+                <label>RG do cliente:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s4">
+                <label class="texto-detalhes" id="rg">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s4">
+                <label>Data de entrada:</label>
+            </div>
+            <div class="col s2">
+                <label>Quantidade:</label>
+            </div>
+            <div class="col s3">
+                <label>Créd. Parcial:</label>
+            </div>
+            <div class="col s3">
+                <label>Créd. Especial:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s4">
+                <label class="texto-detalhes" id="dataEntrada">.</label>
+            </div>
+            <div class="col s2">
+                <label class="texto-detalhes" id="quantidadeExemplares">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="creditoEspecial">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="creditoParcial">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Situação:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s4">
+                <label class="texto-detalhes" id="situacao">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este registro?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}

@@ -151,21 +151,27 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AvaliacoesController.cs" />
     <Compile Include="Controllers\CidadesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\EditorasController.cs" />
-    <Compile Include="Controllers\EnderecosController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\ExemplaresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdiomasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
     <Compile Include="Controllers\SessoesController.cs" />
+    <Compile Include="Controllers\TransacoesController.cs" />
     <Compile Include="DAL\Contexto.cs" />
     <Compile Include="DAL\Inicializador.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706191530127_InitialCreate.cs" />
+    <Compile Include="Migrations\201706191530127_InitialCreate.Designer.cs">
+      <DependentUpon>201706191530127_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Endereco.cs" />
@@ -180,7 +186,6 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\imagens\books-background.jpg" />
     <Content Include="Content\imagens\logo.png" />
     <Content Include="Content\materialize\css\materialize.css" />
     <Content Include="Content\materialize\css\materialize.min.css" />
@@ -296,8 +301,6 @@
     <Content Include="Views\Clientes\Create.cshtml" />
     <Content Include="Views\Clientes\Edit.cshtml" />
     <Content Include="Views\Clientes\Index.cshtml" />
-    <Content Include="Views\Enderecos\Edit.cshtml" />
-    <Content Include="Views\Enderecos\Index.cshtml" />
     <Content Include="Views\Cidades\Create.cshtml" />
     <Content Include="Views\Cidades\Edit.cshtml" />
     <Content Include="Views\Cidades\Index.cshtml" />
@@ -307,19 +310,22 @@
     <Content Include="Views\Paises\Create.cshtml" />
     <Content Include="Views\Paises\Edit.cshtml" />
     <Content Include="Views\Paises\Index.cshtml" />
-    <Content Include="Views\Enderecos\Create.cshtml" />
-    <Content Include="Views\Idiomas\Create.cshtml" />
-    <Content Include="Views\Sessoes\Edit.cshtml" />
-    <Content Include="Views\Sessoes\Index.cshtml" />
-    <Content Include="Views\Editoras\Create.cshtml" />
-    <Content Include="Views\Editoras\Index.cshtml" />
-    <Content Include="Views\Idiomas\Index.cshtml" />
-    <Content Include="Views\Idiomas\Edit.cshtml" />
-    <Content Include="Views\Editoras\Edit.cshtml" />
-    <Content Include="Views\Sessoes\Create.cshtml" />
     <Content Include="Views\Exemplares\Create.cshtml" />
     <Content Include="Views\Exemplares\Edit.cshtml" />
     <Content Include="Views\Exemplares\Index.cshtml" />
+    <Content Include="Views\Editoras\Create.cshtml" />
+    <Content Include="Views\Editoras\Edit.cshtml" />
+    <Content Include="Views\Editoras\Index.cshtml" />
+    <Content Include="Views\Idiomas\Create.cshtml" />
+    <Content Include="Views\Idiomas\Edit.cshtml" />
+    <Content Include="Views\Idiomas\Index.cshtml" />
+    <Content Include="Views\Sessoes\Create.cshtml" />
+    <Content Include="Views\Sessoes\Edit.cshtml" />
+    <Content Include="Views\Sessoes\Index.cshtml" />
+    <Content Include="Views\Avaliacoes\Create.cshtml" />
+    <Content Include="Views\Avaliacoes\Edit.cshtml" />
+    <Content Include="Views\Avaliacoes\Index.cshtml" />
+    <Content Include="Views\Transacoes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -335,6 +341,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201706191530127_InitialCreate.resx">
+      <DependentUpon>201706191530127_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

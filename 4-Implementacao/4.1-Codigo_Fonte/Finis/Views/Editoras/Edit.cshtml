@@ -1,5 +1,9 @@
 ﻿@model Finis.Models.Editora
 
+@{
+    ViewBag.Title = "Alterar Editora";
+}
+
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
@@ -33,7 +37,7 @@
                 </div>
                 <div class="input-field col s4">
                     @Html.LabelFor(model => model.telefone, htmlAttributes: new { @class = "validate" })
-                    @Html.EditorFor(model => model.telefone, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.telefone, new { htmlAttributes = new { @id = "telefone", @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.telefone, "", new { @class = "validate" })
                 </div>
             </div>
@@ -53,4 +57,12 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#telefone").mask("(99)99999-9999");
+        });
+
+    </script>
 }

@@ -17,7 +17,6 @@ namespace Finis.Models
         [Display(Name = "Nome do país")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        //[Index("NomeIndex", IsUnique = true)]
         public string nome { get; set; }
 
         [Display(Name = "Sigla")]
@@ -36,7 +35,6 @@ namespace Finis.Models
         [Display(Name = "Nome do estado")]
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
-        //[Index("NomeIndex", IsUnique = true)]
         public string nome { get; set; }
 
         [Display(Name = "Sigla")]
@@ -97,7 +95,7 @@ namespace Finis.Models
         public string bairro { get; set; }
 
         [Display(Name = "CEP")]
-        public Nullable<int> cep { get; set; }
+        public int cep { get; set; }
         
         [Display(Name = "Cidade")]
         //[Required(ErrorMessage = "Por favor selecione uma cidade")]

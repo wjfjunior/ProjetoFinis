@@ -20,15 +20,23 @@ namespace Finis.Models
     {
         public Cliente()
         {
-            //this.endereco = new Endereco();
+            
         }
 
         [Display(Name = "Saldo de crédito parcial")]
         [Required(ErrorMessage = "Por favor insira um valor")]
+        [DisplayFormat(DataFormatString = "{0:n2}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem preço")]
+        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
         public decimal saldoCreditoParcial { get; set; }
 
         [Display(Name = "Saldo de crédito especial")]
         [Required(ErrorMessage = "Por favor insira um valor")]
+        [DisplayFormat(DataFormatString = "{0:n2}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem preço")]
+        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
         public decimal saldoCreditoEspecial { get; set; }
 
         [Display(Name = "Data de Nascimento")]
@@ -62,6 +70,22 @@ namespace Finis.Models
         public void EmitirCartao(Cliente cliente)
         {
 
+        }
+
+        public void NovoSaldo(decimal creditoEspecial, decimal creditoParcial)
+        {
+            this.saldoCreditoEspecial = creditoEspecial;
+            this.saldoCreditoEspecial = creditoEspecial;
+        }
+
+        public void AtualizaSaldoEspecial(decimal creditoEspecial)
+        {
+            this.saldoCreditoEspecial += creditoEspecial;
+        }
+
+        public void AtualizaSaldoParcial(decimal creditoParcial)
+        {
+            this.saldoCreditoParcial += creditoParcial;
         }
     }
 }

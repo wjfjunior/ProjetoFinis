@@ -25,9 +25,11 @@ namespace Finis.Models
         public string email { get; set; }
 
         [Display(Name = "Telefone")]
+        [StringLength(15, ErrorMessage = "O número é muito longo")]
         public string telefone { get; set; }
 
         [Display(Name = "Celular")]
+        [StringLength(15, ErrorMessage = "O número é muito longo")]
         public string celular { get; set; }
         
         [Display(Name = "Endereço")]

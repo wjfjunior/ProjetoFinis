@@ -16,33 +16,23 @@ namespace Finis.Models
         [Display(Name = "Usado")]
         USADO = 2,
     }
-
-    public class Autor : Pessoa
+    public enum VendaOnline
     {
-        public Nullable<int> exemplar_id { get; set; }
+        [Display(Name = "Sim")]
+        SIM = 1,
 
-        [ForeignKey("exemplar_id")]
-        public virtual Exemplar Exemplar { get; set; }
+        [Display(Name = "Não")]
+        NAO = 2,
     }
 
-    public class Editora : EntidadeAbstrata
+    public class Autor : Pessoa { }
+
+    public class Editora : Fornecedor
     {
-        [Display(Name = "Nome")]
-        [Required(ErrorMessage = "Por favor insira um nome")]
-        [StringLength(50, ErrorMessage = "O nome é muito longo")]
-        public string nome { get; set; }
-
-        [Display(Name = "E-mail")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Por favor insira um e-mail válido")]
-        [StringLength(50, ErrorMessage = "O e-mail é muito longo")]
-        public string email { get; set; }
-
-        [Display(Name = "Telefone")]
-        public string telefone { get; set; }
-
-        [Display(Name = "CNPJ")]
-        [StringLength(50, ErrorMessage = "O número do documento é muito longo")]
-        public string cnpj { get; set; }
+        public Editora()
+        {
+            this.tipoFornecedor = TipoFornecedor.EDITORA;
+        }
     }
 
     public class Idioma : EntidadeAbstrata
@@ -71,7 +61,7 @@ namespace Finis.Models
     {
         public Exemplar()
         {
-            this.vendaOnline = true;
+            
         }
 
         [Display(Name = "Título")]
@@ -84,21 +74,34 @@ namespace Finis.Models
         public Conservacao conservacao { get; set; }
 
         [Display(Name = "ISBN")]
-        public int isbn { get; set; }
+        [StringLength(32, ErrorMessage = "O valor é muito longo")]
+        public string isbn { get; set; }
 
         [Display(Name = "Ano")]
-        [DisplayFormat(DataFormatString = "yyyy")]
-        public DateTime ano { get; set; }
+        [Range(1000, 2017, ErrorMessage = "Ano inválido")]
+        public int ano { get; set; }
 
         [Display(Name = "Edição")]
+        [DisplayFormat(DataFormatString = "{0}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem edição")]
+        [Range(0, 100, ErrorMessage = "Valor inválido")]
         public int edicao { get; set; }
 
         [Display(Name = "Preço de Compra")]
         [Required(ErrorMessage = "Por favor insira um valor")]
+        [DisplayFormat(DataFormatString = "{0:n2}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem preço")]
+        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 500")]
         public decimal precoCompra { get; set; }
 
         [Display(Name = "Preço de Venda")]
         [Required(ErrorMessage = "Por favor insira um valor")]
+        [DisplayFormat(DataFormatString = "{0:n2}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem preço")]
+        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 500")]
         public decimal precoVenda { get; set; }
 
         [Display(Name = "Descrição")]
@@ -106,39 +109,46 @@ namespace Finis.Models
         [DataType(DataType.MultilineText)]
         public string descricao { get; set; }
 
-        [Display(Name = "Peso")]
+        [Display(Name = "Peso (Kg)")]
+        [DisplayFormat(DataFormatString = "{0:n2}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Sem peso")]
+        [Range(0, 100, ErrorMessage = "O peso deve ser entre 0 e 100")]
         public decimal peso { get; set; }
 
-        [Display(Name = "Disponibilizar para venda na internet")]
-        public bool vendaOnline { get; set; }
+        [Display(Name = "Disponibilizar para venda na internet?")]
+        public VendaOnline vendaOnline { get; set; }
 
         [Display(Name = "Quantidade")]
+        [DisplayFormat(DataFormatString = "{0}",
+            ApplyFormatInEditMode = true,
+            NullDisplayText = "Estoque vazio")]
         [Required(ErrorMessage = "Por favor insira a quantidade disponível")]
+        [Range(0, 5000, ErrorMessage = "A quantidade deverá ser entre 0 e 5000")]
         public int quantidade { get; set; }
-        
-        [InverseProperty("Exemplar")]
+
+        //[InverseProperty("Exemplar")]
         [ScriptIgnore]
         public virtual ICollection<Autor> Autores { get; set; }
         
         [Display(Name = "Editora")]
         [Required(ErrorMessage = "Por favor selecione uma editora")]
-        public int editoraId { get; set; }
+        public int? editoraId { get; set; }
         [ForeignKey("editoraId")]
         public virtual Editora editora { get; set; }
         
         [Display(Name = "Idioma")]
         [Required(ErrorMessage = "Por favor selecione um idioma")]
-        public int idiomaId { get; set; }
+        public int? idiomaId { get; set; }
         [ForeignKey("idiomaId")]
         public virtual Idioma idioma { get; set; }
         
         [Display(Name = "Sessão")]
         [Required(ErrorMessage = "Por favor selecione uma sessão")]
-        public int sessaoId { get; set; }
+        public int? sessaoId { get; set; }
         [ForeignKey("sessaoId")]
         public virtual Sessao sessao { get; set; }
 
-        [NotMapped]
         public String conservacaoString
         {
             get
@@ -157,9 +167,9 @@ namespace Finis.Models
         {
             get
             {
-                if (this.vendaOnline)
+                if (this.vendaOnline == VendaOnline.SIM)
                     return "Sim";
-                else if (!this.vendaOnline)
+                else if (this.vendaOnline == VendaOnline.NAO)
                     return "Não";
 
                 else return "";

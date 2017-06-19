@@ -1,9 +1,13 @@
 ﻿@model Finis.Models.Exemplar
 
-@using (Html.BeginForm())
+@{
+    ViewBag.Title = "Editar Exemplar";
+}
+
+@using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="container" id="formulario">
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
@@ -19,8 +23,7 @@
                     @Html.ValidationMessageFor(model => model.titulo, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s2">
-                    @Html.LabelFor(model => model.conservacao, htmlAttributes: new { @class = "validate" })
-                    @Html.EnumDropDownListFor(model => model.conservacao, htmlAttributes: new { @class = "validate" })
+                    @Html.EnumDropDownListFor(model => model.conservacao, "Conservação", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.conservacao, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s2">
@@ -69,30 +72,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s4">
-                    @Html.DropDownList("idiomaId", (SelectList)ViewBag.idiomaId, "Idioma", htmlAttributes: new { @class = "validate" })
+                <div class="input-field col s3">
+                    @Html.DropDownListFor(model => model.idiomaId, (SelectList)ViewBag.Idiomas, "Idioma", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.idiomaId, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s4">
-                    @Html.DropDownList("editoraId", (SelectList)ViewBag.editoraId, "Editora", htmlAttributes: new { @class = "validate" })
+                    @Html.DropDownListFor(model => model.editoraId, (SelectList)ViewBag.Editoras, "Editora", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.editoraId, "", new { @class = "validate" })
                 </div>
-                <div class="input-field col s4">
-                    @Html.DropDownList("sessaoId", (SelectList)ViewBag.sessaoId, "Sessão", htmlAttributes: new { @class = "validate" })
+                <div class="input-field col s3">
+                    @Html.DropDownListFor(model => model.sessaoId, (SelectList)ViewBag.Sessoes, "Sessão", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.sessaoId, "", new { @class = "validate" })
                 </div>
+                <div class="input-field col s2">
+                    @Html.EnumDropDownListFor(model => model.vendaOnline, "Venda online?", htmlAttributes: new { @class = "validate" })
+                    @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
+                </div>
             </div>
-            <p>
-                <input type="checkbox" id="vendaOnline" />
-                <label for="vendaOnline">Disponibilizar para venda na internet</label>
-            </p>
             @*<div class="row">
-                    <div class="input-field col s12">
-                        @Html.CheckBox("vendaOnline", true)
-                        @Html.LabelFor(model => model.vendaOnline, htmlAttributes: new { @class = "validate" })
-                        @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
-                    </div>
-                </div>*@
+                <div class="input-field col s12">
+                    @Html.CheckBox("vendaOnline", true)
+                    @Html.LabelFor(model => model.vendaOnline, htmlAttributes: new { @class = "validate" })
+                    @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
+                </div>
+            </div>*@
             <div class="row">
                 <div class="input-field col s12">
                     @Html.LabelFor(model => model.descricao, htmlAttributes: new { @class = "validate" })
@@ -112,7 +115,7 @@
             </div>
         </form>
     </div>
-                        }
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -122,13 +125,6 @@
         $(document).ready(function () {
             $('select').material_select();
             $('#descricao').trigger('autoresize');
-        });
-
-        $('.datepicker').pickadate({
-            format: 'yyyy',
-            viewMode: "years",
-            minViewMode: "years",
-            autoclose: true,
         });
 
     </script>

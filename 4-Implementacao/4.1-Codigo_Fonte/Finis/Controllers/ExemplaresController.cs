@@ -18,7 +18,7 @@ namespace Finis.Controllers
         // GET: Exemplares
         public ActionResult Index()
         {
-            var exemplares = db.Exemplares.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
+            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
             return View(exemplares.ToList());
         }
 
@@ -35,7 +35,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Exemplar exemplar = db.Exemplares.Find(id);
+                Exemplar exemplar = db.Exemplar.Find(id);
                 if (exemplar == null)
                 {
                     sucesso = false;
@@ -43,7 +43,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
-                    //exemplar.endereco = RecuperaEndereco(cliente.enderecoId);
+                    exemplar.editora = this.RecuperaEditora(exemplar.editoraId);
+                    exemplar.idioma = this.RecuperaIdioma(exemplar.idiomaId);
+                    exemplar.sessao = this.RecuperaSessao(exemplar.sessaoId);
+
                     sucesso = true;
                     resultado = exemplar.Serializar();
                 }
@@ -56,13 +59,42 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
+        private Editora RecuperaEditora(int? id)
+        {
+            if (id != null)
+            {
+                Editora editora = db.Fornecedors.Find(id);
+                return editora;
+            }
+            return new Editora();
+        }
+
+        private Idioma RecuperaIdioma(int? id)
+        {
+            if (id != null)
+            {
+                Idioma idioma = db.Idiomas.Find(id);
+                return idioma;
+            }
+            return new Idioma();
+        }
+
+        private Sessao RecuperaSessao(int? id)
+        {
+            if (id != null)
+            {
+                Sessao sessao = db.Sessaos.Find(id);
+                return sessao;
+            }
+            return new Sessao();
+        }
+
         // GET: Exemplares/Create
         public ActionResult Create()
         {
-            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome");
+            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
             ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome");
-            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome");
-            ViewBag.Title = "Inserir Exemplar";
+            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome");
             return View();
         }
 
@@ -71,18 +103,18 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,preco,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
+        public ActionResult Create([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,precoCompra,precoVenda,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {
-                db.Exemplares.Add(exemplar);
+                db.Exemplar.Add(exemplar);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
+            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
             ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
+            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -93,15 +125,19 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exemplar exemplar = db.Exemplares.Find(id);
+            Exemplar exemplar = db.Exemplar.Find(id);
             if (exemplar == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
-            ViewBag.Title = "Editar Exemplar";
+            ViewBag.Editoras = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome", "Editora");
+            ViewBag.Idiomas = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
+            ViewBag.Sessoes = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+
+            exemplar.editora = this.RecuperaEditora(exemplar.editoraId);
+            exemplar.idioma = this.RecuperaIdioma(exemplar.idiomaId);
+            exemplar.sessao = this.RecuperaSessao(exemplar.sessaoId);
+
             return View(exemplar);
         }
 
@@ -110,7 +146,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,preco,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
+        public ActionResult Edit([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,precoCompra,precoVenda,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {
@@ -118,9 +154,9 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.editoraId = new SelectList(db.Editoras, "id", "nome", exemplar.editoraId);
+            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
             ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessoes, "id", "nome", exemplar.sessaoId);
+            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -129,10 +165,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Exemplar exemplar = db.Exemplares.Find(id);
-                //Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
-                db.Exemplares.Remove(exemplar);
-                //db.Enderecos.Remove(endereco);
+                Exemplar exemplar = db.Exemplar.Find(id);
+                db.Exemplar.Remove(exemplar);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

@@ -11,29 +11,15 @@ using Finis.Models;
 
 namespace Finis.Controllers
 {
-    public class EstadosController : Controller
+    public class AvaliacoesController : Controller
     {
         private Contexto db = new Contexto();
 
-        // GET: Estados
+        // GET: Avaliacoes
         public ActionResult Index()
         {
-            return View(db.Estado.ToList());
-        }
-
-        // GET: Estados/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Estado estado = db.Estado.Find(id);
-            if (estado == null)
-            {
-                return HttpNotFound();
-            }
-            return View(estado);
+            var avaliacao = db.Avaliacao.Include(a => a.cliente);
+            return View(avaliacao.ToList());
         }
 
         // GET: Clientes/Details/5
@@ -49,8 +35,8 @@ namespace Finis.Controllers
             }
             else
             {
-                Estado estado = db.Estado.Find(id);
-                if (estado == null)
+                Avaliacao avaliacao = db.Avaliacao.Find(id);
+                if (avaliacao == null)
                 {
                     sucesso = false;
                     resultado = "Não encontrado!";
@@ -58,7 +44,7 @@ namespace Finis.Controllers
                 else
                 {
                     sucesso = true;
-                    resultado = estado.Serializar();
+                    resultado = avaliacao.Serializar();
                 }
             }
             var obj = new
@@ -69,87 +55,77 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Estados/Create
+        // GET: Avaliacoes/Create
         public ActionResult Create()
         {
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            ViewBag.clienteId = new SelectList(db.Cliente, "id", "nome");
             return View();
         }
 
-        // POST: Estados/Create
+        public void ConcluiAvaliacao(Avaliacao avaliacao)
+        {
+            avaliacao.ConcluirAvaliacao();
+        }
+
+        // POST: Avaliacoes/Create
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Estado model)
+        public ActionResult Create([Bind(Include = "id,dataEntrada,quantidadeExemplares,creditoEspecial,creditoParcial,situacao,clienteId,user_insert,user_update,date_insert,date_update")] Avaliacao avaliacao)
         {
+            if(avaliacao.situacao == situacaoAvaliacao.CONCLUIDO)
+            {
+                ViewBag.Erro = 1;
+                return View(avaliacao);
+            }
+
             if (ModelState.IsValid)
             {
-                db.Estado.Add(model);
+                db.Avaliacao.Add(avaliacao);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
-            return View(model);
+
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", avaliacao.clienteId);
+            return View(avaliacao);
         }
 
-        // GET: Estados/Edit/5
+        // GET: Avaliacoes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Estado estado = db.Estado.Find(id);
-            if (estado == null)
+            Avaliacao avaliacao = db.Avaliacao.Find(id);
+            if (avaliacao == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
-            return View(estado);
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", avaliacao.clienteId);
+            return View(avaliacao);
         }
 
-        // POST: Estados/Edit/5
+        // POST: Avaliacoes/Edit/5
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Estado model)
+        public ActionResult Edit([Bind(Include = "id,dataEntrada,quantidadeExemplares,creditoEspecial,creditoParcial,situacao,clienteId,user_insert,user_update,date_insert,date_update")] Avaliacao avaliacao)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(model).State = EntityState.Modified;
+                db.Entry(avaliacao).State = EntityState.Modified;
                 db.SaveChanges();
+                if (avaliacao.situacao == situacaoAvaliacao.CONCLUIDO)
+                {
+                    this.ConcluiAvaliacao(avaliacao);
+                }
                 return RedirectToAction("Index");
             }
-            ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
-            return View(model);
-        }
-
-        // GET: Estados/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Estado estado = db.Estado.Find(id);
-            if (estado == null)
-            {
-                return HttpNotFound();
-            }
-            return View(estado);
-        }
-
-        // POST: Estados/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Estado estado = db.Estado.Find(id);
-            db.Estado.Remove(estado);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            ViewBag.clienteId = new SelectList(db.Cliente, "id", "nome", avaliacao.clienteId);
+            return View(avaliacao);
         }
 
         // GET: Clientes/Delete/5
@@ -157,8 +133,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Estado estado = db.Estado.Find(id);
-                db.Estado.Remove(estado);
+                Avaliacao avaliacao = db.Avaliacao.Find(id);
+                db.Avaliacao.Remove(avaliacao);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
