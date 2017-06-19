@@ -171,6 +171,10 @@
     <Compile Include="Migrations\201706191530127_InitialCreate.Designer.cs">
       <DependentUpon>201706191530127_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706192127454_Ajustes-Avaliacao.cs" />
+    <Compile Include="Migrations\201706192127454_Ajustes-Avaliacao.Designer.cs">
+      <DependentUpon>201706192127454_Ajustes-Avaliacao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -245,6 +249,7 @@
     <Content Include="Content\materialize\fonts\roboto\Roboto-Bold.woff" />
     <Content Include="Content\materialize\fonts\roboto\Roboto-Bold.ttf" />
     <Content Include="Content\materialize\fonts\roboto\Roboto-Bold.eot" />
+    <None Include="Properties\PublishProfiles\ProjetoFinis - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ProjetoFinis - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -345,6 +350,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201706191530127_InitialCreate.resx">
       <DependentUpon>201706191530127_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706192127454_Ajustes-Avaliacao.resx">
+      <DependentUpon>201706192127454_Ajustes-Avaliacao.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

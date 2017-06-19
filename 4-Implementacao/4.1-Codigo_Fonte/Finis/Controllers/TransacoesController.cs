@@ -54,7 +54,7 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
         
-        public void GeraTransacaoEntrada(decimal valor, TipoCredito credito, int? clienteId)
+        public void GeraTransacaoEntrada(decimal? valor, TipoCredito credito, int? clienteId)
         {
             Transacao transacao = new Transacao();
             transacao.NovaTransacaoEntrada(valor, credito, clienteId);
@@ -62,7 +62,7 @@ namespace Finis.Controllers
             db.SaveChanges();
         }
 
-        public void GeraTransacaoSaida(decimal valor, TipoCredito credito, int? clienteId)
+        public void GeraTransacaoSaida(decimal? valor, TipoCredito credito, int? clienteId)
         {
             Transacao transacao = new Transacao();
             transacao.NovaTransacaoEntrada(valor, credito, clienteId);

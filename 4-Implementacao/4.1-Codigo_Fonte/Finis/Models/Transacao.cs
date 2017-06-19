@@ -69,19 +69,19 @@ namespace Finis.Models
             }
         }
 
-        public void NovaTransacaoEntrada(decimal valor, TipoCredito credito, int? ClienteId)
+        public void NovaTransacaoEntrada(decimal? valor, TipoCredito credito, int? ClienteId)
         {
             this.data = DateTime.Now;
-            this.valor = valor;
+            this.valor = valor.GetValueOrDefault();
             this.tipoCredito = credito;
             this.clienteId = ClienteId;
             this.tipoTransacao = TipoTransacao.ENTRADA;
         }
 
-        public void NovaTransacaoSaida(decimal valor, TipoCredito credito, int? ClienteId)
+        public void NovaTransacaoSaida(decimal? valor, TipoCredito credito, int? ClienteId)
         {
             this.data = DateTime.Now;
-            this.valor = valor;
+            this.valor = valor.GetValueOrDefault();
             this.tipoCredito = credito;
             this.clienteId = ClienteId;
             this.tipoTransacao = TipoTransacao.SAIDA;

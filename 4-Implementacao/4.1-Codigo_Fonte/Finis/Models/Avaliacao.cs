@@ -42,15 +42,13 @@ namespace Finis.Models
         [DisplayFormat(DataFormatString = "{0:n2}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Sem valor")]
-        [Range(0, 100, ErrorMessage = "O valor deve ser entre 0 e 10000")]
-        public decimal creditoEspecial { get; set; }
+        public Nullable<decimal> creditoEspecial { get; set; }
 
         [Display(Name = "Crédito parcial")]
         [DisplayFormat(DataFormatString = "{0:n2}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Sem valor")]
-        [Range(0, 100, ErrorMessage = "O valor deve ser entre 0 e 10000")]
-        public decimal creditoParcial { get; set; }
+        public Nullable<decimal> creditoParcial { get; set; }
 
         [Display(Name = "Situação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]

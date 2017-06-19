@@ -133,28 +133,28 @@ namespace Finis.Controllers
             return View(model);
         }
 
-        public void AtualizaSaldoEspecial(int? id, decimal creditoEspecial)
+        public void AtualizaSaldoEspecial(int? id, decimal? creditoEspecial)
         {
             if(id != null)
             {
                 Cliente cliente = db.Cliente.Find(id);
                 if (cliente != null)
                 {
-                    cliente.AtualizaSaldoEspecial(creditoEspecial);
+                    cliente.AtualizaSaldoEspecial(creditoEspecial.GetValueOrDefault());
                     db.Entry(cliente).State = EntityState.Modified;
                     db.SaveChanges();
                 }
             }
         }
 
-        public void AtualizaSaldoParcial(int? id, decimal creditoParcial)
+        public void AtualizaSaldoParcial(int? id, decimal? creditoParcial)
         {
             if (id != null)
             {
                 Cliente cliente = db.Cliente.Find(id);
                 if (cliente != null)
                 {
-                    cliente.AtualizaSaldoParcial(creditoParcial);
+                    cliente.AtualizaSaldoParcial(creditoParcial.GetValueOrDefault());
                     db.Entry(cliente).State = EntityState.Modified;
                     db.SaveChanges();
                 }

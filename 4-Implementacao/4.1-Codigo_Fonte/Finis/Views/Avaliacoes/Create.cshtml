@@ -38,16 +38,16 @@
             </div>
             <div class="row">
                 <div class="input-field col s5">
-                    @Html.LabelFor(model => model.creditoEspecial, htmlAttributes: new { @class = "validate" })
+                    @Html.LabelFor(model => model.creditoEspecial, htmlAttributes: new { @id = "lblCreditoEspecial", @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.creditoEspecial, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.creditoEspecial, new { htmlAttributes = new { @id = "creditoEspecial", @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.creditoEspecial, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s5">
-                    @Html.LabelFor(model => model.creditoParcial, htmlAttributes: new { @class = "validate" })
+                    @Html.LabelFor(model => model.creditoParcial, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.creditoParcial, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.creditoParcial, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.creditoParcial, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -73,11 +73,6 @@
         $(document).ready(function () {
             $('select').material_select();
 
-                @*if (@ViewBag.CodErro != null && ViewBag.CodErro == 1) {
-
-                    alert("Não é possível salvar uma nova avaliação na situação de CONCLUÍDO!");
-                }*@
-
         });
 
         $('.datepicker').pickadate({
@@ -93,11 +88,44 @@
 
                 if (valorSituacao == 2)
                 {
-                    document.getElementById('situacaoAvaliacao').readOnly = false;
+                    document.getElementById('creditoEspecial').readOnly = false;
+                    document.getElementById('creditoParcial').readOnly = false;
+
+                    document.getElementById('creditoEspecial').style.visibility = "visible";
+                    document.getElementById('creditoParcial').style.visibility = "visible";
+
+                    document.getElementById('lblCreditoEspecial').style.visibility = "visible";
+                    document.getElementById('lblCreditoParcial').style.visibility = "visible";
+                }
+                else if (valorSituacao == 3 || valorSituacao == 4)
+                {
+                    document.getElementById('creditoEspecial').readOnly = true;
+                    document.getElementById('creditoParcial').readOnly = true;
+
+                    document.getElementById('creditoEspecial').style.visibility = "visible";
+                    document.getElementById('creditoParcial').style.visibility = "visible";
+
+                    document.getElementById('lblCreditoEspecial').style.visibility = "visible";
+                    document.getElementById('lblCreditoParcial').style.visibility = "visible";
+                }
+                else if (valorSituacao == 1)
+                {
+                    document.getElementById('creditoEspecial').style.visibility = "hidden"; 
+                    document.getElementById('creditoParcial').style.visibility = "hidden"; 
+
+                    document.getElementById('lblCreditoEspecial').style.visibility = "hidden";
+                    document.getElementById('lblCreditoParcial').style.visibility = "hidden";
                 }
                 else
                 {
-                    document.getElementById('situacaoAvaliacao').readOnly = true;
+                    document.getElementById('creditoEspecial').style.visibility = "visible";
+                    document.getElementById('creditoParcial').style.visibility = "visible"; 
+
+                    document.getElementById('lblCreditoEspecial').style.visibility = "visible";
+                    document.getElementById('lblCreditoParcial').style.visibility = "visible";
+
+                    document.getElementById('creditoEspecial').readOnly = false;
+                    document.getElementById('creditoParcial').readOnly = false;
                 }
             }
         }

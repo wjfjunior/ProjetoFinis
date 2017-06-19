@@ -1,3 +1,0 @@
-Fazer função de busca
-Organizar roteamento
-Criar endereço
