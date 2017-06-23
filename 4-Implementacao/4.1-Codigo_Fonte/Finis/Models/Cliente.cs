@@ -28,7 +28,6 @@ namespace Finis.Models
         [DisplayFormat(DataFormatString = "{0:n2}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Sem preço")]
-        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
         public decimal saldoCreditoParcial { get; set; }
 
         [Display(Name = "Saldo de crédito especial")]
@@ -36,7 +35,6 @@ namespace Finis.Models
         [DisplayFormat(DataFormatString = "{0:n2}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Sem preço")]
-        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
         public decimal saldoCreditoEspecial { get; set; }
 
         [Display(Name = "Data de Nascimento")]
