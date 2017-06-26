@@ -21,7 +21,7 @@ namespace Finis.Models
 
         [Display(Name = "Sigla")]
         [Required(ErrorMessage = "Por favor insira uma sigla")]
-        [StringLength(2, ErrorMessage = "O tamanho máximo é de 2 caracteres")]
+        [StringLength(3, ErrorMessage = "O tamanho máximo é de 3 caracteres")]
         public string sigla { get; set; }
     }
 
@@ -42,6 +42,10 @@ namespace Finis.Models
         [StringLength(2, ErrorMessage = "O tamanho máximo é de 2 caracteres")]
         public string sigla { get; set; }
 
+        [NotMapped]
+        [Display(Name = "País")]
+        [Required(ErrorMessage = "Por favor selecione um país")]
+        public string paisNome { get; set; }
         
         [Display(Name = "País")]
         [Required(ErrorMessage = "Por favor selecione um país")]

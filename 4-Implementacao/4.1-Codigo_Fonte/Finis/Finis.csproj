@@ -175,6 +175,18 @@
     <Compile Include="Migrations\201706192127454_Ajustes-Avaliacao.Designer.cs">
       <DependentUpon>201706192127454_Ajustes-Avaliacao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706260246155_AtualizaPais.cs" />
+    <Compile Include="Migrations\201706260246155_AtualizaPais.Designer.cs">
+      <DependentUpon>201706260246155_AtualizaPais.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706260249502_AtualizaPais_2.cs" />
+    <Compile Include="Migrations\201706260249502_AtualizaPais_2.Designer.cs">
+      <DependentUpon>201706260249502_AtualizaPais_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706260551406_AtualizaPais_3.cs" />
+    <Compile Include="Migrations\201706260551406_AtualizaPais_3.Designer.cs">
+      <DependentUpon>201706260551406_AtualizaPais_3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -353,6 +365,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706192127454_Ajustes-Avaliacao.resx">
       <DependentUpon>201706192127454_Ajustes-Avaliacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706260246155_AtualizaPais.resx">
+      <DependentUpon>201706260246155_AtualizaPais.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706260249502_AtualizaPais_2.resx">
+      <DependentUpon>201706260249502_AtualizaPais_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706260551406_AtualizaPais_3.resx">
+      <DependentUpon>201706260551406_AtualizaPais_3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -18,7 +18,31 @@ namespace Finis.Controllers
         // GET: Estados
         public ActionResult Index()
         {
-            return View(db.Estado.ToList());
+            return View(db.Estado.OrderBy(e => e.nome).ToList());
+        }
+
+        [HttpGet]
+        public JsonResult DropboxPaises()
+        {
+            var listaPaises = db.Pais.Select(p => new {p.id, p.nome}).OrderBy(p => p.nome).ToArray();
+
+            var obj = new
+            {
+                lista_paises = listaPaises
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomePais(Estado estado)
+        {
+            if(estado.pais == null)
+            {
+                Pais pais = new Pais();
+                pais.id = estado.paisId;
+                estado.pais = db.Pais.Find(pais);
+            }
+            estado.paisNome = estado.pais.id + " - " + estado.pais.nome;
         }
 
         // GET: Estados/Details/5
@@ -76,6 +100,25 @@ namespace Finis.Controllers
             return View();
         }
 
+        private bool VerificaJaExiste(Estado estado)
+        {
+            List<Estado> resultado = new List<Estado>();
+
+            resultado = db.Estado.Where(e => e.nome == estado.nome && e.paisId == estado.paisId).ToList();
+            if(resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            resultado = db.Estado.Where(e => e.sigla == estado.sigla && e.paisId == estado.paisId).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         // POST: Estados/Create
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -85,6 +128,12 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(VerificaJaExiste(model))
+                {
+                    ViewBag.Erro = "Ja existe um registro com os valores informados!";
+                    return View(model);
+                }
+                model.sigla = model.sigla.ToUpper();
                 db.Estado.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -106,6 +155,7 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Paises = new SelectList(db.Pais, "Id", "Nome", "Sigla");
+            this.ConfiguraNomePais(estado);
             return View(estado);
         }
 
@@ -118,6 +168,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.sigla = model.sigla.ToUpper();
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

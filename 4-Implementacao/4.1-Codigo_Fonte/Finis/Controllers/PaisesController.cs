@@ -18,13 +18,13 @@ namespace Finis.Controllers
         // GET: Paises
         public ActionResult Index()
         {
-            return View(db.Pais.ToList());
+            return View(db.Pais.OrderBy(p => p.nome).ToList());
         }
 
-        // GET: Clientes
-        public ActionResult Buscar(string nome)
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
+            return View("Index", db.Pais.Where(c => c.nome.Contains(pesquisar)).ToList());
         }
 
         // GET: Paises/Details/5
@@ -81,6 +81,19 @@ namespace Finis.Controllers
             return View();
         }
 
+        private bool VerificaJaExiste(Pais pais)
+        {
+            List<Pais> resultado = new List<Pais>();
+
+            resultado = db.Pais.Where(p => p.nome == pais.nome).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         // POST: Paises/Create
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -90,6 +103,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (VerificaJaExiste(model))
+                {
+                    ViewBag.Erro = "Ja existe um registro com os valores informados!";
+                    return View(model);
+                }
                 db.Pais.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");

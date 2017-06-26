@@ -41,18 +41,31 @@
     }
 
 </script>
-
-@*<nav>
-    <div class="nav-wrapper">
-        <form>
-            <div class="input-field">
-                <input id="search" type="search" required>
-                <label for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-            </div>
-        </form>
-    </div>
-</nav>*@
+@using (Html.BeginForm())
+{
+<div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.Label("Pesquisar")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                    </div>
+                    <div class="col s6">
+                        <button class="btn waves-effect waves-gray btn-reset" type="reset" name="btn-reset">
+                            Reset
+                            <i class="mdi-content-clear right"></i>
+                        </button>
+                        <button type="submit" class="waves-effect waves-light btn">
+                            Pesquisar
+                            <i class="material-icons right">cloud</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+</div>
+}
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Paises")">
         <i class="material-icons">add</i>

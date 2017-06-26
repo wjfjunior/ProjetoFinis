@@ -33,3 +33,41 @@
     padding-left: 1%;
     padding-right: 1%;
 }
+
+#container-busca {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-right: 4%;
+}
+
+.chips .autocomplete-content {
+    margin-top: 0;
+}
+
+.input-field .prefix ~ input,
+.input-field .prefix ~ textarea,
+.input-field .prefix ~ label,
+.input-field .prefix ~ .validate ~ label,
+.input-field .prefix ~ .autocomplete-content {
+    margin-left: 3rem;
+    width: 92%;
+    width: calc(100% - 3rem);
+}
+
+/* Autocomplete */
+.autocomplete-content {
+    margin-top: -20px;
+    display: block;
+    opacity: 1;
+    position: static;
+}
+
+    .autocomplete-content li .highlight {
+        color: #444;
+    }
+
+    .autocomplete-content li img {
+        height: 40px;
+        width: 40px;
+        margin: 5px 15px;
+    }
