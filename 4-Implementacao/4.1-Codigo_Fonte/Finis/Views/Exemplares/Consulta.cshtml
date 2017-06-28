@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Finis.Models.Exemplar>
 
 @{
-    ViewBag.Title = "Cadastro de Exemplares";
+    ViewBag.Title = "Consulta de Exemplares";
 }
 
 <script type="text/javascript">
@@ -108,7 +108,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.quantidade)
             </th>
-            <th>Opções</th>
+            <th>Detalhes</th>
         </tr>
     </thead>
 
@@ -133,11 +133,9 @@
            @Html.DisplayFor(modelItem => item.quantidade)
         </td>
         <td>
-            <a class="btn-floating blue" href="@Url.Action("Edit", "Exemplares", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
             <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">
                 <i class="fa fa-info" aria-hidden="true"></i>
             </a>
-            <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
         </td>
     </tr>
 }

@@ -36,10 +36,10 @@
 
         document.getElementById('nome').innerHTML = SubstituirCampoNulo(obj.cliente.nome);
         document.getElementById('rg').innerHTML = SubstituirCampoNulo(obj.cliente.rg);
-        document.getElementById('dataEntrada').innerHTML = FormataDataJSON(SubstituirCampoNulo(obj.dataEntrada));
+        document.getElementById('dataEntrada').innerHTML = SubstituirCampoNulo(obj.dataEntradaString);
         document.getElementById('quantidadeExemplares').innerHTML = SubstituirCampoNulo(obj.quantidadeExemplares);
-        document.getElementById('creditoEspecial').innerHTML = SubstituirCampoNulo(obj.creditoEspecial);
-        document.getElementById('creditoParcial').innerHTML = SubstituirCampoNulo(obj.creditoParcial);
+        document.getElementById('creditoEspecial').innerHTML = SubstituirCampoNulo(obj.creditoEspecialString);
+        document.getElementById('creditoParcial').innerHTML = SubstituirCampoNulo(obj.creditoParcialString);
         document.getElementById('situacao').innerHTML = SubstituirCampoNulo(obj.situacaoString);
     }
 
@@ -51,20 +51,37 @@
             return campo;
     }
 
-    function FormataDataJSON(data) {
-
-        var dateString = data.substr(6);
-        var currentTime = new Date(parseInt(dateString));
-        var month = currentTime.getMonth() + 1;
-        var day = currentTime.getDate();
-        var year = currentTime.getFullYear();
-        var date = day + "/" + month + "/" + year;
-
-        return date;
-    }
-
 </script>
 
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.Label("Cliente")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @type = "text", @id = "estadoNome", @class = "autocomplete" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s3">
+                        @Html.Editor("dataInicio", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de início" } })
+                    </div>
+                    <div class="col s3">
+                        @Html.Editor("dataFim", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de fim" } })
+                    </div>
+                    <div class="col s3">
+                        <button type="submit" class="waves-effect waves-light btn">
+                            Pesquisar
+                            <i class="material-icons right">search</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Avaliacoes")">
         <i class="material-icons">add</i>
@@ -106,16 +123,16 @@
                 @Html.DisplayFor(modelItem => item.cliente.rg)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.dataEntrada)
+                @Html.DisplayFor(modelItem => item.dataEntradaString)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.quantidadeExemplares)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.creditoEspecial)
+                @Html.DisplayFor(modelItem => item.creditoEspecialString)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.creditoParcial)
+                @Html.DisplayFor(modelItem => item.creditoParcialString)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.situacaoString)
@@ -206,8 +223,12 @@
         <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
     </div>
 </div>
+
 @section scripts{
+    @Scripts.Render("~/bundles/materialize")
     <script type="text/javascript">
+
+        var dados = {};
 
         function showModal(id, modal) {
             $('#' + modal).openModal();
@@ -217,6 +238,34 @@
         $(document).ready(function () {
 
             $('.modal-trigger').leanModal();
+
+            $('.datepicker').pickadate({
+                format: 'dd/mm/yyyy',
+                selectMonths: true,
+                selectYears: 100,
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxClientes", "Transacoes")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                        },
+                    });
+                }
+            });
+
         });
 
     </script>

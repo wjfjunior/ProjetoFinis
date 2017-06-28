@@ -12,6 +12,7 @@ namespace Finis.DAL
     {
         public Contexto() : base("Contexto")
         {
+            this.Configuration.LazyLoadingEnabled = false;
             Database.SetInitializer<Contexto>(null);
         }
 

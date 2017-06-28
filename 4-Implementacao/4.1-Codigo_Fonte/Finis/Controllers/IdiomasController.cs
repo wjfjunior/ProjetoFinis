@@ -19,7 +19,48 @@ namespace Finis.Controllers
         public ActionResult Index()
         {
             var idiomas = db.Idiomas.Include(i => i.pais);
-            return View(idiomas.ToList());
+            return View(idiomas.ToList().OrderBy(i => i.nome));
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Idiomas.Include(i => i.pais).Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
+        }
+
+        [HttpGet]
+        public JsonResult DropboxPaises()
+        {
+            var listaPaises = db.Pais.Select(p => new { p.id, p.nome }).OrderBy(p => p.nome).ToArray();
+
+            var obj = new
+            {
+                lista_paises = listaPaises
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomePais(Idioma idioma)
+        {
+            if (idioma.pais == null)
+            {
+                idioma.pais = db.Pais.Find(idioma.paisId);
+            }
+            idioma.paisNome = idioma.pais.id + " - " + idioma.pais.nome;
+        }
+
+        private bool VerificaJaExiste(Idioma idioma)
+        {
+            List<Idioma> resultado = new List<Idioma>();
+
+            resultado = db.Idiomas.Where(e => e.nome == idioma.nome && e.paisId == idioma.paisId).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         // GET: Clientes/Details/5
@@ -43,6 +84,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    if(idioma.pais == null)
+                    {
+                        idioma.pais = db.Pais.Find(idioma.paisId);
+                    }
                     sucesso = true;
                     resultado = idioma.Serializar();
                 }
@@ -67,10 +112,16 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,nome,paisId,user_insert,user_update,date_insert,date_update")] Idioma idioma)
+        public ActionResult Create(Idioma idioma)
         {
             if (ModelState.IsValid)
             {
+                idioma.nome = idioma.nome.ToUpper();
+                if (VerificaJaExiste(idioma))
+                {
+                    ViewBag.Erro = "Ja existe um registro com os valores informados!";
+                    return View(idioma);
+                }
                 db.Idiomas.Add(idioma);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -93,6 +144,7 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.paisId = new SelectList(db.Pais, "id", "nome", idioma.paisId);
+            this.ConfiguraNomePais(idioma);
             return View(idioma);
         }
 
@@ -101,10 +153,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,nome,paisId,user_insert,user_update,date_insert,date_update")] Idioma idioma)
+        public ActionResult Edit(Idioma idioma)
         {
             if (ModelState.IsValid)
             {
+                idioma.nome = idioma.nome.ToUpper();
                 db.Entry(idioma).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

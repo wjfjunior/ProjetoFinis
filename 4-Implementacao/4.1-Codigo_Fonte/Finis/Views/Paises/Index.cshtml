@@ -47,18 +47,13 @@
         <div class="nav-wrapper">
             <form>
                 <div class="row">
-                    <div class="input-field col s6">
-                        @Html.Label("Pesquisar")
+                    <div class="input-field col s8">
+                        @Html.Label("Buscar")
                         @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
                     </div>
-                    <div class="col s6">
-                        <button class="btn waves-effect waves-gray btn-reset" type="reset" name="btn-reset">
-                            Reset
-                            <i class="mdi-content-clear right"></i>
-                        </button>
-                        <button type="submit" class="waves-effect waves-light btn">
-                            Pesquisar
-                            <i class="material-icons right">cloud</i>
+                    <div class="col s2">
+                        <button type="submit" class="btn-floating" id="botao-busca">
+                            <i class="material-icons">search</i>
                         </button>
                     </div>
                 </div>

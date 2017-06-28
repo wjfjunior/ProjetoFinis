@@ -18,7 +18,16 @@ namespace Finis.Controllers
         // GET: Editoras
         public ActionResult Index()
         {
-            return View(db.Fornecedors.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA).ToList());
+            return View(db.Fornecedors.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA).OrderBy(f => f.nome).ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Fornecedors
+                .Where(f => f.nome.Contains(pesquisar) && f.tipoFornecedor == TipoFornecedor.EDITORA)
+                .OrderBy(f => f.nome)
+                .ToList());
         }
 
         // GET: Clientes/Details/5

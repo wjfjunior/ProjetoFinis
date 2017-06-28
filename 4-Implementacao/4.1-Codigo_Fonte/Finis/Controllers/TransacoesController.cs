@@ -18,8 +18,105 @@ namespace Finis.Controllers
         // GET: Transacoes
         public ActionResult Index()
         {
-            var transacoes = db.Transacao.Include(t => t.cliente);
+            var transacoes = db.Transacao.Include(t => t.cliente).OrderByDescending(t => t.data);
             return View(transacoes.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar, DateTime? dataInicio, DateTime? dataFim)
+        {
+            if (dataInicio != null)
+            {
+                if (dataFim != null)
+                {
+                    if (pesquisar != null && pesquisar != "")
+                    {
+                        if (pesquisar.Contains("-"))
+                        {
+                            string[] tokens = pesquisar.Split('-');
+
+                            if (tokens.Length == 3)
+                            {
+                                string nome = tokens[1].Replace(" ", "");
+                                string rg = tokens[2].Replace(" ", "");
+
+                                return View(db.Transacao
+                                .Include(t => t.cliente)
+                                .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg))
+                                .OrderBy(t => t.cliente.nome)
+                                .ToList());
+                            }
+                        }
+
+                        return View(db.Transacao
+                            .Include(t => t.cliente)
+                            .Where(t => t.cliente.nome.Contains(pesquisar) || t.cliente.rg.Contains(pesquisar) && t.data >= dataInicio && t.data <= dataFim)
+                            .OrderBy(t => t.cliente.nome)
+                            .ToList());
+                    }
+                    else
+                    {
+                        return View(db.Transacao
+                            .Include(t => t.cliente)
+                            .Where(t => t.data >= dataInicio && t.data <= dataFim)
+                            .OrderByDescending(t => t.data)
+                            .ToList());
+                    }
+                }
+                else
+                {
+                    return View(db.Transacao
+                        .Include(t => t.cliente)
+                        .Where(t => t.data == dataInicio)
+                        .OrderByDescending(t => t.data)
+                        .ToList());
+                }
+            }
+            else if (pesquisar != null && pesquisar != "")
+            {
+                if (pesquisar.Contains("-"))
+                {
+                    string[] tokens = pesquisar.Split('-');
+
+                    if (tokens.Length == 3)
+                    {
+                        string nome = tokens[1].Replace(" ", "");
+                        string rg = tokens[2].Replace(" ", "");
+
+                        return View(db.Transacao
+                        .Include(t => t.cliente)
+                        .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg))
+                        .OrderBy(t => t.cliente.nome)
+                        .ToList());
+                    }
+                }
+
+                return View(db.Transacao
+                    .Include(t => t.cliente)
+                    .Where(t => t.cliente.nome.Contains(pesquisar) || t.cliente.rg.Contains(pesquisar))
+                    .OrderBy(t => t.cliente.nome)
+                    .ToList());
+            }
+            else
+            {
+                return View(db.Transacao
+                    .Include(t => t.cliente)
+                    .OrderByDescending(t => t.data)
+                    .ToList());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult DropboxClientes()
+        {
+            var listaClientes = db.Cliente.Select(e => new { e.id, e.nome, e.rg }).OrderBy(e => e.nome).ToArray();
+
+            var obj = new
+            {
+                lista = listaClientes
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Detalhes(int? id)
@@ -42,6 +139,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    if(transacao.cliente == null)
+                    {
+                        transacao.cliente = db.Cliente.Find(transacao.clienteId);
+                    }
                     sucesso = true;
                     resultado = transacao.Serializar();
                 }

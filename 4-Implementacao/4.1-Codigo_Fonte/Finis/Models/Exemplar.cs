@@ -41,7 +41,12 @@ namespace Finis.Models
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(20, ErrorMessage = "O nome é muito longo")]
         public string nome { get; set; }
-        
+
+        [NotMapped]
+        [Display(Name = "País")]
+        [Required(ErrorMessage = "Por favor selecione um país")]
+        public string paisNome { get; set; }
+
         [Display(Name = "País")]
         [Required(ErrorMessage = "Por favor selecione um país")]
         public int paisId { get; set; }
@@ -130,7 +135,12 @@ namespace Finis.Models
         //[InverseProperty("Exemplar")]
         [ScriptIgnore]
         public virtual ICollection<Autor> Autores { get; set; }
-        
+
+        [NotMapped]
+        [Display(Name = "Editora")]
+        [Required(ErrorMessage = "Por favor selecione uma editora")]
+        public string editoraNome { get; set; }
+
         [Display(Name = "Editora")]
         [Required(ErrorMessage = "Por favor selecione uma editora")]
         public int? editoraId { get; set; }
@@ -149,6 +159,25 @@ namespace Finis.Models
         [ForeignKey("sessaoId")]
         public virtual Sessao sessao { get; set; }
 
+        [NotMapped]
+        public string precoCompraString
+        {
+            get
+            {
+                return this.precoCompra.ToString("C");
+            }
+        }
+
+        [NotMapped]
+        public string precoVendaString
+        {
+            get
+            {
+                return this.precoVenda.ToString("C");
+            }
+        }
+
+        [NotMapped]
         public String conservacaoString
         {
             get

@@ -59,11 +59,35 @@ namespace Finis.Models
         [DataType(DataType.MultilineText)]
         public string observacao { get; set; }
 
+        [NotMapped]
+        [Display(Name = "Cliente")]
+        [Required(ErrorMessage = "Por favor selecione um cliente")]
+        public string clienteNome { get; set; }
+
         [Display(Name = "Cliente")]
         [Required(ErrorMessage = "Por favor selecione um cliente")]
         public int? clienteId { get; set; }
         [ForeignKey("clienteId")]
         public virtual Cliente cliente { get; set; }
+
+        [NotMapped]
+        public string creditoEspecialString => this.creditoEspecial == null ? "Valor nulo" : string.Format("{0:C}", this.creditoEspecial.Value);
+
+        [NotMapped]
+        public string creditoParcialString => this.creditoParcial == null ? "Valor nulo" : string.Format("{0:C}", this.creditoParcial.Value);
+
+        [NotMapped]
+        public string dataEntradaString
+        {
+            get
+            {
+                return this.dataEntrada.ToString("dd/MM/yyyy");
+            }
+            set
+            {
+                this.dataEntrada = Convert.ToDateTime(value).Date;
+            }
+        }
 
         [NotMapped]
         public String situacaoString

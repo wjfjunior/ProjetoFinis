@@ -56,7 +56,25 @@ namespace Finis.Models
         public virtual Cliente cliente { get; set; }
 
         [NotMapped]
-        public String tipoTransacaoString
+        public string dataString
+        {
+            get
+            {
+                return this.data.ToString("dd/MM/yyyy");
+            }
+        }
+
+        [NotMapped]
+        public string valorString
+        {
+            get
+            {
+                return this.valor.ToString("C");
+            }
+        }
+
+        [NotMapped]
+        public string tipoTransacaoString
         {
             get
             {
@@ -64,6 +82,20 @@ namespace Finis.Models
                     return "Entrada";
                 else if (this.tipoTransacao == TipoTransacao.SAIDA)
                     return "Saída";
+
+                else return "";
+            }
+        }
+
+        [NotMapped]
+        public string tipoCreditoString
+        {
+            get
+            {
+                if (this.tipoCredito == TipoCredito.PARCIAL)
+                    return "Parcial";
+                else if (this.tipoCredito == TipoCredito.ESPECIAL)
+                    return "Especial";
 
                 else return "";
             }

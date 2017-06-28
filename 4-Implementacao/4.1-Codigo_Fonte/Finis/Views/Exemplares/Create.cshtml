@@ -11,6 +11,7 @@
     <div class="container" id="formulario">
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
+        @Html.HiddenFor(model => model.editoraId, new { id = "editoraId" })
 
         <form class="col s12">
             <div class="row">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="input-field col s2">
                     @Html.LabelFor(model => model.isbn, htmlAttributes: new { @class = "validate" })
-                    @Html.EditorFor(model => model.isbn, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.isbn, new { htmlAttributes = new { @id = "isbn", @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.isbn, "", new { @class = "validate" })
                 </div>
             </div>
@@ -72,9 +73,16 @@
                     @Html.DropDownList("idiomaId", (SelectList)ViewBag.idiomaId, "Idioma", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.idiomaId, "", new { @class = "validate" })
                 </div>
-                <div class="input-field col s4">
+                @*<div class="input-field col s4">
                     @Html.DropDownList("editoraId", (SelectList)ViewBag.editoraId, "Editora", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.editoraId, "", new { @class = "validate" })
+                </div>*@
+                <div class="row">
+                    <div class="input-field col s4">
+                        @Html.EditorFor(model => model.editoraNome, new { htmlAttributes = new { @type = "text", @id = "editoraNome", @class = "autocomplete" } })
+                        @Html.LabelFor(model => model.editoraNome)
+                        @Html.ValidationMessageFor(model => model.editoraNome, "", new { @class = "validate" })
+                    </div>
                 </div>
                 <div class="input-field col s3">
                     @Html.DropDownList("sessaoId", (SelectList)ViewBag.sessaoId, "Sessão", htmlAttributes: new { @class = "validate" })
@@ -115,20 +123,61 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/materialize")
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
-            $('select').material_select();
-            $('#descricao').trigger('autoresize');
-        });
+         var dados = {};
 
-        //$('.datepicker').pickadate({
-        //    format: 'yyyy',
-        //    viewMode: "years", 
-        //    minViewMode: "years",
-        //    autoclose: true,
-        //});
+         function RecuperaID(string)
+         {
+             var id = string.substr(0, string.indexOf(' '));
+
+             if (!isNaN(id))
+             {
+                 return parseInt(id);
+             }
+             else
+             {
+                 alert("Por favor selecione uma opção");
+             }
+         }
+
+         $(document).ready(function () {
+
+             $('select').material_select();
+             $('#descricao').trigger('autoresize');
+             $("#isbn").mask("ISBN 999-99-999-9999-9"); 
+
+             var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxEditoras", "Exemplares")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#editoraId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
+         });
 
     </script>
 }

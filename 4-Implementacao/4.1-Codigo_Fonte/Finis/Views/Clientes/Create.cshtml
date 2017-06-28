@@ -7,7 +7,7 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="container" id="formulario">
         <form class="col s12">
             <div class="row">
@@ -17,6 +17,7 @@
                 @Html.HiddenFor(model => model.user_update)
                 @Html.HiddenFor(model => model.id)
                 @Html.HiddenFor(model => model.enderecoId)
+                @Html.HiddenFor(model => model.endereco.cidadeId, new { id = "cidadeId" })
 
                 <div class="row">
                     <div class="input-field col s7">
@@ -93,9 +94,14 @@
                         @Html.EditorFor(model => model.endereco.cep, new { htmlAttributes = new { @class = "validate" } })
                         @Html.ValidationMessageFor(model => model.endereco.cep, "", new { @class = "validate" })
                     </div>
-                    <div class="input-field col s4">
+                    @*<div class="input-field col s4">
                         @Html.DropDownListFor(model => model.endereco.cidadeId, (SelectList)ViewBag.Cidades, "Selecione a cidade", htmlAttributes: new { @class = "validate" })
                         @Html.ValidationMessageFor(model => model.endereco.cidadeId, "", new { @class = "validate" })
+                    </div>*@
+                    <div class="input-field col s4">
+                        @Html.EditorFor(model => model.endereco.cidadeNome, new { htmlAttributes = new { @type = "text", @id = "cidadeNome", @class = "autocomplete" } })
+                        @Html.LabelFor(model => model.endereco.cidadeNome)
+                        @Html.ValidationMessageFor(model => model.endereco.cidadeNome, "", new { @class = "validate" })
                     </div>
                 </div>
                 <div class="row">
@@ -132,23 +138,63 @@
 @section Scripts {
 
     @Scripts.Render("~/bundles/jqueryval") 
-
+    @Scripts.Render("~/bundles/materialize") 
     <script type="text/javascript">
+
+        var dados = {};
+
+        function RecuperaID(string) {
+            var id = string.substr(0, string.indexOf(' '));
+
+            if (!isNaN(id)) {
+                return parseInt(id);
+            }
+            else {
+                alert("Por favor selecione uma opção");
+            }
+        }
 
         $(document).ready(function () {
             $('select').material_select();
 
             $("#telefone").mask("(99)9999-9999");
             $("#celular").mask("(99)99999-9999");
-            //$("#creditoParcial").inputmask("mask", { "mask": "(99)99999-9999" });
-            //$("#creditoEspecial").inputmask("(999) 999-9999", { removeMaskOnSubmit: true });
         });
-        
+
         $('.datepicker').pickadate({
             format: 'dd/mm/yyyy',
             selectMonths: true,
             selectYears: 100,
         });
+
+        var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxCidades", "Clientes")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + "/" + resultado.lista[i].sigla] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#cidadeId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
 
     </script>
 }

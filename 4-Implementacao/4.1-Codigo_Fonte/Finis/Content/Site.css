@@ -36,8 +36,12 @@
 
 #container-busca {
     margin-top: 2%;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
     margin-right: 4%;
+}
+
+#botao-busca {
+    margin-top: 10%;
 }
 
 .chips .autocomplete-content {

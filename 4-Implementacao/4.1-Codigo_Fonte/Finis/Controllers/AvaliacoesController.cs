@@ -18,8 +18,114 @@ namespace Finis.Controllers
         // GET: Avaliacoes
         public ActionResult Index()
         {
-            var avaliacao = db.Avaliacao.Include(a => a.cliente);
+            var avaliacao = db.Avaliacao.Include(a => a.cliente).OrderByDescending(a => a.dataEntrada);
             return View(avaliacao.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar, DateTime? dataInicio, DateTime? dataFim)
+        {
+            if (dataInicio != null)
+            {
+                if (dataFim != null)
+                {
+                    if (pesquisar != null && pesquisar != "")
+                    {
+                        if (pesquisar.Contains("-"))
+                        {
+                            string[] tokens = pesquisar.Split('-');
+
+                            if (tokens.Length == 3)
+                            {
+                                string nome = tokens[1].Replace(" ", "");
+                                string rg = tokens[2].Replace(" ", "");
+
+                                return View(db.Avaliacao
+                                .Include(t => t.cliente)
+                                .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg))
+                                .OrderBy(t => t.cliente.nome)
+                                .ToList());
+                            }
+                        }
+
+                        return View(db.Avaliacao
+                            .Include(t => t.cliente)
+                            .Where(t => t.cliente.nome.Contains(pesquisar) || t.cliente.rg.Contains(pesquisar) && t.dataEntrada >= dataInicio && t.dataEntrada <= dataFim)
+                            .OrderBy(t => t.cliente.nome)
+                            .ToList());
+                    }
+                    else
+                    {
+                        return View(db.Avaliacao
+                            .Include(t => t.cliente)
+                            .Where(t => t.dataEntrada >= dataInicio && t.dataEntrada <= dataFim)
+                            .OrderByDescending(t => t.dataEntrada)
+                            .ToList());
+                    }
+                }
+                else
+                {
+                    return View(db.Avaliacao
+                        .Include(t => t.cliente)
+                        .Where(t => t.dataEntrada == dataInicio)
+                        .OrderByDescending(t => t.dataEntrada)
+                        .ToList());
+                }
+            }
+            else if (pesquisar != null && pesquisar != "")
+            {
+                if(pesquisar.Contains("-"))
+                {
+                    string[] tokens = pesquisar.Split('-');
+
+                    if(tokens.Length == 3)
+                    {
+                        string nome = tokens[1].Replace(" ", "");
+                        string rg = tokens[2].Replace(" ", "");
+
+                        return View(db.Avaliacao
+                        .Include(t => t.cliente)
+                        .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg))
+                        .OrderBy(t => t.cliente.nome)
+                        .ToList());
+                    }
+                }
+                
+                return View(db.Avaliacao
+                    .Include(t => t.cliente)
+                    .Where(t => t.cliente.nome.Contains(pesquisar) || t.cliente.rg.Contains(pesquisar))
+                    .OrderBy(t => t.cliente.nome)
+                    .ToList());
+            }
+            else
+            {
+                return View(db.Avaliacao
+                    .Include(t => t.cliente)
+                    .OrderByDescending(t => t.dataEntrada)
+                    .ToList());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult DropboxClientes()
+        {
+            var listaClientes = db.Cliente.Select(e => new { e.id, e.nome, e.rg }).OrderBy(e => e.nome).ToArray();
+
+            var obj = new
+            {
+                lista = listaClientes
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomeCliente(Avaliacao avaliacao)
+        {
+            if (avaliacao.cliente == null)
+            {
+                avaliacao.cliente = db.Cliente.Find(avaliacao.clienteId);
+            }
+            avaliacao.clienteNome = avaliacao.cliente.id + " - " + avaliacao.cliente.nome + " - " + avaliacao.cliente.rg;
         }
 
         // GET: Clientes/Details/5
@@ -43,6 +149,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    if(avaliacao.cliente == null)
+                    {
+                        avaliacao.cliente = db.Cliente.Find(avaliacao.clienteId);
+                    }
                     sucesso = true;
                     resultado = avaliacao.Serializar();
                 }
@@ -72,7 +182,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,dataEntrada,quantidadeExemplares,creditoEspecial,creditoParcial,situacao,clienteId,user_insert,user_update,date_insert,date_update")] Avaliacao avaliacao)
+        public ActionResult Create(Avaliacao avaliacao)
         {
             if(avaliacao.situacao == situacaoAvaliacao.CONCLUIDO)
             {
@@ -104,6 +214,7 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", avaliacao.clienteId);
+            this.ConfiguraNomeCliente(avaliacao);
             return View(avaliacao);
         }
 
@@ -112,7 +223,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,dataEntrada,quantidadeExemplares,creditoEspecial,creditoParcial,situacao,clienteId,user_insert,user_update,date_insert,date_update")] Avaliacao avaliacao)
+        public ActionResult Edit(Avaliacao avaliacao)
         {
             if (ModelState.IsValid)
             {

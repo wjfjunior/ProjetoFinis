@@ -21,6 +21,12 @@ namespace Finis.Controllers
             return View(db.Estado.OrderBy(e => e.nome).ToList());
         }
 
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Estado.Where(c => c.nome.Contains(pesquisar)).ToList());
+        }
+
         [HttpGet]
         public JsonResult DropboxPaises()
         {
@@ -81,6 +87,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    if (estado.pais == null)
+                    {
+                        estado.pais = db.Pais.Find(estado.paisId);
+                    }
                     sucesso = true;
                     resultado = estado.Serializar();
                 }
@@ -128,12 +138,13 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(VerificaJaExiste(model))
+                model.nome = model.nome.ToUpper();
+                model.sigla = model.sigla.ToUpper();
+                if (VerificaJaExiste(model))
                 {
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
                     return View(model);
                 }
-                model.sigla = model.sigla.ToUpper();
                 db.Estado.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -168,6 +179,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.nome = model.nome.ToUpper();
                 model.sigla = model.sigla.ToUpper();
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();

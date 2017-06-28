@@ -21,7 +21,7 @@
                 </div>
                 <div class="input-field col s4">
                     @Html.LabelFor(model => model.cnpj, htmlAttributes: new { @class = "validate" })
-                    @Html.EditorFor(model => model.cnpj, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.EditorFor(model => model.cnpj, new { htmlAttributes = new { @id = "cnpj", @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.cnpj, "", new { @class = "validate" })
                 </div>
             </div>
@@ -58,6 +58,7 @@
 
         $(document).ready(function () {
             $("#telefone").mask("(99)99999-9999");
+            $("#cnpj").mask("99.999.999/9999-99");
         });
 
     </script>

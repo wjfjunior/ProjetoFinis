@@ -21,17 +21,17 @@
 
     function PreencheModalDetalhes(obj) {
 
-        document.getElementById('valor').innerHTML = SubstituirCampoNulo(obj.valor);
-        document.getElementById('data').innerHTML = SubstituirCampoNulo(obj.data);
-        document.getElementById('tipoTransacao').innerHTML = SubstituirCampoNulo(obj.tipoTransacao);
-        document.getElementById('tipoCredito').innerHTML = SubstituirCampoNulo(obj.tipoCredito);
+        document.getElementById('valor').innerHTML = SubstituirCampoNulo(obj.valorString);
+        document.getElementById('data').innerHTML = SubstituirCampoNulo(obj.dataString);
+        document.getElementById('tipoTransacao').innerHTML = SubstituirCampoNulo(obj.tipoTransacaoString);
+        document.getElementById('tipoCredito').innerHTML = SubstituirCampoNulo(obj.tipoCreditoString);
         document.getElementById('clienteNome').innerHTML = SubstituirCampoNulo(obj.cliente.nome);
         document.getElementById('clienteRg').innerHTML = SubstituirCampoNulo(obj.cliente.rg);
     }
 
     function SubstituirCampoNulo(campo) {
 
-        if (campo == null)
+        if (campo == null || campo == "")
             return " - "
         else
             return campo;
@@ -39,6 +39,35 @@
 
 </script>
 
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.Label("Cliente")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @type = "text", @id = "estadoNome", @class = "autocomplete" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s3">
+                        @Html.Editor("dataInicio", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de início" } })
+                    </div>
+                    <div class="col s3">
+                        @Html.Editor("dataFim", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de fim" } })
+                    </div>
+                    <div class="col s3">
+                        <button type="submit" class="waves-effect waves-light btn">
+                            Pesquisar
+                            <i class="material-icons right">search</i>
+                        </button>
+                    </div>
+               </div>
+            </form>
+        </div>
+    </div>
+}
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Avaliacoes")">
         <i class="material-icons">add</i>
@@ -64,7 +93,7 @@
         <th>
             @Html.DisplayNameFor(model => model.data)
         </th>
-        <th>Opções</th>
+        <th>Detalhes</th>
     </tr>
 
     @foreach (var item in Model)
@@ -77,13 +106,13 @@
                 @Html.DisplayFor(modelItem => item.cliente.rg)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.valor)
+                @Html.DisplayFor(modelItem => item.valorString)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.tipoTransacao)
+                @Html.DisplayFor(modelItem => item.tipoTransacaoString)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.tipoCredito)
+                @Html.DisplayFor(modelItem => item.tipoCreditoString)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.data)
@@ -104,56 +133,50 @@
         <h5>Informações do registro</h5>
         <div class="row" id="linha-detalhes">
             <div class="col s8">
-                <label>Nome do cliente:</label>
+                <label>Valor:</label>
             </div>
             <div class="col s4">
-                <label>RG do cliente:</label>
+                <label>Data:</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
             <div class="col s8">
-                <label class="texto-detalhes" id="nome">.</label>
+                <label class="texto-detalhes" id="valor">.</label>
             </div>
             <div class="col s4">
-                <label class="texto-detalhes" id="rg">.</label>
+                <label class="texto-detalhes" id="data">.</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
-            <div class="col s4">
-                <label>Data de entrada:</label>
+            <div class="col s6">
+                <label>Tipo de transação:</label>
             </div>
-            <div class="col s2">
-                <label>Quantidade:</label>
-            </div>
-            <div class="col s3">
-                <label>Créd. Parcial:</label>
-            </div>
-            <div class="col s3">
-                <label>Créd. Especial:</label>
+            <div class="col s6">
+                <label>Tipo de crédito:</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
-            <div class="col s4">
-                <label class="texto-detalhes" id="dataEntrada">.</label>
+            <div class="col s6">
+                <label class="texto-detalhes" id="tipoTransacao">.</label>
             </div>
-            <div class="col s2">
-                <label class="texto-detalhes" id="quantidadeExemplares">.</label>
-            </div>
-            <div class="col s3">
-                <label class="texto-detalhes" id="creditoEspecial">.</label>
-            </div>
-            <div class="col s3">
-                <label class="texto-detalhes" id="creditoParcial">.</label>
+            <div class="col s6">
+                <label class="texto-detalhes" id="tipoCredito">.</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
-            <div class="col s12">
-                <label>Situação:</label>
+            <div class="col s8">
+                <label>Cliente:</label>
+            </div>
+            <div class="col s4">
+                <label>Registro Geral (RG):</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
+            <div class="col s8">
+                <label class="texto-detalhes" id="clienteNome">.</label>
+            </div>
             <div class="col s4">
-                <label class="texto-detalhes" id="situacao">.</label>
+                <label class="texto-detalhes" id="clienteRg">.</label>
             </div>
         </div>
     </div>
@@ -173,7 +196,10 @@
     </div>
 </div>
 @section scripts{
+@Scripts.Render("~/bundles/materialize")
     <script type="text/javascript">
+
+        var dados = {};
 
         function showModal(id, modal) {
             $('#' + modal).openModal();
@@ -183,6 +209,34 @@
         $(document).ready(function () {
 
             $('.modal-trigger').leanModal();
+
+            $('.datepicker').pickadate({
+                format: 'dd/mm/yyyy',
+                selectMonths: true,
+                selectYears: 100,
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxClientes", "Transacoes")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+                            
+                        },
+                    });
+                }
+            });
+
         });
 
     </script>

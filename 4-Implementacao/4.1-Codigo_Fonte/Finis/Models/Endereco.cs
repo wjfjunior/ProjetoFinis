@@ -65,7 +65,12 @@ namespace Finis.Models
         [Required(ErrorMessage = "Por favor insira um nome")]
         [StringLength(30, ErrorMessage = "O nome é muito longo")]
         public string nome { get; set; }
-        
+
+        [NotMapped]
+        [Display(Name = "Estado")]
+        [Required(ErrorMessage = "Por favor selecione um estado")]
+        public string estadoNome { get; set; }
+
         [Display(Name = "Estado")]
         [Required(ErrorMessage = "Por favor selecione um estado")]
         public int estadoId { get; set; }
@@ -100,7 +105,12 @@ namespace Finis.Models
 
         [Display(Name = "CEP")]
         public int cep { get; set; }
-        
+
+        [NotMapped]
+        [Display(Name = "Cidade")]
+        //[Required(ErrorMessage = "Por favor selecione uma cidade")]
+        public string cidadeNome { get; set; }
+
         [Display(Name = "Cidade")]
         //[Required(ErrorMessage = "Por favor selecione uma cidade")]
         public int? cidadeId { get; set; }

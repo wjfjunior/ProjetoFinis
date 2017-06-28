@@ -18,7 +18,13 @@ namespace Finis.Controllers
         // GET: Sessoes
         public ActionResult Index()
         {
-            return View(db.Sessaos.ToList());
+            return View(db.Sessaos.ToList().OrderBy(s => s.nome));
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Sessaos.Where(c => c.nome.Contains(pesquisar)).OrderBy(s => s.nome).ToList());
         }
 
         // GET: Clientes/Details/5

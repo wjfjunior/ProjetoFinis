@@ -19,7 +19,57 @@ namespace Finis.Controllers
         // GET: Cidades
         public ActionResult Index()
         {
-            return View(db.Cidade.ToList());
+            return View(db.Cidade.OrderBy(c => c.nome).ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Cidade.Where(c => c.nome.Contains(pesquisar)).ToList());
+        }
+
+        [HttpGet]
+        public JsonResult DropboxEstados()
+        {
+            var listaEstados = db.Estado.Select(e => new { e.id, e.nome, e.pais.sigla }).OrderBy(e => e.nome).ToArray();
+
+            var obj = new
+            {
+                lista = listaEstados
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomeEstado(Cidade cidade)
+        {
+            if (cidade.estado == null)
+            {
+                Estado estado = new Estado();
+                estado.id = cidade.estadoId;
+                cidade.estado = db.Estado.Find(estado);
+
+                if(cidade.estado.pais == null)
+                {
+                    Pais pais = new Pais();
+                    pais.id = cidade.estado.paisId;
+                    cidade.estado.pais = db.Pais.Find(pais);
+                }
+            }
+            cidade.estadoNome = cidade.estado.id + " - " + cidade.estado.nome + "/" + cidade.estado.pais.sigla;
+        }
+
+        private bool VerificaJaExiste(Cidade cidade)
+        {
+            List<Cidade> resultado = new List<Cidade>();
+
+            resultado = db.Cidade.Where(e => e.nome == cidade.nome && e.estadoId == cidade.estadoId).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         // GET: Cidades/Details/5
@@ -58,6 +108,10 @@ namespace Finis.Controllers
                 }
                 else
                 {
+                    if(cidade.estado == null)
+                    {
+                        cidade.estado = db.Estado.Find(cidade.estadoId);
+                    }
                     sucesso = true;
                     resultado = JsonConvert.SerializeObject(cidade);
                 }
@@ -86,6 +140,12 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.nome = model.nome.ToUpper();
+                if (VerificaJaExiste(model))
+                {
+                    ViewBag.Erro = "Ja existe um registro com os valores informados!";
+                    return View(model);
+                }
                 db.Cidade.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -107,6 +167,7 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Estados = new SelectList(db.Estado, "Id", "Nome", "Sigla");
+            this.ConfiguraNomeEstado(cidade);
             return View(cidade);
         }
 
@@ -119,6 +180,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.nome = model.nome.ToUpper();
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

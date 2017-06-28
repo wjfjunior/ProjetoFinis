@@ -52,6 +52,37 @@ namespace Finis.Models
         public string rg { get; set; }
 
         [NotMapped]
+        public string saldoCreditoParcialString
+        {
+            get
+            {
+                return this.saldoCreditoParcial.ToString("C");
+            }
+        }
+
+        [NotMapped]
+        public string saldoCreditoEspecialString
+        {
+            get
+            {
+                return this.saldoCreditoEspecial.ToString("C");
+            }
+        }
+
+        [NotMapped]
+        public string dataNascimentoString
+        {
+            get
+            {
+                return this.dataNascimento.ToString("dd/MM/yyyy");
+            }
+            set
+            {
+                this.dataNascimento = Convert.ToDateTime(value).Date;
+            }
+        }
+
+        [NotMapped]
         public String generoString
         {
             get

@@ -22,10 +22,53 @@ namespace Finis.Controllers
             return View(db.Cliente.ToList());
         }
 
-        // GET: Clientes
-        public ActionResult Buscar(string nome)
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Cliente.Where(c => c.nome.Contains(nome)).ToList());
+            return View("Index", db.Cliente.Where(c => c.nome.Contains(pesquisar) || c.rg.Contains(pesquisar)).ToList());
+        }
+
+        [HttpGet]
+        public JsonResult DropboxCidades()
+        {
+            var listaCidades = db.Cidade.Select(c => new { c.id, c.nome, c.estado.sigla }).OrderBy(c => c.nome).ToArray();
+
+            var obj = new
+            {
+                lista = listaCidades
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomeCidade(Cliente cliente)
+        {
+            if (cliente.endereco == null || cliente.enderecoId == null || cliente.endereco.id == 0)
+            {
+                cliente.endereco = db.Endereco.Find(cliente.enderecoId);
+            }
+            if (cliente.endereco.cidade == null || cliente.endereco.cidadeId == null || cliente.endereco.cidade.id == 0)
+            {
+                cliente.endereco.cidade = db.Cidade.Find(cliente.endereco.cidadeId);
+            }
+            if (cliente.endereco.cidade.estado == null || cliente.endereco.cidade.estadoId == 0 || cliente.endereco.cidade.estado.id == 0)
+            {
+                cliente.endereco.cidade.estado = db.Estado.Find(cliente.endereco.cidade.estadoId);
+            }
+            cliente.endereco.cidadeNome = cliente.endereco.cidade.id + " - " + cliente.endereco.cidade.nome + "/" + cliente.endereco.cidade.estado.sigla;
+        }
+
+        private bool VerificaJaExiste(Cliente cliente)
+        {
+            List<Cliente> resultado = new List<Cliente>();
+
+            resultado = db.Cliente.Where(c => c.nome == cliente.nome && c.rg == cliente.rg).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private Endereco RecuperaEndereco(int? id)
@@ -33,6 +76,10 @@ namespace Finis.Controllers
             if(id != null)
             {
                 Endereco endereco = db.Endereco.Find(id);
+                if(endereco.cidade == null)
+                {
+                    endereco.cidade = db.Cidade.Find(endereco.cidadeId);
+                }
                 return endereco;
             }
             return new Endereco();
@@ -88,6 +135,11 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (VerificaJaExiste(model))
+                {
+                    ViewBag.Erro = "Ja existe um registro com os valores informados!";
+                    return View(model);
+                }
                 db.Cliente.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -109,6 +161,7 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
+            this.ConfiguraNomeCidade(cliente);
             var enderecoID = cliente.enderecoId;
             cliente.endereco = this.RecuperaEndereco(cliente.enderecoId);
             cliente.enderecoId = enderecoID;

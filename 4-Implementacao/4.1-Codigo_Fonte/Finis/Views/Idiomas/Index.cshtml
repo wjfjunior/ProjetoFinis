@@ -48,6 +48,27 @@
     }
 
 </script>
+
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s8">
+                        @Html.Label("Buscar")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                    </div>
+                    <div class="col s2">
+                        <button type="submit" class="btn-floating" id="botao-busca">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Idiomas")">
         <i class="material-icons">add</i>

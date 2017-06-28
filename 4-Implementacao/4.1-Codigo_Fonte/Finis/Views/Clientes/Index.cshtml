@@ -36,14 +36,14 @@
     function PreencheModalDetalhes(obj) {
 
         document.getElementById('nome').innerHTML = obj.nome;
-        document.getElementById('dtaNascimento').innerHTML = FormataDataJSON(obj.dataNascimento);
+        document.getElementById('dtaNascimento').innerHTML = obj.dataNascimentoString;
         document.getElementById('genero').innerHTML = obj.generoString;
         document.getElementById('rg').innerHTML = obj.rg;
         document.getElementById('telefone').innerHTML = obj.telefone;
         document.getElementById('celular').innerHTML = obj.celular;
         document.getElementById('email').innerHTML = SubstituirCampoNulo(obj.email);
-        document.getElementById('saldoParcial').innerHTML = obj.saldoCreditoParcial;
-        document.getElementById('saldoEspecial').innerHTML = obj.saldoCreditoEspecial;
+        document.getElementById('saldoParcial').innerHTML = obj.saldoCreditoParcialString;
+        document.getElementById('saldoEspecial').innerHTML = obj.saldoCreditoEspecialString;
 
         document.getElementById('logradouro').innerHTML = obj.endereco.logradouro;
         document.getElementById('numero').innerHTML = obj.endereco.numero;
@@ -61,34 +61,28 @@
             return campo;
     }
 
-    function FormataDataJSON(data) {
-
-        var dateString = data.substr(6);
-        var currentTime = new Date(parseInt(dateString));
-        var month = currentTime.getMonth() + 1;
-        var day = currentTime.getDate();
-        var year = currentTime.getFullYear();
-        var date = day + "/" + month + "/" + year;
-
-        return date;
-    }
-
 </script>
 
-<div class="container-busca" >
-    <nav>
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
         <div class="nav-wrapper">
             <form>
-                <div class="input-field">
-                    <input id="search" type="search" required>
-                    <label for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
+                <div class="row">
+                    <div class="input-field col s8">
+                        @Html.Label("Buscar")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                    </div>
+                    <div class="col s2">
+                        <button type="submit" class="btn-floating" id="botao-busca">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
-    </nav>
-</div>
-
+    </div>
+}
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Clientes")">
         <i class="material-icons">add</i>
@@ -99,6 +93,9 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.rg)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.telefone)
@@ -122,16 +119,19 @@
             @Html.DisplayFor(modelItem => item.nome)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.rg)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.telefone)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.celular)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.saldoCreditoParcial)
+            @Html.DisplayFor(modelItem => item.saldoCreditoParcialString)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.saldoCreditoEspecial)
+            @Html.DisplayFor(modelItem => item.saldoCreditoEspecialString)
         </td>
         <td>
             <a class="btn-floating blue" href="@Url.Action("Edit", "Clientes", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>

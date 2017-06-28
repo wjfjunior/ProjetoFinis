@@ -13,6 +13,7 @@
         @Html.ValidationSummary(true, "", new { @class = "validate" })
         @Html.HiddenFor(model => model.date_insert)
         @Html.HiddenFor(model => model.user_update)
+        @Html.HiddenFor(model => model.paisId, new { id = "paisId" })
         @Html.HiddenFor(model => model.id)
 
         <form class="col s12">
@@ -23,13 +24,22 @@
                     @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
                 </div>
             </div>
-            <div class="row">
+            @*<div class="row">
                 <div class="input-field col s12">
                     @Html.DropDownListFor(model => model.paisId, (SelectList)ViewBag.paisId, "Selecione o país", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.paisId, "", new { @class = "text-danger" })
                 </div> 
+            </div>*@
+            <div class="row">
+                <div class="input-field col s12">
+                    @Html.EditorFor(model => model.paisNome, new { htmlAttributes = new { @type = "text", @id = "paisNome", @class = "autocomplete" } })
+                    @Html.LabelFor(model => model.paisNome)
+                    @Html.ValidationMessageFor(model => model.paisNome, "", new { @class = "validate" })
+                </div>
             </div>
         </form>
+
+        <br/>
 
         <div class="row">
             <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Idiomas")'" type="button" name="action">
@@ -46,10 +56,58 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/materialize")
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('select').material_select();
-        });
+
+         var dadosPaises = {};
+
+         function RecuperaID(string)
+         {
+             var id = string.substr(0, string.indexOf(' '));
+
+             if (!isNaN(id))
+             {
+                 return parseInt(id);
+             }
+             else
+             {
+                 alert("Por favor selecione uma opção");
+             }
+         }
+
+         $(document).ready(function () {
+             //$('select').material_select();
+
+             var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxPaises", "Idiomas")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista_paises.length; i++)
+                    {
+                        dadosPaises[resultado.lista_paises[i].id + " - " + resultado.lista_paises[i].nome] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dadosPaises,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#paisId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
+         });
+
     </script>
 }

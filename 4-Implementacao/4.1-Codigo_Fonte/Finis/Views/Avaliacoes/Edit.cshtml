@@ -14,18 +14,26 @@
         @Html.HiddenFor(model => model.date_insert)
         @Html.HiddenFor(model => model.user_update)
         @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
 
         <form class="col s12">
-            <div class="row">
+            @*<div class="row">
                 <div class="input-field col s12">
                     @Html.DropDownListFor(model => model.clienteId, (SelectList)ViewBag.Clientes, "Cliente", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.clienteId, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="input-field col s12">
+                    @Html.EditorFor(model => model.clienteNome, new { htmlAttributes = new { @type = "text", @id = "clienteNome", @class = "autocomplete" } })
+                    @Html.LabelFor(model => model.clienteNome)
+                    @Html.ValidationMessageFor(model => model.clienteNome, "", new { @class = "validate" })
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s4">
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.dataEntrada, new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de entrada" } })
+                    @Html.EditorFor(model => model.dataEntradaString, new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de entrada" } })
                     @{ Html.EnableClientValidation(true); }
                     @Html.ValidationMessageFor(model => model.dataEntrada, "", new { @class = "validate" })
                 </div>
@@ -35,7 +43,7 @@
                     @Html.ValidationMessageFor(model => model.quantidadeExemplares, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s5">
-                    @Html.EnumDropDownListFor(model => model.situacao, "Situação", htmlAttributes: new { @class = "validate" })
+                    @Html.EnumDropDownListFor(model => model.situacao, "Situação", htmlAttributes: new { @class = "validate", @id = "situacaoAvaliacao", @name = "situacaoAvaliacao" })
                     @Html.ValidationMessageFor(model => model.situacao, "", new { @class = "validate" })
                 </div>
             </div>
@@ -71,10 +79,53 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/materialize")
     <script type="text/javascript">
+
+        var dados = {};
+
+        function RecuperaID(string) {
+            var id = string.substr(0, string.indexOf(' '));
+
+            if (!isNaN(id)) {
+                return parseInt(id);
+            }
+            else {
+                alert("Por favor selecione uma opção");
+            }
+        }
 
         $(document).ready(function () {
             $('select').material_select();
+
+            var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxClientes", "Avaliacoes")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#clienteId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
 
         });
 

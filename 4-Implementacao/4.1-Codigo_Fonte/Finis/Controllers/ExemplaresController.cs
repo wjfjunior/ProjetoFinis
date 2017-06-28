@@ -18,8 +18,78 @@ namespace Finis.Controllers
         // GET: Exemplares
         public ActionResult Index()
         {
-            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao);
+            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
             return View(exemplares.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string pesquisar)
+        {
+            return View("Index", db.Exemplar
+                .Include(e => e.editora)
+                .Include(e => e.idioma)
+                .Include(e => e.sessao)
+                .Where(c => c.titulo.Contains(pesquisar) || c.isbn.Contains(pesquisar))
+                .OrderBy(e => e.titulo)
+                .ToList());
+        }
+
+        // GET: Exemplares
+        public ActionResult Consulta()
+        {
+            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
+            return View(exemplares.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Consulta(string pesquisar)
+        {
+            return View(db.Exemplar
+                .Include(e => e.editora)
+                .Include(e => e.idioma)
+                .Include(e => e.sessao)
+                .Where(c => c.titulo.Contains(pesquisar) || c.isbn.Contains(pesquisar))
+                .OrderBy(e => e.titulo)
+                .ToList());
+        }
+
+        [HttpGet]
+        public JsonResult DropboxEditoras()
+        {
+            var listaEditora = db.Fornecedors
+                .Where(e => e.tipoFornecedor == TipoFornecedor.EDITORA)
+                .Select(p => new { p.id, p.nome })
+                .OrderBy(p => p.nome)
+                .ToArray();
+
+            var obj = new
+            {
+                lista = listaEditora
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomeEditora(Exemplar exemplar)
+        {
+            if (exemplar.editora == null)
+            {
+                exemplar.editora = db.Fornecedors.Find(exemplar.editoraId);
+            }
+            exemplar.editoraNome = exemplar.editora.id + " - " + exemplar.editora.nome;
+        }
+
+        private bool VerificaJaExiste(Exemplar exemplar)
+        {
+            List<Exemplar> resultado = new List<Exemplar>();
+
+            resultado = db.Exemplar.Where(e => e.isbn == exemplar.isbn).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+            
+            return false;
         }
 
         // GET: Clientes/Details/5
@@ -103,10 +173,15 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,precoCompra,precoVenda,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
+        public ActionResult Create(Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {
+                if (VerificaJaExiste(exemplar))
+                {
+                    ViewBag.Erro = "Ja existe um registro com o ISBN informado!";
+                    return View(exemplar);
+                }
                 db.Exemplar.Add(exemplar);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -130,6 +205,9 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+
+            this.ConfiguraNomeEditora(exemplar);
+
             ViewBag.Editoras = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome", "Editora");
             ViewBag.Idiomas = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
             ViewBag.Sessoes = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
@@ -146,7 +224,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,titulo,conservacao,isbn,ano,edicao,precoCompra,precoVenda,descricao,peso,vendaOnline,quantidade,editoraId,idiomaId,sessaoId,user_insert,user_update,date_insert,date_update")] Exemplar exemplar)
+        public ActionResult Edit(Exemplar exemplar)
         {
             if (ModelState.IsValid)
             {

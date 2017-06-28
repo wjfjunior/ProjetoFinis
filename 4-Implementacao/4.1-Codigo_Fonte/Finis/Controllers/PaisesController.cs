@@ -103,6 +103,8 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.nome = model.nome.ToUpper();
+                model.sigla = model.sigla.ToUpper();
                 if (VerificaJaExiste(model))
                 {
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
@@ -140,6 +142,8 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                pais.nome = pais.nome.ToUpper();
+                pais.sigla = pais.sigla.ToUpper();
                 db.Entry(pais).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
