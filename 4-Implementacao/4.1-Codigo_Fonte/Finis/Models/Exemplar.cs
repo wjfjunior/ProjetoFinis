@@ -132,6 +132,11 @@ namespace Finis.Models
         [Range(0, 5000, ErrorMessage = "A quantidade deverá ser entre 0 e 5000")]
         public int quantidade { get; set; }
 
+        [NotMapped]
+        [Display(Name = "Autores")]
+        [Required(ErrorMessage = "Por favor selecione um ou mais autores")]
+        public string AutoresNome { get; set; }
+
         //[InverseProperty("Exemplar")]
         [ScriptIgnore]
         public virtual ICollection<Autor> Autores { get; set; }

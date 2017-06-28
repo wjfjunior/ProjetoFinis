@@ -18,13 +18,33 @@ namespace Finis.Models
 
         [Display(Name = "Aguardando retorno do cliente")]
         AGUARDANDO_CLIENTE = 3,
-
-        [Display(Name = "Concluído")]
+        
+        [Display(Name = "Concluída")]
         CONCLUIDO = 4,
+
+        [Display(Name = "Cancelada")]
+        CANCELADA = 5,
+    }
+
+    public enum statusAvaliacao
+    {
+        [Display(Name = "Aberta")]
+        ABERTA = 1,
+
+        [Display(Name = "Cancelada")]
+        AVALIADA = 2,
+
+        [Display(Name = "Concluída")]
+        CONCLUIDA = 3,
     }
 
     public class Avaliacao : EntidadeAbstrata
     {
+        public Avaliacao()
+        {
+            this.status = statusAvaliacao.ABERTA;
+        }
+
         [Display(Name = "Data de entrada")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         [Required(ErrorMessage = "Por favor insira uma data")]
@@ -53,6 +73,9 @@ namespace Finis.Models
         [Display(Name = "Situação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
         public situacaoAvaliacao situacao { get; set; }
+
+        [Display(Name = "Status")]
+        public statusAvaliacao status { get; set; }
 
         [Display(Name = "Observação")]
         [StringLength(200, ErrorMessage = "A observacao é muito longa")]
@@ -86,6 +109,22 @@ namespace Finis.Models
             set
             {
                 this.dataEntrada = Convert.ToDateTime(value).Date;
+            }
+        }
+
+        [NotMapped]
+        public String statusString
+        {
+            get
+            {
+                if (this.status == statusAvaliacao.ABERTA)
+                    return "Aberta";
+                else if (this.status == statusAvaliacao.AVALIADA)
+                    return "Avaliada";
+                else if (this.status == statusAvaliacao.CONCLUIDA)
+                    return "Concluída";
+
+                else return "";
             }
         }
 

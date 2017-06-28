@@ -42,7 +42,7 @@ namespace Finis.Controllers
 
                                 return View(db.Avaliacao
                                 .Include(t => t.cliente)
-                                .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg))
+                                .Where(t => t.cliente.nome.Contains(nome) || t.cliente.rg.Contains(rg) && t.dataEntrada >= dataInicio && t.dataEntrada <= dataFim)
                                 .OrderBy(t => t.cliente.nome)
                                 .ToList());
                             }

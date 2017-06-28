@@ -1,0 +1,12 @@
+﻿body {
+}
+
+.card {
+    margin-top: 10%;
+}
+
+#btn-floating-card {
+    position: absolute;
+    right: 24px;
+    bottom: -28px;
+}

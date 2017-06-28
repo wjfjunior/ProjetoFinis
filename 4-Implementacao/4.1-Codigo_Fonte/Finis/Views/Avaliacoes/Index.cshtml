@@ -5,6 +5,16 @@
 }
 <script>
 
+    function ConcluirAvaliacao(id) {
+
+        console.log(id);
+    }
+
+    function CancelarAvaliacao(id) {
+
+        console.log(id);
+    }
+
     function DeletaRegistro(id) {
 
         $.ajax({
@@ -102,6 +112,9 @@
             @Html.DisplayNameFor(model => model.quantidadeExemplares)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.creditoEspecial)
         </th>
         <th>
@@ -129,6 +142,9 @@
                 @Html.DisplayFor(modelItem => item.quantidadeExemplares)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.statusString)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.creditoEspecialString)
             </td>
             <td>
@@ -143,6 +159,8 @@
                     <i class="fa fa-info" aria-hidden="true"></i>
                 </a>
                 <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+                <a class="btn-floating red" onclick="showModalConcluir(@item.id, 'md2'); return false;"><i class="material-icons">delete</i></a>
+                <a class="btn-floating red" onclick="showModalCancelar(@item.id, 'md3'); return false;"><i class="material-icons">delete</i></a>
             </td>
         </tr>
     }
@@ -223,6 +241,26 @@
         <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
     </div>
 </div>
+<div id="md2" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja concluir esta avaliação?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md2').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md2_YesBtn">Confirmar</a>
+    </div>
+</div>
+<div id="md3" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja cancelar esta avaliação?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md3').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md3_YesBtn">Confirmar</a>
+    </div>
+</div>
 
 @section scripts{
     @Scripts.Render("~/bundles/materialize")
@@ -233,6 +271,16 @@
         function showModal(id, modal) {
             $('#' + modal).openModal();
             $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); DeletaRegistro(id); });
+        }
+
+        function showModalConcluir(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); ConcluirAvaliacao(id); });
+        }
+
+        function showModalCancelar(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); CancelarAvaliacao(id); });
         }
 
         $(document).ready(function () {

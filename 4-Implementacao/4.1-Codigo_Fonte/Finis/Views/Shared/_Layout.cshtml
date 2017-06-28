@@ -31,10 +31,14 @@
                     <li class="no-padding">
                         <ul class="collapsible collapsible-accordion">
                             <li class="bold">
-                                <a href="@Url.Action("Index", "Home")" class="waves-effect waves-teal">Página Inicial</a>
+                                <a href="@Url.Action("Index", "Home")" class="waves-effect">
+                                    <i class="fa fa-tachometer fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Página Inicial
+                                </a>
                             </li>
                             <li class="bold">
-                                <a class="collapsible-header  waves-effect waves-teal">Cadastros</a>
+                                <a class="collapsible-header  waves-effect waves-teal">
+                                    <i class="fa fa-id-card-o" aria-hidden="true"></i> &nbsp; Cadastros
+                                </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="@Url.Action("Index","Paises")">Países</a></li>
@@ -45,10 +49,9 @@
                                 </div>
                             </li>
                             <li class="bold">
-                                <a href="@Url.Action("Index", "Avaliacoes")" class="waves-effect waves-teal">Avaliações</a>
-                            </li>
-                            <li class="bold">
-                                <a class="collapsible-header  waves-effect waves-teal">Acervo</a>
+                                <a class="collapsible-header  waves-effect waves-teal">
+                                    <i class="fa fa-book" aria-hidden="true"></i> &nbsp; Acervo
+                                </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="@Url.Action("Index","Exemplares")">Exemplares</a></li>
@@ -59,7 +62,14 @@
                                 </div>
                             </li>
                             <li class="bold">
-                                <a href="@Url.Action("Index", "Transacoes")" class="waves-effect waves-teal">Transações</a>
+                                <a href="@Url.Action("Index", "Avaliacoes")" class="waves-effect waves-teal">
+                                    <i class="fa fa-check-square-o fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Avaliações
+                                </a>
+                            </li>
+                            <li class="bold">
+                                <a href="@Url.Action("Index", "Transacoes")" class="waves-effect waves-teal">
+                                    <i class="fa fa-exchange fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Transações
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -80,9 +90,9 @@
     @RenderSection("Scripts", required: false)
     <script>
         $(".button-collapse").sideNav({
-            menuWidth: 300, // Default is 240
-            edge: 'left', // Choose the horizontal origin
-            closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+            menuWidth: 300, 
+            edge: 'left', 
+            closeOnClick: true
         });
     </script>
 </body>

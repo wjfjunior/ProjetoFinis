@@ -2,8 +2,63 @@
     ViewBag.Title = "Página inicial";
 }
 
-<div>
-    <p>
-        Em construção
-    </p>
+@Styles.Render("~/Content/home.css")
+
+<div class="row">
+    <div class="col s3">
+        <div class="card">
+            <div class="card-image">
+                <img src="~/Content/imagens/office-620822_640.jpg"/>
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" id="btn-floating-card" href="@Url.Action("Create","Clientes")">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+            <div class="card-content">
+                <span class="card-title"><a href="@Url.Action("Index","Clientes")">Clientes</a></span>
+                <p>Cadastro das informações dos clientes como nome, RG e saldo de créditos.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="card">
+            <div class="card-image">
+                <img src="~/Content/imagens/arranged-1842261_640.jpg" />
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" id="btn-floating-card" href="@Url.Action("Create","Exemplares")">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+            <div class="card-content">
+                <span class="card-title"><a href="@Url.Action("Index","Exemplares")">Exemplares</a></span>
+                <p>Cadastro dos livros, revistas, gibis e demais exemplares do acervo.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="card">
+            <div class="card-image">
+                <img src="~/Content/imagens/books-1012088_640.jpg" />
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" id="btn-floating-card" href="@Url.Action("Create","Avaliacoes")">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+            <div class="card-content">
+                <span class="card-title"><a href="@Url.Action("Index","Avaliacoes")">Avaliações</a></span>
+                <p>Gerenciamento das avaliações de exemplares para o acervo.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col s3">
+        <div class="card">
+            <div class="card-image">
+                <img src="~/Content/imagens/cash-register-78741_640.jpg" />
+                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red" id="btn-floating-card" href="@Url.Action("Create","Transacoes")">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+            <div class="card-content">
+                <span class="card-title"><a href="@Url.Action("Index","Transacoes")">Transações</a></span>
+                <p>Gerenciamento das transações de créditos realizadas pelos clientes.</p>
+            </div>
+        </div>
+    </div>
 </div>

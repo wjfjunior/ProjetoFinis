@@ -81,12 +81,10 @@
                     @Html.DropDownListFor(model => model.editoraId, (SelectList)ViewBag.Editoras, "Editora", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.editoraId, "", new { @class = "validate" })
                 </div>*@
-                <div class="row">
-                    <div class="input-field col s4">
-                        @Html.EditorFor(model => model.editoraNome, new { htmlAttributes = new { @type = "text", @id = "editoraNome", @class = "autocomplete" } })
-                        @Html.LabelFor(model => model.editoraNome)
-                        @Html.ValidationMessageFor(model => model.editoraNome, "", new { @class = "validate" })
-                    </div>
+                <div class="input-field col s4">
+                    @Html.EditorFor(model => model.editoraNome, new { htmlAttributes = new { @type = "text", @id = "editoraNome", @class = "autocomplete" } })
+                    @Html.LabelFor(model => model.editoraNome)
+                    @Html.ValidationMessageFor(model => model.editoraNome, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s3">
                     @Html.DropDownListFor(model => model.sessaoId, (SelectList)ViewBag.Sessoes, "Sessão", htmlAttributes: new { @class = "validate" })
