@@ -32,7 +32,7 @@ namespace Finis.Models
         ABERTA = 1,
 
         [Display(Name = "Cancelada")]
-        AVALIADA = 2,
+        CANCELADA = 2,
 
         [Display(Name = "Concluída")]
         CONCLUIDA = 3,
@@ -94,10 +94,10 @@ namespace Finis.Models
         public virtual Cliente cliente { get; set; }
 
         [NotMapped]
-        public string creditoEspecialString => this.creditoEspecial == null ? "Valor nulo" : string.Format("{0:C}", this.creditoEspecial.Value);
+        public string creditoEspecialString => this.creditoEspecial == null ? "Sem valor" : string.Format("{0:C}", this.creditoEspecial.Value);
 
         [NotMapped]
-        public string creditoParcialString => this.creditoParcial == null ? "Valor nulo" : string.Format("{0:C}", this.creditoParcial.Value);
+        public string creditoParcialString => this.creditoParcial == null ? "Sem valor" : string.Format("{0:C}", this.creditoParcial.Value);
 
         [NotMapped]
         public string dataEntradaString
@@ -119,8 +119,8 @@ namespace Finis.Models
             {
                 if (this.status == statusAvaliacao.ABERTA)
                     return "Aberta";
-                else if (this.status == statusAvaliacao.AVALIADA)
-                    return "Avaliada";
+                else if (this.status == statusAvaliacao.CANCELADA)
+                    return "Cancelada";
                 else if (this.status == statusAvaliacao.CONCLUIDA)
                     return "Concluída";
 
@@ -169,7 +169,12 @@ namespace Finis.Models
                 ClientesController clientesController = new ClientesController();
                 clientesController.AtualizaSaldoParcial(this.clienteId, this.creditoParcial);
             }
-            this.situacao = situacaoAvaliacao.CONCLUIDO;
+            this.status = statusAvaliacao.CONCLUIDA;
+        }
+
+        public void CancelarAvaliacao()
+        {
+            this.status = statusAvaliacao.CANCELADA;
         }
     }
 }

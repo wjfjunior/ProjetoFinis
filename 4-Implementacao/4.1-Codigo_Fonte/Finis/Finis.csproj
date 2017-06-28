@@ -191,6 +191,10 @@
     <Compile Include="Migrations\201706280612476_AjusteModelo.Designer.cs">
       <DependentUpon>201706280612476_AjusteModelo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201706281907556_AjusteAvaliacoes.cs" />
+    <Compile Include="Migrations\201706281907556_AjusteAvaliacoes.Designer.cs">
+      <DependentUpon>201706281907556_AjusteAvaliacoes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -385,6 +389,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706280612476_AjusteModelo.resx">
       <DependentUpon>201706280612476_AjusteModelo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706281907556_AjusteAvaliacoes.resx">
+      <DependentUpon>201706281907556_AjusteAvaliacoes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

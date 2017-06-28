@@ -7,12 +7,38 @@
 
     function ConcluirAvaliacao(id) {
 
-        console.log(id);
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("ConcluirAvaliacao", "Avaliacoes")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+
+                     if (dados.Sucesso) {
+                         location.reload();
+                     } else {
+                         alert(dados.Resultado);
+                     }
+                 }
+             });
     }
 
     function CancelarAvaliacao(id) {
 
-        console.log(id);
+       $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("CancelarAvaliacao", "Avaliacoes")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+
+                     if (dados.Sucesso) {
+                         location.reload();
+                     } else {
+                         alert(dados.Resultado);
+                     }
+                 }
+             });
     }
 
     function DeletaRegistro(id) {
@@ -51,6 +77,7 @@
         document.getElementById('creditoEspecial').innerHTML = SubstituirCampoNulo(obj.creditoEspecialString);
         document.getElementById('creditoParcial').innerHTML = SubstituirCampoNulo(obj.creditoParcialString);
         document.getElementById('situacao').innerHTML = SubstituirCampoNulo(obj.situacaoString);
+        document.getElementById('status').innerHTML = SubstituirCampoNulo(obj.statusString);
     }
 
     function SubstituirCampoNulo(campo) {
@@ -109,7 +136,7 @@
             @Html.DisplayNameFor(model => model.dataEntrada)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.quantidadeExemplares)
+            @Html.DisplayName("Exemplares")
         </th>
         <th>
             @Html.DisplayNameFor(model => model.status)
@@ -159,8 +186,8 @@
                     <i class="fa fa-info" aria-hidden="true"></i>
                 </a>
                 <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
-                <a class="btn-floating red" onclick="showModalConcluir(@item.id, 'md2'); return false;"><i class="material-icons">delete</i></a>
-                <a class="btn-floating red" onclick="showModalCancelar(@item.id, 'md3'); return false;"><i class="material-icons">delete</i></a>
+                <a class="btn-floating yellow darken-2" onclick="showModalConcluir(@item.id, 'md2'); return false;"><i class="fa fa-check" aria-hidden="true"></i></a>
+                <a class="btn-floating yellow darken-2" onclick="showModalCancelar(@item.id, 'md3'); return false;"><i class="fa fa-times" aria-hidden="true"></i></a>
             </td>
         </tr>
     }
@@ -216,13 +243,19 @@
             </div>
         </div>
         <div class="row" id="linha-detalhes">
-            <div class="col s12">
+            <div class="col s6">
                 <label>Situação:</label>
+            </div>
+            <div class="col s6">
+                <label>Status:</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
-            <div class="col s4">
+            <div class="col s6">
                 <label class="texto-detalhes" id="situacao">.</label>
+            </div>
+            <div class="col s6">
+                <label class="texto-detalhes" id="status">.</label>
             </div>
         </div>
     </div>
@@ -285,6 +318,8 @@
 
         $(document).ready(function () {
 
+            $('.tooltipped').tooltip({ delay: 10 });
+
             $('.modal-trigger').leanModal();
 
             $('.datepicker').pickadate({
@@ -292,7 +327,7 @@
                 selectMonths: true,
                 selectYears: 100,
             });
-
+            
             $.ajax({
                 type: 'GET',
                 url: '@Url.Action("DropboxClientes", "Transacoes")',

@@ -2,32 +2,12 @@ RELATÓRIO DE ERROS CONHECIDOS
 
 	- Calendário de datas com nomes em inglês;
 	- Inserir máscara no campo de saldo;
-	- Erro apresentado no console durante o download de fontes;
-	- Inserir máscara no campo CEP
-	- Logradouro e Bairro voltar como obrigatorio
+	- É possível remover um cliente mesmo que este tenha uma avaliação vinculada.
+	- Incluir lista de autores em Criar Exemplar
 
 SUGESTÕES DE IMPLEMENTAÇÕES
 	
-	- Criar validações javascript para Cliente
-	- Revisar validações com DataAnotations
-	- Implementação de Busca pode ser feota com Sobrecarga de método em index e submit {} na view
-	- Dropdown com espaço para digitar e buscar
-
-	- Exemplares => Adicionar botão para chamada de Modal para Criação de Autor;
-	- Exemplares => Adicionar botão para chamada de Modal para Criação de Sessão;
-	- Exemplares => Adicionar botão para chamada de Modal para Criação de Idioma;
-	- Exemplares => Adicionar tela de consulta para o usuário Cliente (clonar index)
-
-	- Permitir digitar para selecionar registro no combobox;
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
-	- Permitir adicionar novo registro sem sair da tela de cadastro;
-	- Inserir cores nos botôes do modal de exclusão
-
-	- Pais => Não permitir salvar com o mesmo nome
-	- Cidade => Não permitir salvar com o mesmo nome e mesmo estado
-	- Estado => Não Permitir salvar com o mesmo nome e mesmo pais
 
 	-> Transações: Adicionar extrato no cadastro de cliente
 	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente
-
-	- Avaliações: Exibir cliente + rg no dropdown

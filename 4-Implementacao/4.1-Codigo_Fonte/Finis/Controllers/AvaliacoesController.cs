@@ -184,12 +184,6 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Avaliacao avaliacao)
         {
-            if(avaliacao.situacao == situacaoAvaliacao.CONCLUIDO)
-            {
-                ViewBag.Erro = 1;
-                return View(avaliacao);
-            }
-
             if (ModelState.IsValid)
             {
                 db.Avaliacao.Add(avaliacao);
@@ -229,14 +223,90 @@ namespace Finis.Controllers
             {
                 db.Entry(avaliacao).State = EntityState.Modified;
                 db.SaveChanges();
-                if (avaliacao.situacao == situacaoAvaliacao.CONCLUIDO)
-                {
-                    this.ConcluiAvaliacao(avaliacao);
-                }
                 return RedirectToAction("Index");
             }
             ViewBag.clienteId = new SelectList(db.Cliente, "id", "nome", avaliacao.clienteId);
             return View(avaliacao);
+        }
+
+        // GET: Clientes/Concluir/5
+        public JsonResult ConcluirAvaliacao(int? id)
+        {
+            bool sucesso = false;
+            string resultado = "Não foi possível concluir";
+
+            if (id != null)
+            {
+                Avaliacao avaliacao = db.Avaliacao.Find(id);
+                this.ConfiguraNomeCliente(avaliacao);
+                if (avaliacao.status == statusAvaliacao.CANCELADA)
+                {
+                    sucesso = false;
+                    resultado = "Não é possível concluir uma avaliação já cancelada!";
+                }
+                else if (avaliacao.status == statusAvaliacao.CONCLUIDA)
+                {
+                    sucesso = false;
+                    resultado = "Não é possível concluir uma avaliação já concluída!";
+                }
+                else
+                {
+                    avaliacao.CancelarAvaliacao();
+                    db.Entry(avaliacao).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    sucesso = true;
+                    resultado = "Concluída com sucesso!";
+                }
+            }
+
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Clientes/Cancelar/5
+        public JsonResult CancelarAvaliacao(int? id)
+        {
+            bool sucesso = false;
+            string resultado = "Não foi possível cancelar";
+
+            if (id != null)
+            {
+                Avaliacao avaliacao = db.Avaliacao.Find(id);
+                this.ConfiguraNomeCliente(avaliacao);
+                if (avaliacao.status == statusAvaliacao.CANCELADA)
+                {
+                    sucesso = false;
+                    resultado = "Não é possível cancelar uma avaliação já cancelada!";
+                }
+                else if (avaliacao.status == statusAvaliacao.CONCLUIDA)
+                {
+                    sucesso = false;
+                    resultado = "Não é possível cancelar uma avaliação já concluída!";
+                }
+                else
+                {
+                    avaliacao.CancelarAvaliacao();
+                    db.Entry(avaliacao).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    sucesso = true;
+                    resultado = "Cancelado com sucesso!";
+                }
+            }
+
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Clientes/Delete/5
@@ -245,6 +315,7 @@ namespace Finis.Controllers
             if (id != null)
             {
                 Avaliacao avaliacao = db.Avaliacao.Find(id);
+                this.ConfiguraNomeCliente(avaliacao);
                 db.Avaliacao.Remove(avaliacao);
                 db.SaveChanges();
             }
