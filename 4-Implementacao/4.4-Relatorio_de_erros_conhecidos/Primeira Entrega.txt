@@ -8,6 +8,8 @@ RELATÓRIO DE ERROS CONHECIDOS
 SUGESTÕES DE IMPLEMENTAÇÕES
 	
 	- Permitir adicionar novo registro sem sair da tela de cadastro;
+	- Alterar collation do banco para Latin1_General_CI_AI 
+		(SELECT * FROM sys.fn_helpcollations()  WHERE description LIKE 'latin%';)
 
 	-> Transações: Adicionar extrato no cadastro de cliente
 	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente

@@ -18,7 +18,7 @@
 
         <form class="col s12">
             <div class="row">
-                <div class="input-field col s8">
+                <div class="input-field col s7">
                     @Html.LabelFor(model => model.titulo, htmlAttributes: new { @class = "validate" })
                     @Html.EditorFor(model => model.titulo, new { htmlAttributes = new { @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.titulo, "", new { @class = "validate" })
@@ -27,7 +27,7 @@
                     @Html.EnumDropDownListFor(model => model.conservacao, "Conservação", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.conservacao, "", new { @class = "validate" })
                 </div>
-                <div class="input-field col s2">
+                <div class="input-field col s3">
                     @Html.LabelFor(model => model.isbn, htmlAttributes: new { @class = "validate" })
                     @Html.EditorFor(model => model.isbn, new { htmlAttributes = new { @class = "validate" } })
                     @Html.ValidationMessageFor(model => model.isbn, "", new { @class = "validate" })

@@ -134,7 +134,7 @@ namespace Finis.Models
 
         [NotMapped]
         [Display(Name = "Autores")]
-        [Required(ErrorMessage = "Por favor selecione um ou mais autores")]
+        //[Required(ErrorMessage = "Por favor selecione um ou mais autores")]
         public string AutoresNome { get; set; }
 
         //[InverseProperty("Exemplar")]
