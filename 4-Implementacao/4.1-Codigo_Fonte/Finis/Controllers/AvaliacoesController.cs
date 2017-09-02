@@ -251,7 +251,7 @@ namespace Finis.Controllers
                 }
                 else
                 {
-                    avaliacao.CancelarAvaliacao();
+                    avaliacao.ConcluirAvaliacao();
                     db.Entry(avaliacao).State = EntityState.Modified;
                     db.SaveChanges();
 
