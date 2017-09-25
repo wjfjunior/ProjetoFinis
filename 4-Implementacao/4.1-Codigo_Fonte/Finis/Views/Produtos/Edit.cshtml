@@ -1,0 +1,144 @@
+﻿@model Finis.Models.Produto
+
+@{
+    ViewBag.Title = "Editar Produto";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container" id="formulario">
+
+        @Html.ValidationSummary(true, "", new { @class = "validate" })
+        @Html.HiddenFor(e => e.unidadeMedidaId, new { id = "unidadeMedidaId" })
+        @Html.HiddenFor(e => e.marcaId, new { id = "marcaId" })
+        @Html.HiddenFor(model => model.date_insert)
+        @Html.HiddenFor(model => model.user_update)
+        @Html.HiddenFor(model => model.id)
+
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s8">
+                    @Html.LabelFor(model => model.nome, htmlAttributes: new { @class = "validate" })
+                    @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
+                </div>
+                <div class="input-field col s4">
+                    @Html.EditorFor(model => model.marcaNome, new { htmlAttributes = new { @type = "text", @id = "marcaNome", @class = "autocomplete" } })
+                    @Html.LabelFor(model => model.marcaNome)
+                    @Html.ValidationMessageFor(model => model.marcaNome, "", new { @class = "validate" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s2">
+                    @Html.LabelFor(model => model.precoCompra, htmlAttributes: new { @class = "validate" })
+                    @{ Html.EnableClientValidation(false); }
+                    @Html.EditorFor(model => model.precoCompra, new { htmlAttributes = new { @class = "validate" } })
+                    @{ Html.EnableClientValidation(true); }
+                    @Html.ValidationMessageFor(model => model.precoCompra, "", new { @class = "validate" })
+                </div>
+                <div class="input-field col s2">
+                    @Html.LabelFor(model => model.precoVenda, htmlAttributes: new { @class = "validate" })
+                    @{ Html.EnableClientValidation(false); }
+                    @Html.EditorFor(model => model.precoVenda, new { htmlAttributes = new { @class = "validate" } })
+                    @{ Html.EnableClientValidation(true); }
+                    @Html.ValidationMessageFor(model => model.precoVenda, "", new { @class = "validate" })
+                </div>
+                <div class="input-field col s2">
+                    @Html.LabelFor(model => model.quantidade, htmlAttributes: new { @class = "validate" })
+                    @Html.EditorFor(model => model.quantidade, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.ValidationMessageFor(model => model.quantidade, "", new { @class = "validate" })
+                </div>
+                <div class="input-field col s2">
+                    @Html.LabelFor(model => model.estoqueMinimo, htmlAttributes: new { @class = "validate" })
+                    @Html.EditorFor(model => model.estoqueMinimo, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.ValidationMessageFor(model => model.estoqueMinimo, "", new { @class = "validate" })
+                </div>
+                <div class="input-field col s4">
+                    @Html.DropDownList("unidadeMedidaId", (SelectList)ViewBag.unidadeMedidaId, "Unidade de Medida", htmlAttributes: new { @class = "validate" })
+                    @Html.ValidationMessageFor(model => model.unidadeMedidaId, "", new { @class = "validate" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    @Html.LabelFor(model => model.descricao, htmlAttributes: new { @class = "validate" })
+                    @Html.ValidationMessageFor(model => model.descricao, "", new { @class = "validate" })
+                    @Html.TextAreaFor(model => model.descricao, new { @class = "materialize-textarea" })
+                </div>
+            </div>
+        </form>
+
+        <br />
+
+        <div class="row">
+            <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Produtos")'" type="button" name="action">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                Voltar
+            </button>
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                Salvar
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+                        }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/materialize")
+
+    <script type="text/javascript">
+
+         var dados = {};
+
+         function RecuperaID(string)
+         {
+             var id = string.substr(0, string.indexOf(' '));
+
+             if (!isNaN(id))
+             {
+                 return parseInt(id);
+             }
+             else
+             {
+                 alert("Por favor selecione uma opção");
+             }
+         }
+
+         $(document).ready(function () {
+
+             $('select').material_select();
+             $('#descricao').trigger('autoresize');
+
+             var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxUnidadesMedida", "Produtos")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#marcaId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
+         });
+
+    </script>
+}

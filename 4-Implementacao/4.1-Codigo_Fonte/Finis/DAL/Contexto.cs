@@ -26,6 +26,9 @@ namespace Finis.DAL
         public DbSet<Fornecedor> Fornecedor { get; set; }
         public DbSet<Autor> Autor { get; set; }
         public DbSet<Transacao> Transacao { get; set; }
+        public DbSet<Produto> Produto { get; set; }
+        public DbSet<UnidadeMedida> UnidadeMedida { get; set; }
+        public DbSet<Marca> Marca { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -39,6 +42,9 @@ namespace Finis.DAL
             modelBuilder.Entity<Endereco>().ToTable("Enderecos");
             modelBuilder.Entity<Sessao>().ToTable("Sessoes");
             modelBuilder.Entity<Editora>().ToTable("Editoras");
+            modelBuilder.Entity<Produto>().ToTable("Produtos");
+            modelBuilder.Entity<UnidadeMedida>().ToTable("UnidadesMedida");
+            modelBuilder.Entity<Marca>().ToTable("Marcas");
 
             base.OnModelCreating(modelBuilder);
         }

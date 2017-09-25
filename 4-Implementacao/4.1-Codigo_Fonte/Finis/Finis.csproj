@@ -155,13 +155,16 @@
     <Compile Include="Controllers\CidadesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
     <Compile Include="Controllers\EditorasController.cs" />
+    <Compile Include="Controllers\EnderecosController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\ExemplaresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdiomasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
+    <Compile Include="Controllers\ProdutosController.cs" />
     <Compile Include="Controllers\SessoesController.cs" />
     <Compile Include="Controllers\TransacoesController.cs" />
+    <Compile Include="Controllers\UnidadeMedidasController.cs" />
     <Compile Include="DAL\Contexto.cs" />
     <Compile Include="DAL\Inicializador.cs" />
     <Compile Include="Global.asax.cs">
@@ -199,6 +202,14 @@
     <Compile Include="Migrations\201706290035595_AjusteExemplar.Designer.cs">
       <DependentUpon>201706290035595_AjusteExemplar.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709242006487_CriarProduto.cs" />
+    <Compile Include="Migrations\201709242006487_CriarProduto.Designer.cs">
+      <DependentUpon>201709242006487_CriarProduto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709250123097_CriarMarca.cs" />
+    <Compile Include="Migrations\201709250123097_CriarMarca.Designer.cs">
+      <DependentUpon>201709250123097_CriarMarca.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -207,6 +218,7 @@
     <Compile Include="Models\Exemplar.cs" />
     <Compile Include="Models\Fornecedor.cs" />
     <Compile Include="Models\Pessoa.cs" />
+    <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Transacao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -359,6 +371,12 @@
     <Content Include="Views\Avaliacoes\Index.cshtml" />
     <Content Include="Views\Transacoes\Index.cshtml" />
     <Content Include="Views\Exemplares\Consulta.cshtml" />
+    <Content Include="Views\UnidadeMedidas\Create.cshtml" />
+    <Content Include="Views\UnidadeMedidas\Edit.cshtml" />
+    <Content Include="Views\UnidadeMedidas\Index.cshtml" />
+    <Content Include="Views\Produtos\Create.cshtml" />
+    <Content Include="Views\Produtos\Edit.cshtml" />
+    <Content Include="Views\Produtos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -399,6 +417,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706290035595_AjusteExemplar.resx">
       <DependentUpon>201706290035595_AjusteExemplar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709242006487_CriarProduto.resx">
+      <DependentUpon>201709242006487_CriarProduto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709250123097_CriarMarca.resx">
+      <DependentUpon>201709250123097_CriarMarca.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -21,12 +21,6 @@
                     @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
                 </div>
             </div>
-            @*<div class="row">
-                <div class="input-field col s12">
-                    @Html.DropDownListFor(model => model.paisId, (SelectList)ViewBag.paisId, "Selecione o país", htmlAttributes: new { @class = "validate" })
-                    @Html.ValidationMessageFor(model => model.paisId, "", new { @class = "text-danger" })
-                </div> 
-            </div>*@
             <div class="row">
                 <div class="input-field col s12">
                     @Html.EditorFor(model => model.paisNome, new { htmlAttributes = new { @type = "text", @id = "paisNome", @class = "autocomplete" } })

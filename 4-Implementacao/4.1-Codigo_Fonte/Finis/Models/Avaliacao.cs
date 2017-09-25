@@ -55,7 +55,7 @@ namespace Finis.Models
         [DisplayFormat(DataFormatString = "{0}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Nenhum")]
-        [Range(0, 5000, ErrorMessage = "A quantidade deverá ser entre 0 e 5000")]
+        [Range(1, 5000, ErrorMessage = "A quantidade deverá ser entre 1 e 5000")]
         public int quantidadeExemplares { get; set; }
 
         [Display(Name = "Crédito especial")]

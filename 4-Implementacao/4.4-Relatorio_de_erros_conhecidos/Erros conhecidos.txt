@@ -13,3 +13,4 @@ SUGESTÕES DE IMPLEMENTAÇÕES
 
 	-> Transações: Adicionar extrato no cadastro de cliente
 	-> Transações: Permitir visualizar e alterar créditos no Index do Cliente
+	-> Alterar a resolução mínima para 1024x768 (Ipad mini 2)

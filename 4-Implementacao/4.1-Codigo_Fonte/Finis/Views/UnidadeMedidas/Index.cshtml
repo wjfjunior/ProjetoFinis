@@ -1,0 +1,171 @@
+﻿@model IEnumerable<Finis.Models.UnidadeMedida>
+
+@{
+    ViewBag.Title = "Cadastro de Unidades de Medidas";
+}
+
+<script>
+
+    function deletaRegistro(id) {
+
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("DeletarRegistro", "UnidadeMedidas")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
+
+    function carregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "UnidadeMedidas")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     preencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function preencheModalDetalhes(obj) {
+
+        document.getElementById('grandeza').innerHTML = obj.grandeza;
+        document.getElementById('simbolo').innerHTML = obj.simbolo;
+        document.getElementById('unidade').innerHTML = obj.unidade;
+    }
+
+</script>
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s8">
+                        @Html.Label("Buscar")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                    </div>
+                    <div class="col s2">
+                        <button type="submit" class="btn-floating" id="botao-busca">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create", "UnidadeMedidas")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.grandeza)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.simbolo)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.grandeza)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.simbolo)
+            </td>
+            <td>
+                <a class="btn-floating blue" href="@Url.Action("Edit", "UnidadeMedidas", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </a>
+                <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+            </td>
+        </tr>
+    }
+</table>
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do registro</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Grandeza:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="grandeza">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Unidade:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="unidade">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Símbolo:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="simbolo">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este registro?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); deletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}
