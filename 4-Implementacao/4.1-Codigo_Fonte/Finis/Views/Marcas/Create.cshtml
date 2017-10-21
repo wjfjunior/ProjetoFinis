@@ -1,25 +1,17 @@
-﻿@model Finis.Models.Pais
+﻿@model Finis.Models.Marca
 
 @{
-    ViewBag.Title = "Editar País";
+    ViewBag.Title = "Nova Marca";
 }
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "validate" })
-    @Html.HiddenFor(model => model.date_insert)
-    @Html.HiddenFor(model => model.user_update)
-    @Html.HiddenFor(model => model.id)
 
     <div class="container" id="formulario">
         <form class="col s12">
             <div class="row">
-
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
-                @Html.HiddenFor(model => model.date_insert)
-                @Html.HiddenFor(model => model.user_update)
-
                 <div class="row">
                     <div class="input-field col s12">
                         @Html.LabelFor(model => model.nome)
@@ -28,14 +20,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        @Html.LabelFor(model => model.sigla)
-                        @Html.EditorFor(model => model.sigla, new { htmlAttributes = new { @class = "validate" } })
-                        @Html.ValidationMessageFor(model => model.sigla, "", new { @class = "validate" })
-                    </div>
-                </div>
-                <div class="row">
-                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Paises")'" type="button" name="action">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Marcas")'" type="button" name="action">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         Voltar
                     </button>
@@ -48,7 +33,19 @@
         </form>
     </div>
 }
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+             var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+        });
+
+    </script>
 }
