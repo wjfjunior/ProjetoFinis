@@ -124,3 +124,19 @@
         <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); deletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}

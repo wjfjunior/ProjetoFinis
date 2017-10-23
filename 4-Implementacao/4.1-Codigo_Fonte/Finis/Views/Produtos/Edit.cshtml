@@ -10,7 +10,6 @@
     <div class="container" id="formulario">
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
-        @Html.HiddenFor(e => e.unidadeMedidaId, new { id = "unidadeMedidaId" })
         @Html.HiddenFor(e => e.marcaId, new { id = "marcaId" })
         @Html.HiddenFor(model => model.date_insert)
         @Html.HiddenFor(model => model.user_update)
@@ -55,7 +54,7 @@
                     @Html.ValidationMessageFor(model => model.estoqueMinimo, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s4">
-                    @Html.DropDownList("unidadeMedidaId", (SelectList)ViewBag.unidadeMedidaId, "Unidade de Medida", htmlAttributes: new { @class = "validate" })
+                    @Html.DropDownListFor(model => model.unidadeMedidaId, (SelectList)ViewBag.Sessoes, "Sessão", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.unidadeMedidaId, "", new { @class = "validate" })
                 </div>
             </div>
@@ -119,7 +118,7 @@
 
             $.ajax({
                 type: 'GET',
-                url: '@Url.Action("DropboxUnidadesMedida", "Produtos")',
+                url: '@Url.Action("DropboxMarca", "Produtos")',
                 success: function (response) {
                     var resultado = JSON.parse(response);
 

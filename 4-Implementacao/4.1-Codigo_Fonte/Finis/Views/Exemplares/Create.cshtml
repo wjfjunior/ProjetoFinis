@@ -73,10 +73,6 @@
                     @Html.DropDownList("idiomaId", (SelectList)ViewBag.idiomaId, "Idioma", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.idiomaId, "", new { @class = "validate" })
                 </div>
-                @*<div class="input-field col s4">
-                    @Html.DropDownList("editoraId", (SelectList)ViewBag.editoraId, "Editora", htmlAttributes: new { @class = "validate" })
-                    @Html.ValidationMessageFor(model => model.editoraId, "", new { @class = "validate" })
-                </div>*@
                 <div class="input-field col s4">
                     @Html.EditorFor(model => model.editoraNome, new { htmlAttributes = new { @type = "text", @id = "editoraNome", @class = "autocomplete" } })
                     @Html.LabelFor(model => model.editoraNome)
@@ -91,13 +87,6 @@
                     @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
                 </div>
             </div>
-            @*<div class="row">
-                <div class="input-field col s12">
-                    @Html.CheckBox("vendaOnline", true)
-                    @Html.LabelFor(model => model.vendaOnline, htmlAttributes: new { @class = "validate" })
-                    @Html.ValidationMessageFor(model => model.vendaOnline, "", new { @class = "validate" })
-                </div>
-            </div>*@
             <div class="row">
                 <div class="input-field col s12">
                     @Html.LabelFor(model => model.descricao, htmlAttributes: new { @class = "validate" })

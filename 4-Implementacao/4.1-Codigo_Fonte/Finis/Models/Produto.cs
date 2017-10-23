@@ -95,11 +95,6 @@ namespace Finis.Models
         public int estoqueMinimo { get; set; }
 
         [NotMapped]
-        [Display(Name = "Unidade de Medida")]
-        [Required(ErrorMessage = "Por favor selecione uma unidade de medida")]
-        public string unidadeMedidaNome { get; set; }
-
-        [NotMapped]
         [Display(Name = "Marca")]
         [Required(ErrorMessage = "Por favor selecione uma marca")]
         public string marcaNome { get; set; }

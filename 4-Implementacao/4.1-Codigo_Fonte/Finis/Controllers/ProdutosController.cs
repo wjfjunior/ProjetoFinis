@@ -54,15 +54,6 @@ namespace Finis.Controllers
             return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
         }
 
-        private void ConfiguraNomeUnidadeMedida(Produto produto)
-        {
-            if (produto.unidadeMedida == null)
-            {
-                produto.unidadeMedida = db.UnidadeMedida.Find(produto.unidadeMedidaId);
-            }
-            produto.unidadeMedidaNome = produto.unidadeMedida.id + " - " + produto.unidadeMedida.unidade + " - " + produto.unidadeMedida.simbolo;
-        }
-
         private void ConfiguraNomeMarca(Produto produto)
         {
             if (produto.marca == null)
@@ -70,6 +61,16 @@ namespace Finis.Controllers
                 produto.marca = db.Marca.Find(produto.marcaId);
             }
             produto.marcaNome = produto.marca.id + " - " + produto.marca.nome;
+        }
+
+        private UnidadeMedida RecuperaUnidadeMedida(int? id)
+        {
+            if (id != null)
+            {
+                UnidadeMedida model = db.UnidadeMedida.Find(id);
+                return model;
+            }
+            return new UnidadeMedida();
         }
 
         // GET: Clientes/Details/5
@@ -117,7 +118,6 @@ namespace Finis.Controllers
         public ActionResult Create()
         {
             ViewBag.unidadeMedidaId = new SelectList(db.UnidadeMedida, "id", "unidade");
-            ViewBag.marcaId = new SelectList(db.Marca, "id", "nome");
             return View();
         }
 
@@ -137,7 +137,6 @@ namespace Finis.Controllers
             }
 
             ViewBag.paisId = new SelectList(db.Pais, "id", "unidade", model.unidadeMedidaId);
-            ViewBag.marcaId = new SelectList(db.Marca, "id", "nome", model.marcaId);
             return View(model);
         }
 
@@ -154,9 +153,8 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.unidadeMedidaId = new SelectList(db.UnidadeMedida, "id", "unidade", produto.unidadeMedidaId);
-            ViewBag.marcaId = new SelectList(db.Marca, "id", "nome", produto.marcaId);
-            this.ConfiguraNomeUnidadeMedida(produto);
             this.ConfiguraNomeMarca(produto);
+            produto.unidadeMedida = this.RecuperaUnidadeMedida(produto.unidadeMedidaId);
             return View(produto);
         }
 

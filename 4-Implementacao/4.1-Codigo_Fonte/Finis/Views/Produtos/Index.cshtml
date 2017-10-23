@@ -40,7 +40,7 @@
         document.getElementById('precoCompra').innerHTML = SubstituirCampoNulo(obj.precoCompra);
         document.getElementById('precoVenda').innerHTML = SubstituirCampoNulo(obj.precoVenda);
         document.getElementById('quantidade').innerHTML = SubstituirCampoNulo(obj.quantidade);
-        document.getElementById('marca').innerHTML = SubstituirCampoNulo(obj.marca);
+        document.getElementById('marca').innerHTML = SubstituirCampoNulo(obj.marca.nome);
         document.getElementById('estoqueMinimo').innerHTML = SubstituirCampoNulo(obj.estoqueMinimo);
         document.getElementById('unidadeMedida').innerHTML = SubstituirCampoNulo(obj.unidadeMedida.simbolo);
     }
@@ -87,7 +87,7 @@
                     @Html.DisplayNameFor(model => model.nome)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.marca)
+                    @Html.DisplayName("Marca")
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.precoCompra)
@@ -115,7 +115,7 @@
                     @Html.DisplayFor(modelItem => item.nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.marca)
+                    @Html.DisplayFor(modelItem => item.marca.nome)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.precoCompra)

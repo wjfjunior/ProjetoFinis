@@ -214,6 +214,10 @@
     <Compile Include="Migrations\201709250123097_CriarMarca.Designer.cs">
       <DependentUpon>201709250123097_CriarMarca.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710230335170_Ajuste_produto.cs" />
+    <Compile Include="Migrations\201710230335170_Ajuste_produto.Designer.cs">
+      <DependentUpon>201710230335170_Ajuste_produto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Avaliacao.cs" />
@@ -438,6 +442,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709250123097_CriarMarca.resx">
       <DependentUpon>201709250123097_CriarMarca.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710230335170_Ajuste_produto.resx">
+      <DependentUpon>201710230335170_Ajuste_produto.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
