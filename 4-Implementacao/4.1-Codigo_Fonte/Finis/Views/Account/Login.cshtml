@@ -1,0 +1,63 @@
+﻿@model Finis.Models.Usuario
+
+@{
+    Layout = null;
+}
+
+<link href="~/Content/login.css" rel="stylesheet" />
+
+@Styles.Render("http://fonts.googleapis.com/icon?family=Material+Icons")
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="~/Content/materialize/css/materialize.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+<script src="~/Scripts/materialize/materialize.min.js"></script>
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary(true, "", new { @class = "left-alert" })
+
+    <div class="container">
+        <center>
+            <div class="section"></div>
+            <img class="responsive-img" style="width: 250px;" src="~/Content/imagens/logo.png" />
+            <div class="container">
+                <div class="z-depth-5 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+                    <form class="col s12" method="post">
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <i  id="icones" class="mdi-action-account-circle prefix material-icons">assignment_ind</i>
+                                @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "validate" })
+                                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "validate", autofocus = true } })
+                                @Html.ValidationMessageFor(model => model.email, "", new { @class = "validate" })
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <i id="icones" class="mdi-action-account-circle prefix material-icons">lock</i>
+                                @Html.LabelFor(model => model.senha, htmlAttributes: new { @class = "validate" })
+                                @Html.EditorFor(model => model.senha, new { htmlAttributes = new { @class = "validate"} })
+                                @Html.ValidationMessageFor(model => model.senha, "", new { @class = "validate" })
+                            </div>
+                            <label style='float: right;'>
+                                <a style="color:#03A9F4" href='#!'><b>Esqueceu sua senha?</b></a>
+                            </label>
+                        </div>
+                        <br />
+                        <center>
+                            <div class='row'>
+                                <button type='submit' style="background-color:#03A9F4" name='btn_login' class='col s12 btn btn-large waves-effect'>Login</button>
+                            </div>
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </center>
+    </div>
+}
+
+
+    

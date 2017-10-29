@@ -12,26 +12,23 @@ using Finis.Models;
 namespace Finis.Controllers
 {
     [Authorize(Roles = "Administrador, Funcionário")]
-    public class EditorasController : Controller
+    public class UsuariosController : Controller
     {
         private Contexto db = new Contexto();
 
-        // GET: Editoras
+        // GET: Usuarios
         public ActionResult Index()
         {
-            return View(db.Fornecedors.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA).OrderBy(f => f.nome).ToList());
+            return View(db.Usuario.ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Fornecedors
-                .Where(f => f.nome.Contains(pesquisar) && f.tipoFornecedor == TipoFornecedor.EDITORA)
-                .OrderBy(f => f.nome)
-                .ToList());
+            return View("Index", db.Usuario.Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
         }
 
-        // GET: Clientes/Details/5
+        // GET: Usuarios/Details/5
         public JsonResult Detalhes(int? id)
         {
             bool sucesso;
@@ -44,8 +41,8 @@ namespace Finis.Controllers
             }
             else
             {
-                Editora editora = db.Fornecedors.Find(id);
-                if (editora == null)
+                Usuario usuario = db.Usuario.Find(id);
+                if (usuario == null)
                 {
                     sucesso = false;
                     resultado = "Não encontrado!";
@@ -53,7 +50,7 @@ namespace Finis.Controllers
                 else
                 {
                     sucesso = true;
-                    resultado = editora.Serializar();
+                    resultado = usuario.Serializar();
                 }
             }
             var obj = new
@@ -64,58 +61,76 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Editoras/Create
+        // GET: Usuarios/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Editoras/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
+        private bool VerificaJaExiste(Usuario usuario)
+        {
+            List<Usuario> resultado = new List<Usuario>();
+
+            resultado = db.Usuario.Where(e => e.email.Equals(usuario.email)).ToList();
+            if (resultado.Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // POST: Usuarios/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,cnpj,nome,telefone,email,user_insert,user_update,date_insert,date_update")] Editora editora)
+        public ActionResult Create(Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Fornecedors.Add(editora);
+                usuario.nome = usuario.nome.ToUpper();
+                usuario.sobrenome = usuario.sobrenome.ToUpper();
+                if (VerificaJaExiste(usuario))
+                {
+                    ViewBag.Erro = "Já existe um registro com o e-mail informado!";
+                    return View(usuario);
+                }
+                db.Usuario.Add(usuario);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(editora);
+            return View(usuario);
         }
 
-        // GET: Editoras/Edit/5
+        // GET: Usuarios/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Editora editora = db.Fornecedors.Find(id);
-            if (editora == null)
+            Usuario usuario = db.Usuario.Find(id);
+            if (usuario == null)
             {
                 return HttpNotFound();
             }
-            return View(editora);
+            return View(usuario);
         }
 
-        // POST: Editoras/Edit/5
+        // POST: Usuarios/Edit/5
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,cnpj,nome,telefone,email,user_insert,user_update,date_insert,date_update")] Editora editora)
+        public ActionResult Edit(Usuario usuario)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(editora).State = EntityState.Modified;
+                db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(editora);
+            return View(usuario);
         }
 
         // GET: Clientes/Delete/5
@@ -123,13 +138,13 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Editora editora = db.Fornecedors.Find(id);
-                db.Fornecedors.Remove(editora);
+                Usuario usuario = db.Usuario.Find(id);
+                db.Usuario.Remove(usuario);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

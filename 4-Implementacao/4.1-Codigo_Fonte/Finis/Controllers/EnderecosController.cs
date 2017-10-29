@@ -11,6 +11,7 @@ using Finis.Models;
 
 namespace Finis.Controllers
 {
+    [Authorize(Roles = "Administrador, Funcionário")]
     public class EnderecosController : Controller
     {
         private Contexto db = new Contexto();

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Finis.Controllers
 {
+    [Authorize(Roles = "Administrador, Funcionário")]
     public class HomeController : Controller
     {
         public ActionResult Index()

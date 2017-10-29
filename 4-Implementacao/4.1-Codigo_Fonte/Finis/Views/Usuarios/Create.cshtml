@@ -1,0 +1,99 @@
+﻿@model Finis.Models.Usuario
+
+@{
+    ViewBag.Title = "Novo Usuário";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container" id="formulario">
+        <form class="col s12">
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "validate" })
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.LabelFor(model => model.nome)
+                        @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s6">
+                        @Html.LabelFor(model => model.sobrenome)
+                        @Html.EditorFor(model => model.sobrenome, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.sobrenome, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.LabelFor(model => model.email)
+                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.LabelFor(model => model.senha)
+                        @Html.EditorFor(model => model.senha, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.senha, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s6">
+                        @Html.LabelFor(model => model.confirmaSenha)
+                        @Html.EditorFor(model => model.confirmaSenha, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.ValidationMessageFor(model => model.confirmaSenha, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        @Html.EnumDropDownListFor(model => model.pefil, "Escolha o perfil", htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.pefil, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s6 switch">
+                        @*@Html.LabelFor(m => m.ativo, new { @class = "login-label" })*@
+                        <label>
+                            Inativo
+                            @Html.CheckBoxFor(m => m.ativo, new { @type = "checkbox" })
+                            <span class="lever"></span>
+                            Ativo
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Usuarios")'" type="button" name="action">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        Voltar
+                    </button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Salvar
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('select').material_select();
+             var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+             $("input[type='hidden']").each(function (index, element) {
+                 $(this).appendTo($(element).parent());
+             });
+        });
+
+    </script>
+}

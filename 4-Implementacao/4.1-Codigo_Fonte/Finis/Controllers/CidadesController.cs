@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 namespace Finis.Controllers
 {
+    [Authorize(Roles = "Administrador, Funcionário")]
     public class CidadesController : Controller
     {
         private Contexto db = new Contexto();

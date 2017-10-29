@@ -16,6 +16,7 @@ namespace Finis.Controllers
         private Contexto db = new Contexto();
 
         // GET: Exemplares
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Index()
         {
             var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
@@ -23,6 +24,7 @@ namespace Finis.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Index(string pesquisar)
         {
             return View("Index", db.Exemplar
@@ -35,6 +37,7 @@ namespace Finis.Controllers
         }
 
         // GET: Exemplares
+        [Authorize(Roles = "Administrador, Funcionário, Cliente")]
         public ActionResult Consulta()
         {
             var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
@@ -42,6 +45,7 @@ namespace Finis.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador, Funcionário, Cliente")]
         public ActionResult Consulta(string pesquisar)
         {
             return View(db.Exemplar
@@ -160,6 +164,7 @@ namespace Finis.Controllers
         }
 
         // GET: Exemplares/Create
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Create()
         {
             ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
@@ -173,6 +178,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Create(Exemplar exemplar)
         {
             if (ModelState.IsValid)
@@ -194,6 +200,7 @@ namespace Finis.Controllers
         }
 
         // GET: Exemplares/Edit/5
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -224,6 +231,7 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Edit(Exemplar exemplar)
         {
             if (ModelState.IsValid)

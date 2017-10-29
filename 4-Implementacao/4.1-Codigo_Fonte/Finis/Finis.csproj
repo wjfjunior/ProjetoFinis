@@ -154,6 +154,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AvaliacoesController.cs" />
     <Compile Include="Controllers\CidadesController.cs" />
     <Compile Include="Controllers\ClientesController.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Controllers\SessoesController.cs" />
     <Compile Include="Controllers\TransacoesController.cs" />
     <Compile Include="Controllers\UnidadeMedidasController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="DAL\Contexto.cs" />
     <Compile Include="DAL\Inicializador.cs" />
     <Compile Include="Global.asax.cs">
@@ -218,16 +220,19 @@
     <Compile Include="Migrations\201710230335170_Ajuste_produto.Designer.cs">
       <DependentUpon>201710230335170_Ajuste_produto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710232242147_Criar_usuario.cs" />
+    <Compile Include="Migrations\201710232242147_Criar_usuario.Designer.cs">
+      <DependentUpon>201710232242147_Criar_usuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Endereco.cs" />
     <Compile Include="Models\EntidadeAbstrata.cs" />
     <Compile Include="Models\Exemplar.cs" />
     <Compile Include="Models\Fornecedor.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Pessoa.cs" />
     <Compile Include="Models\Produto.cs" />
     <Compile Include="Models\Transacao.cs" />
@@ -245,6 +250,7 @@
     <Content Include="Content\imagens\cash-register-78741_640.jpg" />
     <Content Include="Content\imagens\logo.png" />
     <Content Include="Content\imagens\office-620822_640.jpg" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\materialize\css\materialize.css" />
     <Content Include="Content\materialize\css\materialize.min.css" />
     <Content Include="Content\materialize\font\material-design-icons\LICENSE.txt" />
@@ -405,6 +411,10 @@
     <Content Include="Views\Marcas\Create.cshtml" />
     <Content Include="Views\Marcas\Edit.cshtml" />
     <Content Include="Views\Marcas\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Usuarios\Create.cshtml" />
+    <Content Include="Views\Usuarios\Edit.cshtml" />
+    <Content Include="Views\Usuarios\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -445,6 +455,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710230335170_Ajuste_produto.resx">
       <DependentUpon>201710230335170_Ajuste_produto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710232242147_Criar_usuario.resx">
+      <DependentUpon>201710232242147_Criar_usuario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
