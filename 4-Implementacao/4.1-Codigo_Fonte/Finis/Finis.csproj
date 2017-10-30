@@ -166,7 +166,9 @@
     <Compile Include="Controllers\IdiomasController.cs" />
     <Compile Include="Controllers\MarcasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
+    <Compile Include="Controllers\PedidosController.cs" />
     <Compile Include="Controllers\ProdutosController.cs" />
+    <Compile Include="Controllers\ServicosController.cs" />
     <Compile Include="Controllers\SessoesController.cs" />
     <Compile Include="Controllers\TransacoesController.cs" />
     <Compile Include="Controllers\UnidadeMedidasController.cs" />
@@ -224,8 +226,14 @@
     <Compile Include="Migrations\201710232242147_Criar_usuario.Designer.cs">
       <DependentUpon>201710232242147_Criar_usuario.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710300022512_Criar_Servicos.cs" />
+    <Compile Include="Migrations\201710300022512_Criar_Servicos.Designer.cs">
+      <DependentUpon>201710300022512_Criar_Servicos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\Servico.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Avaliacao.cs" />
     <Compile Include="Models\Cliente.cs" />
@@ -415,6 +423,13 @@
     <Content Include="Views\Usuarios\Create.cshtml" />
     <Content Include="Views\Usuarios\Edit.cshtml" />
     <Content Include="Views\Usuarios\Index.cshtml" />
+    <Content Include="Views\Pedidos\Create.cshtml" />
+    <Content Include="Views\Pedidos\Edit.cshtml" />
+    <Content Include="Views\Pedidos\Index.cshtml" />
+    <Content Include="Views\Pedidos\ListaExemplares.cshtml" />
+    <Content Include="Views\Servicos\Create.cshtml" />
+    <Content Include="Views\Servicos\Edit.cshtml" />
+    <Content Include="Views\Servicos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -458,6 +473,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710232242147_Criar_usuario.resx">
       <DependentUpon>201710232242147_Criar_usuario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710300022512_Criar_Servicos.resx">
+      <DependentUpon>201710300022512_Criar_Servicos.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

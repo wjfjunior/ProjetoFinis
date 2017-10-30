@@ -1,0 +1,129 @@
+﻿@model IEnumerable<Finis.Models.Exemplar>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.editora.nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idioma.nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sessao.nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.titulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.conservacao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.isbn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ano)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.edicao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.precoCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.precoVenda)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.peso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.vendaOnline)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.quantidade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.user_insert)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.user_update)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.date_insert)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.date_update)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.editora.nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idioma.nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sessao.nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.titulo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.conservacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.isbn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ano)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.edicao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.precoCompra)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.precoVenda)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.peso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.vendaOnline)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.quantidade)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.user_insert)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.user_update)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.date_insert)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.date_update)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

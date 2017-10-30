@@ -12,23 +12,23 @@ using Finis.Models;
 namespace Finis.Controllers
 {
     [Authorize(Roles = "Administrador, Funcionário")]
-    public class UsuariosController : Controller
+    public class ServicosController : Controller
     {
         private Contexto db = new Contexto();
 
-        // GET: Usuarios
+        // GET: Servicos
         public ActionResult Index()
         {
-            return View(db.Usuario.ToList());
+            return View(db.Servico.ToList().OrderBy(s => s.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Usuario.Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
+            return View("Index", db.Servico.Where(p => p.nome.Contains(pesquisar)).ToList().OrderBy(p => p.nome));
         }
 
-        // GET: Usuarios/Details/5
+        // GET: Servicos/Details/5
         public JsonResult Detalhes(int? id)
         {
             bool sucesso;
@@ -41,8 +41,8 @@ namespace Finis.Controllers
             }
             else
             {
-                Usuario usuario = db.Usuario.Find(id);
-                if (usuario == null)
+                Servico model = db.Servico.Find(id);
+                if (model == null)
                 {
                     sucesso = false;
                     resultado = "Não encontrado!";
@@ -50,7 +50,7 @@ namespace Finis.Controllers
                 else
                 {
                     sucesso = true;
-                    resultado = usuario.Serializar();
+                    resultado = model.Serializar();
                 }
             }
             var obj = new
@@ -61,17 +61,11 @@ namespace Finis.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Usuarios/Create
-        public ActionResult Create()
+        private bool VerificaJaExiste(Servico usuario)
         {
-            return View();
-        }
+            List<Servico> resultado = new List<Servico>();
 
-        private bool VerificaJaExiste(Usuario usuario)
-        {
-            List<Usuario> resultado = new List<Usuario>();
-
-            resultado = db.Usuario.Where(e => e.email.Equals(usuario.email)).ToList();
+            resultado = db.Servico.Where(e => e.nome.Equals(usuario.nome)).ToList();
             if (resultado.Count() > 0)
             {
                 return true;
@@ -80,57 +74,63 @@ namespace Finis.Controllers
             return false;
         }
 
-        // POST: Usuarios/Create
+        // GET: Servicos/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: Servicos/Create
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
+        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Usuario usuario)
+        public ActionResult Create(Servico servico)
         {
             if (ModelState.IsValid)
             {
-                usuario.nome = usuario.nome.ToUpper();
-                usuario.sobrenome = usuario.sobrenome.ToUpper();
-                if (VerificaJaExiste(usuario))
+                servico.nome = servico.nome.ToUpper();
+                if (VerificaJaExiste(servico))
                 {
-                    ViewBag.Erro = "Já existe um registro com o e-mail informado!";
-                    return View(usuario);
+                    ViewBag.Erro = "Já existe um registro com o nome informado!";
+                    return View(servico);
                 }
-                db.Usuario.Add(usuario);
+                db.Servico.Add(servico);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            return View(usuario);
+            return View(servico);
         }
 
-        // GET: Usuarios/Edit/5
+        // GET: Servicos/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Usuario usuario = db.Usuario.Find(id);
-            if (usuario == null)
+            Servico servico = db.Servico.Find(id);
+            if (servico == null)
             {
                 return HttpNotFound();
             }
-            return View(usuario);
+            return View(servico);
         }
 
-        // POST: Usuarios/Edit/5
+        // POST: Servicos/Edit/5
         // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Usuario usuario)
+        public ActionResult Edit(Servico servico)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(usuario).State = EntityState.Modified;
+                db.Entry(servico).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(usuario);
+            return View(servico);
         }
 
         // GET: Usuarios/Delete/5
@@ -138,8 +138,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Usuario usuario = db.Usuario.Find(id);
-                db.Usuario.Remove(usuario);
+                Servico servico = db.Servico.Find(id);
+                db.Servico.Remove(servico);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

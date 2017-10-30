@@ -9,6 +9,10 @@
     flex: 1 0 auto;
 }
 
+.validation-summary-errors {
+
+}
+
 .input-field input[type=date]:focus + label,
 .input-field input[type=text]:focus + label,
 .input-field input[type=email]:focus + label,

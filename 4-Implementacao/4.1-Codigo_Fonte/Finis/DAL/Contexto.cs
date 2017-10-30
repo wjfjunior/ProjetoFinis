@@ -29,7 +29,9 @@ namespace Finis.DAL
         public DbSet<Produto> Produto { get; set; }
         public DbSet<UnidadeMedida> UnidadeMedida { get; set; }
         public DbSet<Marca> Marca { get; set; }
-        public DbSet<Usuario> Usuario{ get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Pedido> Pedido { get; set; }
+        public DbSet<Servico> Servico { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -47,6 +49,8 @@ namespace Finis.DAL
             modelBuilder.Entity<UnidadeMedida>().ToTable("UnidadesMedida");
             modelBuilder.Entity<Marca>().ToTable("Marcas");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+            modelBuilder.Entity<Pedido>().ToTable("Pedidos");
+            modelBuilder.Entity<Servico>().ToTable("Servicos");
 
             base.OnModelCreating(modelBuilder);
         }

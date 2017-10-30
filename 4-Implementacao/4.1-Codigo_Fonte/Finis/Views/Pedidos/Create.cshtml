@@ -1,0 +1,94 @@
+﻿@model Finis.Models.Pedido
+
+@{
+    ViewBag.Title = "Novo Pedido";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container" id="formulario">
+        <form class="col s12">
+            <div class="row">
+
+                @Html.ValidationSummary(true, "", new { @class = "validate" })
+                @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
+
+                <div class="row">
+                    <div class="input-field col s8">
+                        @Html.EditorFor(model => model.clienteNome, new { htmlAttributes = new { @type = "text", @id = "clienteNome", @class = "autocomplete" } })
+                        @Html.LabelFor(model => model.clienteNome)
+                        @Html.ValidationMessageFor(model => model.clienteNome, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s4">
+                        @Html.EnumDropDownListFor(model => model.situacao, "Situação", htmlAttributes: new { @class = "validate", @id = "situacaoPedido", @name = "situacaoPedido" })
+                        @Html.ValidationMessageFor(model => model.situacao, "", new { @class = "validate" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.LabelFor(model => model.descricao, htmlAttributes: new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.descricao, "", new { @class = "validate" })
+                        @Html.TextAreaFor(model => model.descricao, new { @class = "materialize-textarea" })
+                    </div>
+                </div>
+
+                @Html.Partial("ListaPedidos", Model.Exemplares);
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Pedidos")'" type="button" name="action">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        Voltar
+                    </button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                        Salvar
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+             $('select').material_select();
+
+            var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxClientes", "Pedidos")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            $('#clienteId').val(RecuperaID(val));
+                        },
+                    });
+                }
+            });
+        });
+
+    </script>
+}
