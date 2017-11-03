@@ -33,9 +33,13 @@
                         @Html.TextAreaFor(model => model.descricao, new { @class = "materialize-textarea" })
                     </div>
                 </div>
-
-                @Html.Partial("ListaPedidos", Model.Exemplares);
-
+                <div id="ListaExemplares2">
+                    @{
+                        Html.RenderPartial("ListaExemplares2", Model.Exemplares);
+                     } 
+                </div>
+                <br/>
+                <br />
                 <div class="row">
                     <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Pedidos")'" type="button" name="action">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>

@@ -25,10 +25,13 @@ namespace Finis.Models
 
     public class Pedido : EntidadeAbstrata
     {
+        private DAL.Contexto db = new DAL.Contexto();
+
         public Pedido()
         {
             this.dataPedido = DateTime.Now;
-            this.Exemplares = new List<Exemplar>();
+            this.Exemplares = db.Exemplar.OrderBy(e => e.titulo).ToList();
+            this.situacao = situacaoPedido.PENDENTE;
         }
 
         [NotMapped]

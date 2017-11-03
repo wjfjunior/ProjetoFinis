@@ -430,6 +430,7 @@
     <Content Include="Views\Servicos\Create.cshtml" />
     <Content Include="Views\Servicos\Edit.cshtml" />
     <Content Include="Views\Servicos\Index.cshtml" />
+    <Content Include="Views\Pedidos\ListaExemplares2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

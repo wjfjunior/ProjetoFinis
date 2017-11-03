@@ -1,0 +1,186 @@
+﻿@model IEnumerable<Finis.Models.Exemplar>
+
+<style type="text/css">
+    .edit-mode {}
+
+    .edit-user {}
+
+        .edit-user display-mode {}
+
+    .save-user edit-mode {}
+
+    .display-mode {}
+
+    .cancel-user {}
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #ffffff;
+        color: #212121;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {}
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: white;
+        padding: 3px 7px 2px;
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('.edit-mode').hide();
+        $('.edit-user, .cancel-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            tr.find('.edit-mode, .display-mode').toggle();
+        });
+        $('.save-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var ExpID = tr.find("#id").val();
+            var ExpTitulo = tr.find("#titulo").val();
+            var ExpQtdade = tr.find("#quantidade").val();
+
+            //Creating Employee JSON object
+            var Exemplar =
+                {
+                    "id": ExpID,
+                    "titulo": ExpTitulo,
+                    "quantidade": ExpQtdade
+            };
+            //Posting Employee object to controller's Update action method
+            $.ajax({
+                url: '/Pedidos/Atualiza',
+                data: JSON.stringify(Exemplar),
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    tr.find('.edit-mode, .display-mode').toggle();
+					alert('Record updated Successfully!!');
+                }
+            });
+        });
+
+        $('.edit-user').on('click', function () {
+            var tr = $(this).parents('tr:first');
+            var ExpID = tr.find("#id").val();
+            var ExpTitulo = tr.find("#titulo").val();
+            var ExpQtdade = tr.find("#quantidade").val();
+
+            tr.find("#lblId").text(ExpID);
+            tr.find("#lblTitulo").text(ExpTitulo);
+            tr.find("#lblQtdade").text(ExpQtdade);
+        });
+    })
+</script>
+
+<form class="col s12">
+    <div class="row">
+        <div class="input-field col s12">
+            @Html.Editor("ExemplarNome", new { htmlAttributes = new { @type = "text", @id = "ExemplarNome", @class = "autocomplete" } })
+            @Html.Label("Selecione um exemplar para adicionar")
+        </div>
+    </div>
+</form>
+
+@{
+    var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 10);
+}
+
+<div id="gridContent">
+    @grid.GetHtml(tableStyle: "striped",
+    headerStyle: "webgrid-header",
+    footerStyle: "webgrid-footer",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-selected-row",
+    rowStyle: "webgrid-row-style",
+    mode: WebGridPagerModes.All,
+    columns: grid.Columns(
+
+        grid.Column("ID", "ID", format: @<text>
+
+            <h6 id="lblId">@item.id</h6>
+
+        </text>),
+
+        grid.Column("Título", "Titulo", format: @<text>
+
+                <h6 id="lblTitulo">@item.titulo</h6>
+
+          </text>),
+
+        grid.Column("Quantidade", "Quantidade", format: @<text> 
+
+            <input type="text" id="quantidade" value="@item.quantidade" class="edit-mode" />
+
+        </text>, style: "col2Width"),
+
+    grid.Column("Action", format: @<text>
+            <button class="edit-user display-mode">Edit</button>
+            <button class="save-user edit-mode">Save</button>
+    </text>, style: "col3Width", canSort: false)
+   ))
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/materialize")
+
+<script type="text/javascript">
+
+    var dados = {};
+
+    function RecuperaID(string) {
+        var id = string.substr(0, string.indexOf(' '));
+
+        if (!isNaN(id)) {
+            return parseInt(id);
+        }
+        else {
+            alert("Por favor selecione uma opção");
+        }
+    }
+
+    $(document).ready(function () {
+
+            $('select').material_select();
+
+            var erro = "@ViewBag.Erro";
+
+             if (erro != "" && erro != null && erro != undefined)
+             {
+                 alert("Erro: " + erro);
+             }
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxExemplares", "Pedidos")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].titulo] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                            console.log(val)
+                            //$('#clienteId').val(RecuperaID(val)); add na lista
+                        },
+                    });
+                }
+            });
+
+    });
+
+</script>
+}

@@ -1,63 +1,172 @@
 ﻿@model IEnumerable<Finis.Models.Pedido>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cadastro de Estados";
 }
+<script>
 
-<h2>Index</h2>
+    function deletaRegistro(id) {
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("DeletarRegistro", "Pedidos")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     location.reload();
+                 }
+             });
+    }
+
+    function carregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "Pedidos")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     preencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function preencheModalDetalhes(obj) {
+
+        document.getElementById('cliente').innerHTML = obj.cliente.nome;
+        document.getElementById('descricao').innerHTML = obj.descricao;
+        document.getElementById('data').innerHTML = obj.dataPedido;
+    }
+
+</script>
+
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s8">
+                        @Html.Label("Buscar")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                    </div>
+                    <div class="col s2">
+                        <button type="submit" class="btn-floating" id="botao-busca">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Pedidos")">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+<table class="highlight">
     <tr>
+        <th>
+            @Html.DisplayName("Cliente")
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.descricao)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.dataPedido)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_insert)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.user_update)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.date_insert)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.date_update)
-        </th>
-        <th></th>
+        <th>Opções</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.descricao)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dataPedido)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_insert)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user_update)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.date_insert)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.date_update)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.cliente.nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dataPedido)
+            </td>
+            <td>
+                <a class="btn-floating blue" href="@Url.Action("Edit", "Pedidos", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
+                <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+                    <i class="fa fa-info" aria-hidden="true"></i>
+                </a>
+                <a class="btn-floating red" onclick="showModal(@item.id, 'md1'); return false;"><i class="material-icons">delete</i></a>
+            </td>
+        </tr>
+    }
 
 </table>
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do registro</h5>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Cliente:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="cliente">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Descrição:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="decricao">.</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Data:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="data">.</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
+
+<div id="md1" class="modal">
+    <div class="modal-content">
+        <h4>Confirmação</h4>
+        <p>Tem certeza que deseja remover este registro?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
+        <a href="#" class="waves-effect waves-green btn-flat" id="md1_YesBtn">Confirmar</a>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        function showModal(id, modal) {
+            $('#' + modal).openModal();
+            $('#' + modal + '_YesBtn').click(function () { $('#' + modal).closeModal(); deletaRegistro(id); });
+        }
+
+        $(document).ready(function () {
+
+            $('.modal-trigger').leanModal();
+        });
+
+    </script>
+}

@@ -41,10 +41,38 @@ namespace Finis.Controllers
             return PartialView("ListaExemplares");
         }
 
+        public ActionResult ListaExemplares2()
+        {
+            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
+
+            return PartialView("ListaExemplares2", exemplares.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Atualiza(Exemplar exemplar)
+        {
+                
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public JsonResult DropboxExemplares()
+        {
+            var listaExemplares = db.Exemplar.Select(e => new { e.id, e.titulo }).OrderBy(e => e.titulo).ToArray();
+
+            var obj = new
+            {
+                lista = listaExemplares
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Pedidos/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new Pedido());
         }
 
         // POST: Pedidos/Create
