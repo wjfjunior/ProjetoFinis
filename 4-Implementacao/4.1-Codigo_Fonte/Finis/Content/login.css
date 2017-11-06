@@ -1,8 +1,23 @@
 ﻿body {
     display: flex;
-    background: #03A9F4;
+    background-image: url('imagens/Fundo_login_2.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #03A9F4;
     min-height: 100vh;
     flex-direction: column;
+}
+
+.responsive-img {
+    width: 300px;
+    margin-bottom: 1%;
+}
+
+#btn_login {
+    background-color: #03A9F4;
+    margin-bottom:3%;
 }
 
 .container {

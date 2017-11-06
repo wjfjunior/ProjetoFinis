@@ -1,9 +1,9 @@
 ﻿@model Finis.Models.Usuario
 
 @{
+    ViewBag.Title = "Login";
     Layout = null;
 }
-
 <link href="~/Content/login.css" rel="stylesheet" />
 
 @Styles.Render("http://fonts.googleapis.com/icon?family=Material+Icons")
@@ -23,7 +23,7 @@
     <div class="container">
         <center>
             <div class="section"></div>
-            <img class="responsive-img" style="width: 250px;" src="~/Content/imagens/logo.png" />
+            <img class="responsive-img" src="~/Content/imagens/logo.png" />
             <div class="container">
                 <div class="z-depth-5 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
                     <form class="col s12" method="post">
@@ -49,7 +49,7 @@
                         <br />
                         <center>
                             <div class='row'>
-                                <button type='submit' style="background-color:#03A9F4" name='btn_login' class='col s12 btn btn-large waves-effect'>Login</button>
+                                <button type='submit' id="btn_login" name='btn_login' class='col s12 btn btn-large waves-effect'>Login</button>
                             </div>
                         </center>
                     </form>

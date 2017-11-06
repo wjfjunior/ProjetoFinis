@@ -256,6 +256,8 @@
     <Content Include="Content\imagens\arranged-1842261_640.jpg" />
     <Content Include="Content\imagens\books-1012088_640.jpg" />
     <Content Include="Content\imagens\cash-register-78741_640.jpg" />
+    <Content Include="Content\imagens\Fundo_login.png" />
+    <Content Include="Content\imagens\Fundo_login_2.png" />
     <Content Include="Content\imagens\logo.png" />
     <Content Include="Content\imagens\office-620822_640.jpg" />
     <Content Include="Content\login.css" />
@@ -329,6 +331,7 @@
     <None Include="Properties\PublishProfiles\ProjetoFinis - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\Graficos.js" />
     <Content Include="Scripts\inputmask.extensions.min.js" />
     <Content Include="Scripts\inputmask.numeric.extensions.min.js" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />

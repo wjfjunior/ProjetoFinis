@@ -17,7 +17,8 @@
             <div class="nav-wrapper">
                 <div class="nav-content">
                     <ul class="right" style="float:right" ;>
-                        <li><a href="@Url.Action("LogOff","Account")"><i class="material-icons">input</i></a></li>
+                        <li>@User.Identity.Name</li>
+                        <li style="margin-left:5px;"><a href="@Url.Action("LogOff","Account")"><i class="material-icons">input</i></a></li>
                     </ul>
                     <span id="titulo-pagina" class="nav-title">@ViewBag.Title</span>
                     <a href="@Url.Action("Index","Home")" class="brand-logo center">
