@@ -26,6 +26,16 @@ namespace Finis.Models
         ESPECIAL = 2,
     }
 
+    [NotMapped]
+    public class TotalTransacao
+    {
+        public DateTime mesReferencia { get; set; }
+
+        public int totalEntrada { get; set; }
+
+        public int totalSaida { get; set; }
+    }
+
     public class Transacao : EntidadeAbstrata
     {
         public Transacao()
