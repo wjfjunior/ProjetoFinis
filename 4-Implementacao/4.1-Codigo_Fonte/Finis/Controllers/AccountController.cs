@@ -1,9 +1,6 @@
 ﻿using Finis.DAL;
 using Finis.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -31,7 +28,7 @@ namespace Finis.Controllers
             //{
                  using (Contexto db = new Contexto())
                  {
-                    var vLogin = db.Usuario.Where(p => p.email.Equals(login.email)).FirstOrDefault();
+                    var vLogin = db.Usuarios.Where(p => p.email.Equals(login.email)).FirstOrDefault();
                      /*Verificar se a variavel vLogin está vazia. Isso pode ocorrer caso o usuário não existe. 
                      Caso não exista ele vai cair na condição else.*/
                      if (vLogin != null)

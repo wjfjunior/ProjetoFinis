@@ -10,7 +10,6 @@ namespace Finis.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "Finis.DAL.Contexto";
         }
 
         protected override void Seed(Finis.DAL.Contexto context)

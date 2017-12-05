@@ -187,6 +187,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                avaliacao.ConfigurarParaSalvar();
                 db.Avaliacao.Add(avaliacao);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -222,6 +223,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                avaliacao.ConfigurarParaSalvar();
                 db.Entry(avaliacao).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

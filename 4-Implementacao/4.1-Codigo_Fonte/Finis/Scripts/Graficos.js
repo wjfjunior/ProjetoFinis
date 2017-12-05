@@ -3,17 +3,26 @@ google.charts.setOnLoadCallback(drawChartBarras);
 
 function drawChartBarras() {
     var data = google.visualization.arrayToDataTable([
-        ['Year', 'Sales', 'Expenses', 'Profit'],
-        ['2014', 1000, 400, 200],
-        ['2015', 1170, 460, 250],
-        ['2016', 660, 1120, 300],
-        ['2017', 1030, 540, 350]
+        ['Mês', 'Entradas', 'Saídas'],
+        ['Novembro', 345, 198],
+        ['Outubro', 1170, 460],
+        ['Setembro', 660, 1120],
+        ['Agosto', 1030, 540],
+        ['Julho', 300, 890],
+        ['Junho', 1030, 456],
+        ['Maio', 1030, 670],
+        ['Abril', 630, 240],
+        ['Março', 980, 346],
+        ['Fevereiro', 760, 945],
+        ['Janeiro', 456, 740],
+        ['Dezembro', 879, 440],
+        ['Novembro', 1002, 640]
     ]);
 
     var options = {
         chart: {
-            title: 'Company Performance',
-            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+            title: 'Transações nos últimos 12 meses',
+            subtitle: 'Entradas e saídas de créditos',
         }
     };
 
@@ -27,16 +36,16 @@ google.charts.setOnLoadCallback(drawChartRosca);
 
 function drawChartRosca() {
     var data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['Work', 11],
-        ['Eat', 2],
-        ['Commute', 2],
-        ['Watch TV', 2],
-        ['Sleep', 7]
+        ['Situação', 'Situação'],
+        ['Aguardando avaliação', 3],
+        ['Avaliado', 12],
+        ['Aguardando cliente', 7],
+        ['Concluído', 2],
+        ['Canceladas', 3]
     ]);
 
     var options = {
-        title: 'My Daily Activities',
+        title: 'Situação das avaliações',
         pieHole: 0.4,
     };
 
@@ -50,16 +59,15 @@ google.charts.setOnLoadCallback(drawChartPizza);
 function drawChartPizza() {
 
     var data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['Work', 11],
-        ['Eat', 2],
-        ['Commute', 2],
-        ['Watch TV', 2],
-        ['Sleep', 7]
+        ['Situação', 'Pedidos'],
+        ['Pendentes', 3],
+        ['Realizados', 5],
+        ['Aguardando cliente', 2],
+        ['Concluído', 5]
     ]);
 
     var options = {
-        title: 'My Daily Activities'
+        title: 'Pedidos de Exemplares'
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));

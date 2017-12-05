@@ -35,7 +35,7 @@
 
     function PreencheModalDetalhes(obj) {
 
-        document.getElementById('titulo').innerHTML = SubstituirCampoNulo(obj.titulo);
+        document.getElementById('titulo').innerHTML = SubstituirCampoNulo(obj.nome);
         document.getElementById('editora').innerHTML = SubstituirCampoNulo(obj.editora.nome);
         document.getElementById('edicao').innerHTML = SubstituirCampoNulo(obj.edicao);
         document.getElementById('conservacao').innerHTML = SubstituirCampoNulo(obj.conservacaoString);
@@ -91,7 +91,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.titulo)
+                @Html.DisplayName("Título")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.isbn)
@@ -115,7 +115,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.titulo)
+            @Html.DisplayFor(modelItem => item.nome)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.isbn)

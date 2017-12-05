@@ -15,17 +15,21 @@ namespace Finis.Models
         public EntidadeAbstrata()
         {
             this.id = 0;
+            this.date_insert = DateTime.Now;
+            this.date_update = DateTime.Now;
+            this.user_insert = "";
+            this.user_update = "";
         }
 
         [Key]
         [Editable(false)]
-        public int? id { get; set; }
+        public int id { get; set; }
 
         private string _user_insert;
         private string _user_update;
 
-        private DateTime? _date_insert;
-        private DateTime? _date_update;
+        private DateTime _date_insert;
+        private DateTime _date_update;
 
         public virtual string user_insert
         {
@@ -39,13 +43,13 @@ namespace Finis.Models
             set { _user_update = value; }
         }
 
-        public virtual DateTime? date_insert
+        public virtual DateTime date_insert
         {
             get { return _date_insert; }
             set { _date_insert = value; }
         }
 
-        public virtual DateTime? date_update
+        public virtual DateTime date_update
         {
             get { return _date_update; }
             set { _date_update = value; }

@@ -11,6 +11,7 @@ using Finis.Models;
 
 namespace Finis.Controllers
 {
+    [Authorize(Roles = "Administrador, Funcionário")]
     public class PedidosController : Controller
     {
         private Contexto db = new Contexto();
@@ -41,12 +42,12 @@ namespace Finis.Controllers
             return PartialView("ListaExemplares");
         }
 
-        public ActionResult ListaExemplares2()
-        {
-            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
+        //public ActionResult ListaExemplares2()
+        //{
+        //    var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
 
-            return PartialView("ListaExemplares2", exemplares.ToList());
-        }
+        //    return PartialView("ListaExemplares2", exemplares.ToList());
+        //}
 
         [HttpPost]
         public ActionResult Atualiza(Exemplar exemplar)
@@ -59,7 +60,7 @@ namespace Finis.Controllers
         [HttpGet]
         public JsonResult DropboxExemplares()
         {
-            var listaExemplares = db.Exemplar.Select(e => new { e.id, e.titulo }).OrderBy(e => e.titulo).ToArray();
+            var listaExemplares = db.Item.OfType<Exemplar>().Select(e => new { e.id, e.nome }).OrderBy(e => e.nome).ToArray();
 
             var obj = new
             {
@@ -84,6 +85,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                pedido.ConfigurarParaSalvar();
                 db.Pedido.Add(pedido);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -112,10 +114,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,descricao,dataPedido,user_insert,user_update,date_insert,date_update")] Pedido pedido)
+        public ActionResult Edit(Pedido pedido)
         {
             if (ModelState.IsValid)
             {
+                pedido.ConfigurarParaSalvar();
                 db.Entry(pedido).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

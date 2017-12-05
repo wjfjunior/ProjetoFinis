@@ -160,6 +160,7 @@ namespace Finis.Controllers
         {
             Transacao transacao = new Transacao();
             transacao.NovaTransacaoEntrada(valor, credito, clienteId);
+            transacao.ConfigurarParaSalvar();
             db.Transacao.Add(transacao);
             db.SaveChanges();
         }
@@ -168,6 +169,7 @@ namespace Finis.Controllers
         {
             Transacao transacao = new Transacao();
             transacao.NovaTransacaoEntrada(valor, credito, clienteId);
+            transacao.ConfigurarParaSalvar();
             db.Transacao.Add(transacao);
             db.SaveChanges();
         }

@@ -19,14 +19,14 @@ namespace Finis.Controllers
         // GET: Editoras
         public ActionResult Index()
         {
-            return View(db.Fornecedors.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA).OrderBy(f => f.nome).ToList());
+            return View(db.Fornecedor.OfType<Editora>().OrderBy(f => f.nome).ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Fornecedors
-                .Where(f => f.nome.Contains(pesquisar) && f.tipoFornecedor == TipoFornecedor.EDITORA)
+            return View("Index", db.Fornecedor.OfType<Editora>()
+                .Where(f => f.nome.Contains(pesquisar))
                 .OrderBy(f => f.nome)
                 .ToList());
         }
@@ -44,7 +44,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Editora editora = db.Fornecedors.Find(id);
+                Editora editora = (Editora)db.Fornecedor.Find(id);
                 if (editora == null)
                 {
                     sucesso = false;
@@ -75,11 +75,12 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,cnpj,nome,telefone,email,user_insert,user_update,date_insert,date_update")] Editora editora)
+        public ActionResult Create(Editora editora)
         {
             if (ModelState.IsValid)
             {
-                db.Fornecedors.Add(editora);
+                editora.ConfigurarParaSalvar();
+                db.Fornecedor.Add(editora);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -94,7 +95,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Editora editora = db.Fornecedors.Find(id);
+            Editora editora = (Editora)db.Fornecedor.Find(id);
             if (editora == null)
             {
                 return HttpNotFound();
@@ -107,10 +108,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,cnpj,nome,telefone,email,user_insert,user_update,date_insert,date_update")] Editora editora)
+        public ActionResult Edit(Editora editora)
         {
             if (ModelState.IsValid)
             {
+                editora.ConfigurarParaSalvar();
                 db.Entry(editora).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -123,8 +125,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Editora editora = db.Fornecedors.Find(id);
-                db.Fornecedors.Remove(editora);
+                Editora editora = (Editora)db.Fornecedor.Find(id);
+                db.Fornecedor.Remove(editora);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

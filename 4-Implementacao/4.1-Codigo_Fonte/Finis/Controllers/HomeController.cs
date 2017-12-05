@@ -21,9 +21,9 @@ namespace Finis.Controllers
         public JsonResult Totais()
         {
             int totClientes = db.Cliente.Count();
-            int totExemplares = db.Exemplar.Count();
-            int totProdutos = db.Produto.Count();
-            int totServicos = db.Servico.Count();
+            int totExemplares = db.Item.OfType<Exemplar>().Count();
+            int totProdutos = db.Item.OfType<Produto>().Count();
+            int totServicos = db.Item.OfType<Produto>().Count();
 
             var obj = new
             {
@@ -93,27 +93,22 @@ namespace Finis.Controllers
                 this.ConfiguraInicioFimMes(dataInicio, dataFim, mes);
 
                 totalTransacao.totalEntrada = db.Transacao.Where(t => t.tipoTransacao == Models.TipoTransacao.ENTRADA 
-                                                                && t.data > dataInicio 
-                                                                && t.data < dataFim).Count();
+                                                                && t.data >= dataInicio 
+                                                                && t.data <= dataFim).Count();
 
                 totalTransacao.totalSaida = db.Transacao.Where(t => t.tipoTransacao == Models.TipoTransacao.SAIDA
-                                                                && t.data > dataInicio
-                                                                && t.data < dataFim).Count();
+                                                                && t.data >= dataInicio
+                                                                && t.data <= dataFim).Count();
 
                 totalTransacao.mesReferencia = dataInicio;
                 listaTotais.Add(totalTransacao);
                 DateTime DtaAux = new DateTime(DateTime.Now.Year, mes, DateTime.Now.Day);
                 mes = DtaAux.AddMonths(-1).Month;
             }
-            
-            foreach(TotalTransacao totalTransacao in listaTotais)
-            {
-
-            }
 
             var obj = new
             {
-                //AvaliacoesAguardando = avaliacoesAguardando.ToString()
+                lista = listaTotais
             };
             return Json(obj, JsonRequestBehavior.AllowGet);
         }

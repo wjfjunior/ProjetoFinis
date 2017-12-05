@@ -1,0 +1,158 @@
+﻿@model IEnumerable<Finis.Models.Venda>
+
+@{
+    ViewBag.Title = "Gerenciamento de vendas";
+}
+
+@using (Html.BeginForm())
+{
+    <div id="container-busca">
+        <div class="nav-wrapper">
+            <form>
+                <div class="row">
+                    <div class="input-field col s12">
+                        @Html.Label("Cliente")
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @type = "text", @id = "estadoNome", @class = "autocomplete" } })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s3">
+                        @Html.Editor("dataInicio", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de início" } })
+                    </div>
+                    <div class="col s3">
+                        @Html.Editor("dataFim", new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data de fim" } })
+                    </div>
+                    <div class="col s3">
+                        <button type="submit" class="waves-effect waves-light btn">
+                            Pesquisar
+                            <i class="material-icons right">search</i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<div class="fixed-action-btn vertical">
+    <a class="btn-floating btn-large red" href="@Url.Action("Create","Vendas")">
+        <i class="material-icons">add</i>
+    </a>
+    <ul>
+        <li>
+            <a class="btn-floating btn-large green" href="@Url.Action("Exportar", "Vendas")" , target="_blank">
+                <i class="material-icons">print</i>
+            </a>
+        </li>
+    </ul>
+</div>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.dataCompra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cliente.nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.creditoParcial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.creditoEspecial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.total)
+            </th>
+            <th>Opções</th>
+        </tr>
+    </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dataCompra)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cliente.nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creditoParcial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creditoEspecial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.total)
+                </td>
+                <td>
+                    <a class="btn-floating green" href="@Url.Action("Details", "Clientes", new { id = @item.id })">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+</table>
+
+@section scripts{
+    @Scripts.Render("~/bundles/materialize")
+    <script type="text/javascript">
+
+        var dados = {};
+
+        $(document).ready(function () {
+
+            $('.tooltipped').tooltip({ delay: 10 });
+
+            $('.modal-trigger').leanModal();
+
+            $('.datepicker').pickadate({
+                selectMonths: true,//Creates a dropdown to control month
+                selectYears: 100,//Creates a dropdown of 15 years to control year
+                //The title label to use for the month nav buttons
+                labelMonthNext: 'Proximo Mês',
+                labelMonthPrev: 'Mês Anterior',
+                //The title label to use for the dropdown selectors
+                labelMonthSelect: 'Selecionar Mês',
+                labelYearSelect: 'Selecionar Ano',
+                //Months and weekdays
+                monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Maio', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                //Materialize modified
+                weekdaysLetter: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                //Today and clear
+                today: 'Hoje',
+                clear: 'Limpar',
+                close: 'Fechar',
+                //The format to show on the `input` element
+                format: 'dd/mm/yyyy'
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("DropboxClientes", "Vendas")',
+                success: function (response) {
+                    var resultado = JSON.parse(response);
+
+                    for (i = 0; i < resultado.lista.length; i++)
+                    {
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                    }
+
+                    $('input.autocomplete').autocomplete({
+                        data: dados,
+                        limit: 5,
+                        onAutocomplete: function (val) {
+
+                        },
+                    });
+                }
+            });
+
+        });
+
+    </script>
+}

@@ -19,13 +19,13 @@ namespace Finis.Controllers
         // GET: Usuarios
         public ActionResult Index()
         {
-            return View(db.Usuario.ToList());
+            return View(db.Usuarios.ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Usuario.Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
+            return View("Index", db.Usuarios.Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
         }
 
         // GET: Usuarios/Details/5
@@ -41,7 +41,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Usuario usuario = db.Usuario.Find(id);
+                Usuario usuario = db.Usuarios.Find(id);
                 if (usuario == null)
                 {
                     sucesso = false;
@@ -71,7 +71,7 @@ namespace Finis.Controllers
         {
             List<Usuario> resultado = new List<Usuario>();
 
-            resultado = db.Usuario.Where(e => e.email.Equals(usuario.email)).ToList();
+            resultado = db.Usuarios.Where(e => e.email.Equals(usuario.email)).ToList();
             if (resultado.Count() > 0)
             {
                 return true;
@@ -94,7 +94,8 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Já existe um registro com o e-mail informado!";
                     return View(usuario);
                 }
-                db.Usuario.Add(usuario);
+                usuario.ConfigurarParaSalvar();
+                db.Usuarios.Add(usuario);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -109,7 +110,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Usuario usuario = db.Usuario.Find(id);
+            Usuario usuario = db.Usuarios.Find(id);
             if (usuario == null)
             {
                 return HttpNotFound();
@@ -126,6 +127,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                usuario.ConfigurarParaSalvar();
                 db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -138,8 +140,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Usuario usuario = db.Usuario.Find(id);
-                db.Usuario.Remove(usuario);
+                Usuario usuario = db.Usuarios.Find(id);
+                db.Usuarios.Remove(usuario);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

@@ -19,13 +19,13 @@ namespace Finis.Controllers
         // GET: Servicos
         public ActionResult Index()
         {
-            return View(db.Servico.ToList().OrderBy(s => s.nome));
+            return View(db.Item.OfType<Servico>().ToList().OrderBy(s => s.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Servico.Where(p => p.nome.Contains(pesquisar)).ToList().OrderBy(p => p.nome));
+            return View("Index", db.Item.OfType<Servico>().Where(p => p.nome.Contains(pesquisar)).ToList().OrderBy(p => p.nome));
         }
 
         // GET: Servicos/Details/5
@@ -41,7 +41,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Servico model = db.Servico.Find(id);
+                Servico model = (Servico)db.Item.Find(id);
                 if (model == null)
                 {
                     sucesso = false;
@@ -65,7 +65,7 @@ namespace Finis.Controllers
         {
             List<Servico> resultado = new List<Servico>();
 
-            resultado = db.Servico.Where(e => e.nome.Equals(usuario.nome)).ToList();
+            resultado = db.Item.OfType<Servico>().Where(e => e.nome.Equals(usuario.nome)).ToList();
             if (resultado.Count() > 0)
             {
                 return true;
@@ -95,7 +95,8 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Já existe um registro com o nome informado!";
                     return View(servico);
                 }
-                db.Servico.Add(servico);
+                servico.ConfigurarParaSalvar();
+                db.Item.Add(servico);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -109,7 +110,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Servico servico = db.Servico.Find(id);
+            Servico servico = (Servico)db.Item.Find(id);
             if (servico == null)
             {
                 return HttpNotFound();
@@ -126,6 +127,7 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                servico.ConfigurarParaSalvar();
                 db.Entry(servico).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -138,8 +140,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Servico servico = db.Servico.Find(id);
-                db.Servico.Remove(servico);
+                Servico servico = (Servico)db.Item.Find(id);
+                db.Item.Remove(servico);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

@@ -38,14 +38,19 @@
                             </li>
                             <li class="bold">
                                 <a class="collapsible-header  waves-effect waves-teal">
-                                    <i class="fa fa-id-card-o" aria-hidden="true"></i> &nbsp; Cadastros
+                                    <i class="fa fa-id-card-o" aria-hidden="true"></i> &nbsp; Cadastros Gerais
                                 </a>
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="@Url.Action("Index","Paises")">Países</a></li>
                                         <li><a href="@Url.Action("Index","Estados")">Estados</a></li>
                                         <li><a href="@Url.Action("Index","Cidades")">Cidades</a></li>
-                                        <li><a href="@Url.Action("Index","Clientes")">Clientes</a></li>
+                                        <li><a href="@Url.Action("Index","Idiomas")">Idiomas</a></li>
+                                        <li><a href="@Url.Action("Index","Sessoes")">Sessões</a></li>
+                                        <li><a href="@Url.Action("Index","Marcas")">Marcas</a></li>
+                                        <li><a href="@Url.Action("Index","UnidadeMedidas")">Unidade de Medidas</a></li>
+                                        <li><a href="@Url.Action("Index","Editoras")">Editoras</a></li>
+                                        <li><a href="@Url.Action("Index","Fornecedores")">Fornecedores</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -56,11 +61,30 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a href="@Url.Action("Index","Exemplares")">Exemplares</a></li>
-                                        <li><a href="@Url.Action("Index","Editoras")">Editoras</a></li>
-                                        <li><a href="@Url.Action("Index","Sessoes")">Sessões</a></li>
-                                        <li><a href="@Url.Action("Index","Idiomas")">Idiomas</a></li>
+                                        <li><a href="@Url.Action("Consulta","Exemplares")">Consulta</a></li>
                                     </ul>
                                 </div>
+                            </li>
+                            <li class="bold">
+                                <a href="@Url.Action("Index", "Clientes")" class="waves-effect waves-teal">
+                                    <i class="fa fa-users fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Clientes
+                                </a>
+                            </li>
+                            <li class="bold">
+                                <a class="collapsible-header  waves-effect waves-teal">
+                                    <i class="fa fa-tags" aria-hidden="true"></i> &nbsp; Produtos 
+                                </a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="@Url.Action("Index","Produtos")">Produtos</a></li>
+                                        <li><a href="@Url.Action("Index","Servicos")">Serviços</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="bold">
+                                <a href="@Url.Action("Index", "Pedidos")" class="waves-effect waves-teal">
+                                    <i class="fa fa-gift fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Pedidos
+                                </a>
                             </li>
                             <li class="bold">
                                 <a href="@Url.Action("Index", "Avaliacoes")" class="waves-effect waves-teal">
@@ -70,6 +94,11 @@
                             <li class="bold">
                                 <a href="@Url.Action("Index", "Transacoes")" class="waves-effect waves-teal">
                                     <i class="fa fa-exchange fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Transações
+                                </a>
+                            </li>
+                            <li class="bold">
+                                <a href="@Url.Action("Index", "Usuarios")" class="waves-effect waves-teal">
+                                    <i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i> &nbsp; &nbsp; Usuários
                                 </a>
                             </li>
                         </ul>
@@ -87,6 +116,9 @@
 
     <script src="~/Scripts/jquery.mask.min.js"></script>
     <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     
     @RenderSection("Scripts", required: false)
     <script>

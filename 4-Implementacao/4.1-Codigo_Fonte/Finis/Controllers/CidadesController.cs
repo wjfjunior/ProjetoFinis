@@ -147,6 +147,7 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
                     return View(model);
                 }
+                model.ConfigurarParaSalvar();
                 db.Cidade.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -182,6 +183,7 @@ namespace Finis.Controllers
             if (ModelState.IsValid)
             {
                 model.nome = model.nome.ToUpper();
+                model.ConfigurarParaSalvar();
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

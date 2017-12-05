@@ -33,7 +33,7 @@ namespace Finis.Models
         public string celular { get; set; }
         
         [Display(Name = "Endereço")]
-        public int? enderecoId { get; set; }
+        public int enderecoId { get; set; }
         [ForeignKey("enderecoId")]
         public virtual Endereco endereco { get; set; }
     }

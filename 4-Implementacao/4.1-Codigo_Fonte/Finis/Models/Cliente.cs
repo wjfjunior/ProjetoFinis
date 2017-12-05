@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Finis.Controllers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -101,19 +102,31 @@ namespace Finis.Models
 
         }
 
-        public void NovoSaldo(decimal creditoEspecial, decimal creditoParcial)
+        public void NovoSaldoEspecial(decimal credito)
         {
-            this.saldoCreditoEspecial = creditoEspecial;
-            this.saldoCreditoEspecial = creditoEspecial;
+            TransacoesController transacaoCreditoEspecial = new TransacoesController();
+            transacaoCreditoEspecial.GeraTransacaoEntrada(credito, TipoCredito.ESPECIAL, this.id);
+            this.saldoCreditoEspecial = credito;
+        }
+
+        public void NovoSaldoParcial(decimal credito)
+        {
+            TransacoesController transacaoCreditoParcial = new TransacoesController();
+            transacaoCreditoParcial.GeraTransacaoEntrada(credito, TipoCredito.PARCIAL, this.id);
+            this.saldoCreditoParcial = credito;
         }
 
         public void AtualizaSaldoEspecial(decimal creditoEspecial)
         {
+            TransacoesController transacaoCreditoEspecial = new TransacoesController();
+            transacaoCreditoEspecial.GeraTransacaoEntrada(creditoEspecial, TipoCredito.ESPECIAL, this.id);
             this.saldoCreditoEspecial += creditoEspecial;
         }
 
         public void AtualizaSaldoParcial(decimal creditoParcial)
         {
+            TransacoesController transacaoCreditoParcial = new TransacoesController();
+            transacaoCreditoParcial.GeraTransacaoEntrada(creditoParcial, TipoCredito.PARCIAL, this.id);
             this.saldoCreditoParcial += creditoParcial;
         }
     }

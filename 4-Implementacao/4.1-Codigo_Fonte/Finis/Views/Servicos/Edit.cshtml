@@ -21,12 +21,19 @@
                         @Html.EditorFor(model => model.nome, new { htmlAttributes = new { @class = "validate" } })
                         @Html.ValidationMessageFor(model => model.nome, "", new { @class = "validate" })
                     </div>
-                    <div class="input-field col s6">
-                        @Html.LabelFor(model => model.valor)
+                    <div class="input-field col s3">
+                        @Html.LabelFor(model => model.precoCompra, htmlAttributes: new { @class = "validate" })
                         @{ Html.EnableClientValidation(false); }
-                        @Html.EditorFor(model => model.valor, new { htmlAttributes = new { @class = "validate" } })
+                        @Html.EditorFor(model => model.precoCompra, new { htmlAttributes = new { @class = "validate" } })
                         @{ Html.EnableClientValidation(true); }
-                        @Html.ValidationMessageFor(model => model.valor, "", new { @class = "validate" })
+                        @Html.ValidationMessageFor(model => model.precoCompra, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s3">
+                        @Html.LabelFor(model => model.precoVenda, htmlAttributes: new { @class = "validate" })
+                        @{ Html.EnableClientValidation(false); }
+                        @Html.EditorFor(model => model.precoVenda, new { htmlAttributes = new { @class = "validate" } })
+                        @{ Html.EnableClientValidation(true); }
+                        @Html.ValidationMessageFor(model => model.precoVenda, "", new { @class = "validate" })
                     </div>
                 </div>
                 <div class="row">

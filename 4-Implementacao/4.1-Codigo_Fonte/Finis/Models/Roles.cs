@@ -50,7 +50,7 @@ namespace Finis.Models
 
         public override string[] GetRolesForUser(string username)
         {
-            var sRoles = db.Usuario.Where(p => p.email == username).FirstOrDefault().perfilString;
+            var sRoles = db.Usuarios.Where(p => p.email == username).FirstOrDefault().perfilString;
             string[] retorno = { sRoles };
             return retorno;
 

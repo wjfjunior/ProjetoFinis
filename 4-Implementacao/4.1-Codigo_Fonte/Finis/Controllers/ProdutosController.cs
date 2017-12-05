@@ -19,14 +19,14 @@ namespace Finis.Controllers
         // GET: Produtos
         public ActionResult Index()
         {
-            var produto = db.Produto.Include(p => p.unidadeMedida).Include(m => m.marca);
+            var produto = db.Item.OfType<Produto>().Include(p => p.unidadeMedida).Include(m => m.marca);
             return View(produto.ToList().OrderBy(p => p.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Produto.Include(p => p.unidadeMedida).Include(m => m.marca).Where(p => p.nome.Contains(pesquisar)).ToList().OrderBy(p => p.nome));
+            return View("Index", db.Item.OfType<Produto>().Include(p => p.unidadeMedida).Include(m => m.marca).Where(p => p.nome.Contains(pesquisar)).ToList().OrderBy(p => p.nome));
         }
 
         [HttpGet]
@@ -87,7 +87,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Produto model = db.Produto.Find(id);
+                Produto model = (Produto)db.Item.Find(id);
                 if (model == null)
                 {
                     sucesso = false;
@@ -132,7 +132,8 @@ namespace Finis.Controllers
             if (ModelState.IsValid)
             {
                 model.nome = model.nome.ToUpper();
-                db.Produto.Add(model);
+                model.ConfigurarParaSalvar();
+                db.Item.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -148,7 +149,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Produto produto = db.Produto.Find(id);
+            Produto produto = (Produto)db.Item.Find(id);
             if (produto == null)
             {
                 return HttpNotFound();
@@ -169,6 +170,7 @@ namespace Finis.Controllers
             if (ModelState.IsValid)
             {
                 produto.nome = produto.nome.ToUpper();
+                produto.ConfigurarParaSalvar();
                 db.Entry(produto).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -183,8 +185,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Produto produto = db.Produto.Find(id);
-                db.Produto.Remove(produto);
+                Produto produto = (Produto)db.Item.Find(id);
+                db.Item.Remove(produto);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

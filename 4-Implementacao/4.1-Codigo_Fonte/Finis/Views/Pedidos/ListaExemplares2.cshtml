@@ -110,7 +110,7 @@
 
         grid.Column("Título", "Titulo", format: @<text>
 
-                <h6 id="lblTitulo">@item.titulo</h6>
+                <h6 id="lblTitulo">@item.nome</h6>
 
           </text>),
 
@@ -165,7 +165,7 @@
 
                     for (i = 0; i < resultado.lista.length; i++)
                     {
-                        dados[resultado.lista[i].id + " - " + resultado.lista[i].titulo] = null;
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome] = null;
                     }
 
                     $('input.autocomplete').autocomplete({

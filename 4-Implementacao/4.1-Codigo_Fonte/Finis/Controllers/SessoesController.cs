@@ -16,16 +16,16 @@ namespace Finis.Controllers
     {
         private Contexto db = new Contexto();
 
-        // GET: Sessoes
+        //GET: Sessoes
         public ActionResult Index()
         {
-            return View(db.Sessaos.ToList().OrderBy(s => s.nome));
+            return View(db.Sessao.ToList().OrderBy(s => s.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Sessaos.Where(c => c.nome.Contains(pesquisar)).OrderBy(s => s.nome).ToList());
+            return View("Index", db.Sessao.Where(c => c.nome.Contains(pesquisar)).OrderBy(s => s.nome).ToList());
         }
 
         // GET: Clientes/Details/5
@@ -41,7 +41,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Sessao sessao = db.Sessaos.Find(id);
+                Sessao sessao = db.Sessao.Find(id);
                 if (sessao == null)
                 {
                     sucesso = false;
@@ -68,15 +68,14 @@ namespace Finis.Controllers
         }
 
         // POST: Sessoes/Create
-        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
-        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+       [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,nome,user_insert,user_update,date_insert,date_update")] Sessao sessao)
+        public ActionResult Create(Sessao sessao)
         {
             if (ModelState.IsValid)
             {
-                db.Sessaos.Add(sessao);
+                sessao.ConfigurarParaSalvar();
+                db.Sessao.Add(sessao);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -91,7 +90,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sessao sessao = db.Sessaos.Find(id);
+            Sessao sessao = db.Sessao.Find(id);
             if (sessao == null)
             {
                 return HttpNotFound();
@@ -104,10 +103,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,nome,user_insert,user_update,date_insert,date_update")] Sessao sessao)
+        public ActionResult Edit(Sessao sessao)
         {
             if (ModelState.IsValid)
             {
+                sessao.ConfigurarParaSalvar();
                 db.Entry(sessao).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -120,8 +120,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Sessao sessao = db.Sessaos.Find(id);
-                db.Sessaos.Remove(sessao);
+                Sessao sessao = db.Sessao.Find(id);
+                db.Sessao.Remove(sessao);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

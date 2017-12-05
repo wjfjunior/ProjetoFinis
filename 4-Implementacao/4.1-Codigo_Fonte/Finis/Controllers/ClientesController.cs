@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
 using Newtonsoft.Json;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -20,13 +22,31 @@ namespace Finis.Controllers
         // GET: Clientes
         public ActionResult Index()
         {
-            return View(db.Cliente.ToList());
+            return View(db.Cliente.ToList().OrderBy(c => c.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
             return View("Index", db.Cliente.Where(c => c.nome.Contains(pesquisar) || c.rg.Contains(pesquisar)).ToList());
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Cliente> clientes = new List<Cliente>();
+            clientes = db.Cliente.ToList();
+            
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Clientes.rpt"));
+            rd.SetDataSource(clientes);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+            
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Clientes.pdf");
         }
 
         [HttpGet]
@@ -44,7 +64,7 @@ namespace Finis.Controllers
 
         private void ConfiguraNomeCidade(Cliente cliente)
         {
-            if (cliente.endereco == null || cliente.enderecoId == null || cliente.endereco.id == 0)
+            if (cliente.endereco == null || cliente.endereco.id == 0)
             {
                 cliente.endereco = db.Endereco.Find(cliente.enderecoId);
             }
@@ -141,8 +161,10 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
                     return View(model);
                 }
+                model.ConfigurarParaSalvar();
                 db.Cliente.Add(model);
                 db.SaveChanges();
+                VerificaSaldo(model);
                 return RedirectToAction("Index");
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
@@ -179,12 +201,38 @@ namespace Finis.Controllers
             if (ModelState.IsValid)
             {
                 model.endereco.id = model.enderecoId;
+                VerificaSaldo(model);
+                model.ConfigurarParaSalvar();
                 db.Entry(model).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");
             return View(model);
+        }
+
+        public void VerificaSaldo(Cliente model)
+        {
+            if (model.id != null)
+            {
+                Cliente cliente = db.Cliente.Find(model.id);
+                if (cliente != null)
+                {
+                    if (cliente.saldoCreditoEspecial != model.saldoCreditoEspecial)
+                    {
+                        cliente.NovoSaldoEspecial(model.saldoCreditoEspecial);
+                        db.Entry(cliente).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    if (cliente.saldoCreditoParcial != model.saldoCreditoParcial)
+                    {
+                        cliente.NovoSaldoParcial(model.saldoCreditoParcial);
+                        db.Entry(cliente).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+            }
         }
 
         public void AtualizaSaldoEspecial(int? id, decimal? creditoEspecial)
@@ -209,20 +257,6 @@ namespace Finis.Controllers
                 if (cliente != null)
                 {
                     cliente.AtualizaSaldoParcial(creditoParcial.GetValueOrDefault());
-                    db.Entry(cliente).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        public void NovoSaldo(int? id, decimal creditoEspecial, decimal creditoParcial)
-        {
-            if (id != null)
-            {
-                Cliente cliente = db.Cliente.Find(id);
-                if (cliente != null)
-                {
-                    cliente.NovoSaldo(creditoEspecial, creditoParcial);
                     db.Entry(cliente).State = EntityState.Modified;
                     db.SaveChanges();
                 }

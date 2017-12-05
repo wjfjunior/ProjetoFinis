@@ -111,6 +111,7 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
                     return View(model);
                 }
+                model.ConfigurarParaSalvar();
                 db.Pais.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -139,12 +140,13 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,nome,sigla")] Pais pais)
+        public ActionResult Edit(Pais pais)
         {
             if (ModelState.IsValid)
             {
                 pais.nome = pais.nome.ToUpper();
                 pais.sigla = pais.sigla.ToUpper();
+                pais.ConfigurarParaSalvar();
                 db.Entry(pais).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

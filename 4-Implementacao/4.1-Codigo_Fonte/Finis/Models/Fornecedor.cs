@@ -7,18 +7,6 @@ using System.Web.Mvc;
 
 namespace Finis.Models
 {
-    public enum TipoFornecedor
-    {
-        [Display(Name = "Editora")]
-        EDITORA = 1,
-
-        [Display(Name = "Produto")]
-        PRODUTO = 2,
-
-        [Display(Name = "Serviço")]
-        SERVICO,
-    }
-
     public class Fornecedor : EntidadeAbstrata
     {
         [Display(Name = "Nome")]
@@ -27,7 +15,7 @@ namespace Finis.Models
 
         [Display(Name = "CNPJ")]
         [StringLength(50, ErrorMessage = "O número do documento é muito longo")]
-        //[Remote(action: "ValidaCPF", controller: "Fornecedor", ErrorMessage = "CPF Inválido")]
+        //[Remote(action: "ValidaCnpj", controller: "Fornecedores", ErrorMessage = "CNPJ Inválido!")]
         public string cnpj { get; set; }
         
         [Display(Name = "Telefone")]
@@ -38,9 +26,5 @@ namespace Finis.Models
         [DataType(DataType.EmailAddress, ErrorMessage = "Por favor insira um e-mail válido")]
         [StringLength(50, ErrorMessage = "O e-mail é muito longo")]
         public string email { get; set; }
-
-        [Display(Name = "Tipo de Fornecedor")]
-        [Required(ErrorMessage = "Por favor selecione uma opção")]
-        public TipoFornecedor tipoFornecedor { get; set; }
     }
 }

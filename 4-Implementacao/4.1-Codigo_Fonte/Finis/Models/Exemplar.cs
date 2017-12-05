@@ -25,15 +25,17 @@ namespace Finis.Models
         NAO = 2,
     }
 
-    public class Autor : Pessoa { }
-
-    public class Editora : Fornecedor
+    public class Autor : Pessoa
     {
-        public Editora()
+        public Autor()
         {
-            this.tipoFornecedor = TipoFornecedor.EDITORA;
+            this.exemplares = new HashSet<Exemplar>();
         }
+
+        public virtual ICollection<Exemplar> exemplares { get; set; }
     }
+
+    public class Editora : Fornecedor {}
 
     public class Idioma : EntidadeAbstrata
     {
@@ -62,18 +64,13 @@ namespace Finis.Models
         public string nome { get; set; }
     }
 
-    public class Exemplar : EntidadeAbstrata
+    public class Exemplar : Item
     {
         public Exemplar()
         {
             
         }
-
-        [Display(Name = "Título")]
-        [Required(ErrorMessage = "Por favor insira um título")]
-        [StringLength(30, ErrorMessage = "O título é muito longo")]
-        public string titulo { get; set; }
-
+        
         [Display(Name = "Conservação")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
         public Conservacao conservacao { get; set; }
@@ -92,28 +89,7 @@ namespace Finis.Models
             NullDisplayText = "Sem edição")]
         [Range(0, 100, ErrorMessage = "Valor inválido")]
         public int edicao { get; set; }
-
-        [Display(Name = "Preço de Compra")]
-        [Required(ErrorMessage = "Por favor insira um valor")]
-        [DisplayFormat(DataFormatString = "{0:n2}",
-            ApplyFormatInEditMode = true,
-            NullDisplayText = "Sem preço")]
-        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 500")]
-        public decimal precoCompra { get; set; }
-
-        [Display(Name = "Preço de Venda")]
-        [Required(ErrorMessage = "Por favor insira um valor")]
-        [DisplayFormat(DataFormatString = "{0:n2}",
-            ApplyFormatInEditMode = true,
-            NullDisplayText = "Sem preço")]
-        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 500")]
-        public decimal precoVenda { get; set; }
-
-        [Display(Name = "Descrição")]
-        [StringLength(200, ErrorMessage = "A descrição é muito longa")]
-        [DataType(DataType.MultilineText)]
-        public string descricao { get; set; }
-
+        
         [Display(Name = "Peso (Kg)")]
         [DisplayFormat(DataFormatString = "{0:n2}",
             ApplyFormatInEditMode = true,
@@ -123,22 +99,11 @@ namespace Finis.Models
 
         [Display(Name = "Disponibilizar para venda na internet?")]
         public VendaOnline vendaOnline { get; set; }
-
-        [Display(Name = "Quantidade")]
-        [DisplayFormat(DataFormatString = "{0}",
-            ApplyFormatInEditMode = true,
-            NullDisplayText = "Estoque vazio")]
-        [Required(ErrorMessage = "Por favor insira a quantidade disponível")]
-        [Range(0, 5000, ErrorMessage = "A quantidade deverá ser entre 0 e 5000")]
-        public int quantidade { get; set; }
-
+        
         [NotMapped]
         [Display(Name = "Autores")]
-        //[Required(ErrorMessage = "Por favor selecione um ou mais autores")]
         public string AutoresNome { get; set; }
-
-        //[InverseProperty("Exemplar")]
-        [ScriptIgnore]
+        
         public virtual ICollection<Autor> Autores { get; set; }
 
         [NotMapped]
@@ -151,7 +116,7 @@ namespace Finis.Models
         public int? editoraId { get; set; }
         [ForeignKey("editoraId")]
         public virtual Editora editora { get; set; }
-        
+
         [Display(Name = "Idioma")]
         [Required(ErrorMessage = "Por favor selecione um idioma")]
         public int? idiomaId { get; set; }

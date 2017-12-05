@@ -14,6 +14,7 @@ namespace Finis.DAL
         {
             this.Configuration.LazyLoadingEnabled = false;
             Database.SetInitializer<Contexto>(null);
+            //Database.SetInitializer<Contexto>(new DropCreateDatabaseAlways<Contexto>());
         }
 
         public DbSet<Avaliacao> Avaliacao { get; set; }
@@ -22,21 +23,23 @@ namespace Finis.DAL
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Cidade> Cidade { get; set; }
         public DbSet<Estado> Estado { get; set; }
-        public DbSet<Exemplar> Exemplar { get; set; }
         public DbSet<Fornecedor> Fornecedor { get; set; }
         public DbSet<Autor> Autor { get; set; }
         public DbSet<Transacao> Transacao { get; set; }
-        public DbSet<Produto> Produto { get; set; }
         public DbSet<UnidadeMedida> UnidadeMedida { get; set; }
         public DbSet<Marca> Marca { get; set; }
-        public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Pedido> Pedido { get; set; }
-        public DbSet<Servico> Servico { get; set; }
+        public DbSet<Item> Item { get; set; }
+        public DbSet<Idioma> Idioma { get; set; }
+        public DbSet<Sessao> Sessao { get; set; }
+        public DbSet<Venda> Venda { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Conventions.Remove();
+
             modelBuilder.Entity<Avaliacao>().ToTable("Avaliacoes");
-            modelBuilder.Entity<Exemplar>().ToTable("Exemplares");
             modelBuilder.Entity<Fornecedor>().ToTable("Fornecedores");
             modelBuilder.Entity<Transacao>().ToTable("Transacoes");
             modelBuilder.Entity<Autor>().ToTable("Autores");
@@ -44,21 +47,16 @@ namespace Finis.DAL
             modelBuilder.Entity<Estado>().ToTable("Estados");
             modelBuilder.Entity<Endereco>().ToTable("Enderecos");
             modelBuilder.Entity<Sessao>().ToTable("Sessoes");
-            modelBuilder.Entity<Editora>().ToTable("Editoras");
-            modelBuilder.Entity<Produto>().ToTable("Produtos");
             modelBuilder.Entity<UnidadeMedida>().ToTable("UnidadesMedida");
             modelBuilder.Entity<Marca>().ToTable("Marcas");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
             modelBuilder.Entity<Pedido>().ToTable("Pedidos");
-            modelBuilder.Entity<Servico>().ToTable("Servicos");
+            modelBuilder.Entity<Item>().ToTable("Itens");
+            modelBuilder.Entity<Venda>().ToTable("Vendas");
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public System.Data.Entity.DbSet<Finis.Models.Idioma> Idiomas { get; set; }
-
-        public System.Data.Entity.DbSet<Finis.Models.Sessao> Sessaos { get; set; }
-
-        public System.Data.Entity.DbSet<Finis.Models.Editora> Fornecedors { get; set; }
+        
     }
 }

@@ -36,8 +36,17 @@
     function preencheModalDetalhes(obj) {
 
         document.getElementById('nome').innerHTML = obj.nome;
-        document.getElementById('valor').innerHTML = obj.valor;
-        document.getElementById('descricao').innerHTML = obj.descricao;
+        document.getElementById('precoCompra').innerHTML = SubstituirCampoNulo(obj.precoCompra);
+        document.getElementById('precoVenda').innerHTML = SubstituirCampoNulo(obj.precoVenda);
+        document.getElementById('descricao').innerHTML = SubstituirCampoNulo(obj.descricao);
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null || campo == "")
+            return " - "
+        else
+            return campo;
     }
 
 </script>
@@ -73,7 +82,10 @@
                 @Html.DisplayNameFor(model => model.nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.valor)
+                @Html.DisplayNameFor(model => model.precoCompra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.precoVenda)
             </th>
             <th>Opções</th>
         </tr>
@@ -85,7 +97,10 @@
                 @Html.DisplayFor(modelItem => item.nome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.valor)
+                @Html.DisplayFor(modelItem => item.precoCompra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.precoVenda)
             </td>
             <td>
                 <a class="btn-floating blue" href="@Url.Action("Edit", "Servicos", new { id = @item.id })"><i class="material-icons">mode_edit</i></a>
@@ -108,16 +123,22 @@
             <div class="col s6">
                 <label>Nome:</label>
             </div>
-            <div class="col s6">
-                <label>Valor:</label>
+            <div class="col s3">
+                <label>Preço de venda:</label>
+            </div>
+            <div class="col s3">
+                <label>Preço de Compra:</label>
             </div>
         </div>
         <div class="row" id="linha-detalhes">
             <div class="col s6">
                 <label class="texto-detalhes" id="nome">.</label>
             </div>
-            <div class="col s6">
-                <label class="texto-detalhes" id="valor">.</label>
+            <div class="col s3">
+                <label class="texto-detalhes" id="precoVenda">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="precoCompra">.</label>
             </div>
         </div>
 

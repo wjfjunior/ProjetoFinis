@@ -19,14 +19,14 @@ namespace Finis.Controllers
         // GET: Idiomas
         public ActionResult Index()
         {
-            var idiomas = db.Idiomas.Include(i => i.pais);
+            var idiomas = db.Idioma.Include(i => i.pais);
             return View(idiomas.ToList().OrderBy(i => i.nome));
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Idiomas.Include(i => i.pais).Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
+            return View("Index", db.Idioma.Include(i => i.pais).Where(c => c.nome.Contains(pesquisar)).ToList().OrderBy(i => i.nome));
         }
 
         [HttpGet]
@@ -55,7 +55,7 @@ namespace Finis.Controllers
         {
             List<Idioma> resultado = new List<Idioma>();
 
-            resultado = db.Idiomas.Where(e => e.nome == idioma.nome && e.paisId == idioma.paisId).ToList();
+            resultado = db.Idioma.Where(e => e.nome == idioma.nome && e.paisId == idioma.paisId).ToList();
             if (resultado.Count() > 0)
             {
                 return true;
@@ -77,7 +77,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Idioma idioma = db.Idiomas.Find(id);
+                Idioma idioma = db.Idioma.Find(id);
                 if (idioma == null)
                 {
                     sucesso = false;
@@ -85,7 +85,7 @@ namespace Finis.Controllers
                 }
                 else
                 {
-                    if(idioma.pais == null)
+                    if (idioma.pais == null)
                     {
                         idioma.pais = db.Pais.Find(idioma.paisId);
                     }
@@ -123,7 +123,8 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Ja existe um registro com os valores informados!";
                     return View(idioma);
                 }
-                db.Idiomas.Add(idioma);
+                idioma.ConfigurarParaSalvar();
+                db.Idioma.Add(idioma);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -139,7 +140,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Idioma idioma = db.Idiomas.Find(id);
+            Idioma idioma = db.Idioma.Find(id);
             if (idioma == null)
             {
                 return HttpNotFound();
@@ -159,6 +160,7 @@ namespace Finis.Controllers
             if (ModelState.IsValid)
             {
                 idioma.nome = idioma.nome.ToUpper();
+                idioma.ConfigurarParaSalvar();
                 db.Entry(idioma).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -172,8 +174,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Idioma idioma = db.Idiomas.Find(id);
-                db.Idiomas.Remove(idioma);
+                Idioma idioma = db.Idioma.Find(id);
+                db.Idioma.Remove(idioma);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

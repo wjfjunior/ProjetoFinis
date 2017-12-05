@@ -30,7 +30,7 @@ namespace Finis.Models
         public Pedido()
         {
             this.dataPedido = DateTime.Now;
-            this.Exemplares = db.Exemplar.OrderBy(e => e.titulo).ToList();
+            this.Exemplares = db.Item.OfType<Exemplar>().OrderBy(e => e.nome).ToList();
             this.situacao = situacaoPedido.PENDENTE;
         }
 

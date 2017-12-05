@@ -48,10 +48,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,user_insert,user_update,date_insert,date_update")] Endereco endereco)
+        public ActionResult Create(Endereco endereco)
         {
             if (ModelState.IsValid)
             {
+                endereco.ConfigurarParaSalvar();
                 db.Endereco.Add(endereco);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -80,10 +81,11 @@ namespace Finis.Controllers
         // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,user_insert,user_update,date_insert,date_update")] Endereco endereco)
+        public ActionResult Edit(Endereco endereco)
         {
             if (ModelState.IsValid)
             {
+                endereco.ConfigurarParaSalvar();
                 db.Entry(endereco).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

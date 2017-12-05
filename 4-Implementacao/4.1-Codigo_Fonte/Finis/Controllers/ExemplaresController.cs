@@ -19,7 +19,7 @@ namespace Finis.Controllers
         [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Index()
         {
-            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
+            var exemplares = db.Item.OfType<Exemplar>().Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.nome);
             return View(exemplares.ToList());
         }
 
@@ -27,12 +27,12 @@ namespace Finis.Controllers
         [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Exemplar
+            return View("Index", db.Item.OfType<Exemplar>()
                 .Include(e => e.editora)
                 .Include(e => e.idioma)
                 .Include(e => e.sessao)
-                .Where(c => c.titulo.Contains(pesquisar) || c.isbn.Contains(pesquisar))
-                .OrderBy(e => e.titulo)
+                .Where(c => c.nome.Contains(pesquisar) || c.isbn.Contains(pesquisar))
+                .OrderBy(e => e.nome)
                 .ToList());
         }
 
@@ -40,7 +40,7 @@ namespace Finis.Controllers
         [Authorize(Roles = "Administrador, Funcionário, Cliente")]
         public ActionResult Consulta()
         {
-            var exemplares = db.Exemplar.Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.titulo);
+            var exemplares = db.Item.OfType<Exemplar>().Include(e => e.editora).Include(e => e.idioma).Include(e => e.sessao).OrderBy(e => e.nome);
             return View(exemplares.ToList());
         }
 
@@ -48,20 +48,19 @@ namespace Finis.Controllers
         [Authorize(Roles = "Administrador, Funcionário, Cliente")]
         public ActionResult Consulta(string pesquisar)
         {
-            return View(db.Exemplar
+            return View(db.Item.OfType<Exemplar>()
                 .Include(e => e.editora)
                 .Include(e => e.idioma)
                 .Include(e => e.sessao)
-                .Where(c => c.titulo.Contains(pesquisar) || c.isbn.Contains(pesquisar))
-                .OrderBy(e => e.titulo)
+                .Where(c => c.nome.Contains(pesquisar) || c.isbn.Contains(pesquisar))
+                .OrderBy(e => e.nome)
                 .ToList());
         }
 
         [HttpGet]
         public JsonResult DropboxEditoras()
         {
-            var listaEditora = db.Fornecedors
-                .Where(e => e.tipoFornecedor == TipoFornecedor.EDITORA)
+            var listaEditora = db.Fornecedor.OfType<Editora>()
                 .Select(p => new { p.id, p.nome })
                 .OrderBy(p => p.nome)
                 .ToArray();
@@ -78,7 +77,7 @@ namespace Finis.Controllers
         {
             if (exemplar.editora == null)
             {
-                exemplar.editora = db.Fornecedors.Find(exemplar.editoraId);
+                exemplar.editora = (Editora)db.Fornecedor.Find(exemplar.editoraId);
             }
             exemplar.editoraNome = exemplar.editora.id + " - " + exemplar.editora.nome;
         }
@@ -87,12 +86,12 @@ namespace Finis.Controllers
         {
             List<Exemplar> resultado = new List<Exemplar>();
 
-            resultado = db.Exemplar.Where(e => e.isbn == exemplar.isbn).ToList();
+            resultado = db.Item.OfType<Exemplar>().Where(e => e.isbn == exemplar.isbn).ToList();
             if (resultado.Count() > 0)
             {
                 return true;
             }
-            
+
             return false;
         }
 
@@ -109,7 +108,7 @@ namespace Finis.Controllers
             }
             else
             {
-                Exemplar exemplar = db.Exemplar.Find(id);
+                Exemplar exemplar = (Exemplar)db.Item.Find(id);
                 if (exemplar == null)
                 {
                     sucesso = false;
@@ -137,7 +136,7 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Editora editora = db.Fornecedors.Find(id);
+                Editora editora = (Editora)db.Fornecedor.Find(id);
                 return editora;
             }
             return new Editora();
@@ -147,7 +146,7 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Idioma idioma = db.Idiomas.Find(id);
+                Idioma idioma = db.Idioma.Find(id);
                 return idioma;
             }
             return new Idioma();
@@ -157,7 +156,7 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Sessao sessao = db.Sessaos.Find(id);
+                Sessao sessao = db.Sessao.Find(id);
                 return sessao;
             }
             return new Sessao();
@@ -167,9 +166,9 @@ namespace Finis.Controllers
         [Authorize(Roles = "Administrador, Funcionário")]
         public ActionResult Create()
         {
-            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome");
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome");
+            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "nome");
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome");
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome");
             return View();
         }
 
@@ -188,14 +187,15 @@ namespace Finis.Controllers
                     ViewBag.Erro = "Ja existe um registro com o ISBN informado!";
                     return View(exemplar);
                 }
-                db.Exemplar.Add(exemplar);
+                exemplar.ConfigurarParaSalvar();
+                db.Item.Add(exemplar);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "nome");
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -207,7 +207,7 @@ namespace Finis.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Exemplar exemplar = db.Exemplar.Find(id);
+            Exemplar exemplar = (Exemplar)db.Item.Find(id);
             if (exemplar == null)
             {
                 return HttpNotFound();
@@ -215,9 +215,9 @@ namespace Finis.Controllers
 
             this.ConfiguraNomeEditora(exemplar);
 
-            ViewBag.Editoras = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome", "Editora");
-            ViewBag.Idiomas = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.Sessoes = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.Editoras = new SelectList(db.Fornecedor, "id", "nome", "Editora");
+            ViewBag.Idiomas = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.Sessoes = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
 
             exemplar.editora = this.RecuperaEditora(exemplar.editoraId);
             exemplar.idioma = this.RecuperaIdioma(exemplar.idiomaId);
@@ -236,13 +236,14 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                exemplar.ConfigurarParaSalvar();
                 db.Entry(exemplar).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.editoraId = new SelectList(db.Fornecedor.Where(f => f.tipoFornecedor == TipoFornecedor.EDITORA), "id", "nome");
-            ViewBag.idiomaId = new SelectList(db.Idiomas, "id", "nome", exemplar.idiomaId);
-            ViewBag.sessaoId = new SelectList(db.Sessaos, "id", "nome", exemplar.sessaoId);
+            ViewBag.editoraId = new SelectList(db.Fornecedor, "id", "nome");
+            ViewBag.idiomaId = new SelectList(db.Idioma, "id", "nome", exemplar.idiomaId);
+            ViewBag.sessaoId = new SelectList(db.Sessao, "id", "nome", exemplar.sessaoId);
             return View(exemplar);
         }
 
@@ -251,8 +252,8 @@ namespace Finis.Controllers
         {
             if (id != null)
             {
-                Exemplar exemplar = db.Exemplar.Find(id);
-                db.Exemplar.Remove(exemplar);
+                Exemplar exemplar = (Exemplar)db.Item.Find(id);
+                db.Item.Remove(exemplar);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

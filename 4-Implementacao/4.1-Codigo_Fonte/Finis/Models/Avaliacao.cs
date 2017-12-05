@@ -155,17 +155,11 @@ namespace Finis.Models
         {
             if(this.creditoEspecial != 0)
             {
-                TransacoesController transacaoCreditoEspecial = new TransacoesController();
-                transacaoCreditoEspecial.GeraTransacaoEntrada(this.creditoEspecial, TipoCredito.ESPECIAL, this.clienteId);
-
                 ClientesController clientesController = new ClientesController();
                 clientesController.AtualizaSaldoEspecial(this.clienteId, this.creditoEspecial);
             }
             if(this.creditoParcial != 0)
             {
-                TransacoesController transacaoCreditoParcial = new TransacoesController();
-                transacaoCreditoParcial.GeraTransacaoEntrada(this.creditoParcial, TipoCredito.PARCIAL, this.clienteId);
-
                 ClientesController clientesController = new ClientesController();
                 clientesController.AtualizaSaldoParcial(this.clienteId, this.creditoParcial);
             }

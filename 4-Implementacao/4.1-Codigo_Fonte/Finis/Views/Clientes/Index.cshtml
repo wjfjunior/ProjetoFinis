@@ -83,10 +83,14 @@
         </div>
     </div>
 }
-<div class="fixed-action-btn">
+<div class="fixed-action-btn vertical">
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Clientes")">
         <i class="material-icons">add</i>
     </a>
+    <ul>
+        <li><a class="btn-floating btn-large green" href="@Url.Action("Exportar", "Clientes")", target = "_blank">
+            <i class="material-icons">print</i></a></li>
+    </ul>
 </div>
 <table class="highlight">
     <thead>
