@@ -121,13 +121,38 @@ namespace Finis.Controllers
         }
 
         [HttpGet]
-        public JsonResult DropboxClientes()
+        public JsonResult DropboxItens()
         {
-            var listaClientes = db.Cliente.Select(e => new { e.id, e.nome, e.rg }).OrderBy(e => e.nome).ToArray();
+            var listaItens = db.Item.Select(e => new { e.id, e.nome}).OrderBy(e => e.nome).ToArray();
 
             var obj = new
             {
-                lista = listaClientes
+                lista = listaItens
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult RecuperaCreditosCliente(int? id)
+        {
+            string creditoEspecial = "";
+            string creditoParcial = "";
+
+            if (id != null)
+            {
+                var cliente = db.Cliente.Find(id);
+                if(cliente != null)
+                {
+                    creditoEspecial = cliente.saldoCreditoEspecialString;
+                    creditoParcial = cliente.saldoCreditoParcialString;
+                }
+            }
+            
+            var obj = new
+            {
+                creditoEspecial = creditoEspecial,
+                creditoParcial = creditoParcial
             };
 
             return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
@@ -145,6 +170,7 @@ namespace Finis.Controllers
         // GET: Vendas/Create
         public ActionResult Create()
         {
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome");
             return View(new Venda());
         }
 
@@ -162,7 +188,8 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
+            this.ConfiguraNomeCliente(venda);
             return View(venda);
         }
 
@@ -178,6 +205,8 @@ namespace Finis.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
+            this.ConfiguraNomeCliente(venda);
             return View(venda);
         }
 
@@ -195,6 +224,8 @@ namespace Finis.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
+            this.ConfiguraNomeCliente(venda);
             return View(venda);
         }
 

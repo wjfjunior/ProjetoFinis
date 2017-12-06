@@ -13,10 +13,6 @@
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
-                @Html.HiddenFor(model => model.date_insert)
-                @Html.HiddenFor(model => model.user_update)
-                @Html.HiddenFor(model => model.id)
-                @Html.HiddenFor(model => model.enderecoId)
                 @Html.HiddenFor(model => model.endereco.cidadeId, new { id = "cidadeId" })
 
                 <div class="row">

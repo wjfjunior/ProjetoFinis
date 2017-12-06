@@ -1,8 +1,49 @@
 ﻿@model Finis.Models.Venda
 
+@using Finis.Models
+
 @{
     ViewBag.Title = "Nova Venda";
 }
+
+<script type="text/javascript">
+
+    function SelectedIndexChanged() {
+        console.log("Funcionou");
+        console.log($('#idCliente').val());
+
+        var idCliente = $('#idCliente').val();
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("RecuperaCreditosCliente", "Vendas")',
+                data: { id: idCliente },
+                dataType: 'json',
+                success: function (data) {
+
+                    $('#credEsp').val(data.creditoEspecial);
+                    $('#credParc').val(data.creditoParcial);
+                }
+            });
+    }
+
+    function AdicionaLista(idItem) {
+
+        $.ajax({
+                type: 'GET',
+                url: '@Url.Action("AdicionarItem", "Itens")',
+                data: { id: idItem },
+                dataType: 'html',
+                success: function (data) {
+
+                    var divItens = $("#divItens");
+                    divItens.html(data);
+                }
+            });
+
+    }
+
+</script>
 
 @using (Html.BeginForm())
 {
@@ -12,18 +53,37 @@
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
         @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
+        @Html.Hidden("itemId", new { id = "itemId" })
 
         <form class="col s12">
             <div class="row">
-                <div class="input-field col s12">
-                    @Html.EditorFor(model => model.clienteNome, new { htmlAttributes = new { @type = "text", @id = "clienteNome", @class = "autocomplete" } })
-                    @Html.LabelFor(model => model.clienteNome)
-                    @Html.ValidationMessageFor(model => model.clienteNome, "", new { @class = "validate" })
+                <div class="input-field col s8">
+                    @Html.DropDownListFor(model => model.clienteId, (SelectList)ViewBag.Clientes, "Cliente", htmlAttributes: new { onchange = "SelectedIndexChanged()", @id = "idCliente", @class = "validate" })
+                    @Html.ValidationMessageFor(model => model.clienteId, "", new { @class = "text-danger" })
+                </div>
+                <div class="input-field col s2">
+                    @Html.Label("Crédito especial", htmlAttributes: new { @id = "lblcredEsp", @class = "validate" })
+                    <input type="text" name="credEsp" id="credEsp" readonly>
+                </div>
+                <div class="input-field col s2">
+                    @Html.Label("Crédito parcial", htmlAttributes: new { @id = "lblcredParc", @class = "validate" })
+                    <input type="text" name="credParc" id="credParc" readonly>
                 </div>
             </div>
-
-            <!--INSERIR LISTA DE ITENS-->
-
+            <div class="row">
+                <div class="input-field col s12">
+                    @Html.Editor("item", new { htmlAttributes = new { @type = "text", @id = "item", @class = "autocomplete" } })
+                    @Html.Label("Item")
+                </div>
+            </div>
+            <div class="row">
+                <div id="divItens" class="input-field col s12">
+                    @{
+                        Html.RenderPartial("~/Views/Itens/ListarItens.cshtml", Model.itens);
+                    }
+                </div>
+            </div>
+            <br /><br /><br />
             <div class="row">
                 <div class="input-field col s3">
                     @{ Html.EnableClientValidation(false); }
@@ -110,7 +170,7 @@
                     Voltar
                 </button>
                 <button class="btn waves-effect waves-light" type="submit" name="action">
-                    Encerrar   
+                    Encerrar
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                 </button>
             </div>
@@ -148,13 +208,13 @@
 
             $.ajax({
                 type: 'GET',
-                url: '@Url.Action("DropboxClientes", "Vendas")',
+                url: '@Url.Action("DropboxItens", "Vendas")',
                 success: function (response) {
                     var resultado = JSON.parse(response);
 
                     for (i = 0; i < resultado.lista.length; i++)
                     {
-                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome + " - " + resultado.lista[i].rg] = null;
+                        dados[resultado.lista[i].id + " - " + resultado.lista[i].nome] = null;
                     }
 
                     $('input.autocomplete').autocomplete({
@@ -162,7 +222,10 @@
                         limit: 5,
                         onAutocomplete: function (val) {
 
-                            $('#clienteId').val(RecuperaID(val));
+                            $('#itemId').val(RecuperaID(val));
+                            console.log($('#itemId').val());
+                            AdicionaLista($('#itemId').val());
+                            $('#item').val("");
                         },
                     });
                 }
@@ -196,7 +259,7 @@
 
         window.onload = function () {
             document.getElementById("formaPagamento").onchange = function () {
-                
+
             }
         }
 

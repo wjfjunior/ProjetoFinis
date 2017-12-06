@@ -11,7 +11,7 @@ namespace Finis.Models
     {
         public Item()
         {
-
+            this.vendas = new HashSet<Venda>();
         }
 
         [Display(Name = "Nome")]
@@ -63,9 +63,7 @@ namespace Finis.Models
         [Range(0, 5000, ErrorMessage = "O estoque mínimo deverá ser entre 0 e 5000")]
         public int estoqueMinimo { get; set; }
 
-        public int VendaId { get; set; }
-        [ForeignKey("VendaId")]
-        public virtual Venda venda { get; set; }
+        public virtual ICollection<Venda> vendas { get; set; }
 
     }
 }

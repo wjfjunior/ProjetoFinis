@@ -104,8 +104,8 @@ namespace Finis.Models
         [Display(Name = "Autores")]
         public string AutoresNome { get; set; }
         
-        public virtual ICollection<Autor> Autores { get; set; }
-
+        public virtual ICollection<Autor> autores { get; set; }
+        
         [NotMapped]
         [Display(Name = "Editora")]
         [Required(ErrorMessage = "Por favor selecione uma editora")]

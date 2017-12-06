@@ -203,8 +203,15 @@ namespace Finis.Controllers
                 model.endereco.id = model.enderecoId;
                 VerificaSaldo(model);
                 model.ConfigurarParaSalvar();
-                db.Entry(model).State = EntityState.Modified;
+                
+                var local = db.Set<Cliente>()
+                         .Local
+                         .FirstOrDefault(f => f.id == model.id);
+
+                db.Entry(local).State = System.Data.Entity.EntityState.Detached;
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                
                 return RedirectToAction("Index");
             }
             ViewBag.Cidades = new SelectList(db.Cidade, "Id", "Nome", "Estado");

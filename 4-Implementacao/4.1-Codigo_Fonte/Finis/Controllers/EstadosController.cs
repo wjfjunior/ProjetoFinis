@@ -19,13 +19,13 @@ namespace Finis.Controllers
         // GET: Estados
         public ActionResult Index()
         {
-            return View(db.Estado.OrderBy(e => e.nome).ToList());
+            return View(db.Estado.Include(p => p.pais).OrderBy(e => e.nome).ToList());
         }
 
         [HttpPost]
         public ActionResult Index(string pesquisar)
         {
-            return View("Index", db.Estado.Where(c => c.nome.Contains(pesquisar)).ToList());
+            return View("Index", db.Estado.Include(p => p.pais).Where(c => c.nome.Contains(pesquisar)).ToList());
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace Finis.Controllers
             {
                 Pais pais = new Pais();
                 pais.id = estado.paisId;
-                estado.pais = db.Pais.Find(pais);
+                estado.pais = db.Pais.Find(pais.id);
             }
             estado.paisNome = estado.pais.id + " - " + estado.pais.nome;
         }

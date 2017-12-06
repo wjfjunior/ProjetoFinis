@@ -193,6 +193,7 @@
     <Compile Include="Controllers\FornecedoresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdiomasController.cs" />
+    <Compile Include="Controllers\ItensController.cs" />
     <Compile Include="Controllers\MarcasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
     <Compile Include="Controllers\PedidosController.cs" />
@@ -210,6 +211,10 @@
     <Compile Include="Migrations\201712050125578_ajuste_vendas.cs" />
     <Compile Include="Migrations\201712050125578_ajuste_vendas.Designer.cs">
       <DependentUpon>201712050125578_ajuste_vendas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712060200491_alteracao_venda.cs" />
+    <Compile Include="Migrations\201712060200491_alteracao_venda.Designer.cs">
+      <DependentUpon>201712060200491_alteracao_venda.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Venda.cs" />
@@ -322,7 +327,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="CRRuntime_32bit_13_0_12.msi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\ProjetoFinis - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ProjetoFinis - Web Deploy.pubxml" />
@@ -440,6 +445,7 @@
     <Content Include="Views\Vendas\Create.cshtml" />
     <Content Include="Views\Vendas\Details.cshtml" />
     <Content Include="Views\Vendas\Index.cshtml" />
+    <Content Include="Views\Itens\ListarItens.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -454,6 +460,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712050125578_ajuste_vendas.resx">
       <DependentUpon>201712050125578_ajuste_vendas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712060200491_alteracao_venda.resx">
+      <DependentUpon>201712060200491_alteracao_venda.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Relatorios\Clientes.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

@@ -54,7 +54,7 @@
                     @Html.ValidationMessageFor(model => model.estoqueMinimo, "", new { @class = "validate" })
                 </div>
                 <div class="input-field col s4">
-                    @Html.DropDownListFor(model => model.unidadeMedidaId, (SelectList)ViewBag.Sessoes, "Sessão", htmlAttributes: new { @class = "validate" })
+                    @Html.DropDownListFor(model => model.unidadeMedidaId, (SelectList)ViewBag.Sessoes, "Unidade de medida", htmlAttributes: new { @class = "validate" })
                     @Html.ValidationMessageFor(model => model.unidadeMedidaId, "", new { @class = "validate" })
                 </div>
             </div>

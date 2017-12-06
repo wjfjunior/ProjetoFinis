@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Finis.Models
     {
         public Venda()
         {
-            this.itens = new HashSet<Item>();
+            this.itens = new Collection<Item>();
             this.formaPagamento = FormaPagamento.DINHEIRO;
             this.dataCompra = DateTime.Now;
             this.creditoEspecial = 0;
@@ -90,9 +91,8 @@ namespace Finis.Models
         [Display(Name = "Forma de Pagamento")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
         public FormaPagamento formaPagamento { get; set; }
-
-        [ForeignKey("VendaId")]
-        public ICollection<Item> itens { get; set; }
+        
+        public virtual ICollection<Item> itens { get; set; }
 
         [NotMapped]
         [Display(Name = "Cliente")]
