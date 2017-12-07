@@ -11,7 +11,7 @@ namespace Finis.Models
     {
         public Item()
         {
-            this.vendas = new HashSet<Venda>();
+            this.quantidadeDisponivel = this.quantidadeEstoque;
         }
 
         [Display(Name = "Nome")]
@@ -40,21 +40,16 @@ namespace Finis.Models
         [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
         public decimal precoVenda { get; set; }
 
-        [Display(Name = "Preço Total")]
-        [Required(ErrorMessage = "Por favor insira um valor")]
-        [DisplayFormat(DataFormatString = "{0:n2}",
-            ApplyFormatInEditMode = true,
-            NullDisplayText = "Sem preço")]
-        [Range(0, 500, ErrorMessage = "O preço deverá ser entre 0 e 5000")]
-        public decimal precoTotal { get; set; }
-
         [Display(Name = "Quantidade")]
         [DisplayFormat(DataFormatString = "{0}",
             ApplyFormatInEditMode = true,
             NullDisplayText = "Estoque vazio")]
         [Required(ErrorMessage = "Por favor insira a quantidade disponível")]
         [Range(0, 5000, ErrorMessage = "A quantidade deverá ser entre 0 e 5000")]
-        public int quantidade { get; set; }
+        public int quantidadeEstoque { get; set; }
+
+        [NotMapped]
+        public int quantidadeDisponivel { get; set; }
 
         [Display(Name = "Estoque mínimo")]
         [DisplayFormat(DataFormatString = "{0}",
@@ -62,8 +57,6 @@ namespace Finis.Models
             NullDisplayText = "Zero")]
         [Range(0, 5000, ErrorMessage = "O estoque mínimo deverá ser entre 0 e 5000")]
         public int estoqueMinimo { get; set; }
-
-        public virtual ICollection<Venda> vendas { get; set; }
 
     }
 }

@@ -34,6 +34,7 @@ namespace Finis.DAL
         public DbSet<Idioma> Idioma { get; set; }
         public DbSet<Sessao> Sessao { get; set; }
         public DbSet<Venda> Venda { get; set; }
+        public DbSet<ItemVenda> ItemVenda { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -53,6 +54,7 @@ namespace Finis.DAL
             modelBuilder.Entity<Pedido>().ToTable("Pedidos");
             modelBuilder.Entity<Item>().ToTable("Itens");
             modelBuilder.Entity<Venda>().ToTable("Vendas");
+            modelBuilder.Entity<ItemVenda>().ToTable("ItensVenda");
 
             base.OnModelCreating(modelBuilder);
         }

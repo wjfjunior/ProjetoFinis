@@ -123,7 +123,10 @@ namespace Finis.Controllers
         [HttpGet]
         public JsonResult DropboxItens()
         {
-            var listaItens = db.Item.Select(e => new { e.id, e.nome}).OrderBy(e => e.nome).ToArray();
+            var listaItens = db.Item.Where((e => e.quantidadeEstoque > 0))
+                .Select(e => new { e.id, e.nome})
+                .OrderBy(e => e.nome)
+                .ToArray();
 
             var obj = new
             {
@@ -170,6 +173,7 @@ namespace Finis.Controllers
         // GET: Vendas/Create
         public ActionResult Create()
         {
+            Session["ListaItens"] = new List<ItemVenda>();
             ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome");
             return View(new Venda());
         }

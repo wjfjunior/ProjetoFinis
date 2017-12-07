@@ -193,7 +193,7 @@
     <Compile Include="Controllers\FornecedoresController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IdiomasController.cs" />
-    <Compile Include="Controllers\ItensController.cs" />
+    <Compile Include="Controllers\ItensVendaController.cs" />
     <Compile Include="Controllers\MarcasController.cs" />
     <Compile Include="Controllers\PaisesController.cs" />
     <Compile Include="Controllers\PedidosController.cs" />
@@ -216,7 +216,12 @@
     <Compile Include="Migrations\201712060200491_alteracao_venda.Designer.cs">
       <DependentUpon>201712060200491_alteracao_venda.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712062352422_modificacao-vendas.cs" />
+    <Compile Include="Migrations\201712062352422_modificacao-vendas.Designer.cs">
+      <DependentUpon>201712062352422_modificacao-vendas.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ItemVenda.cs" />
     <Compile Include="Models\Venda.cs" />
     <Compile Include="DAL\Contexto.cs" />
     <Compile Include="DAL\Inicializador.cs" />
@@ -445,7 +450,7 @@
     <Content Include="Views\Vendas\Create.cshtml" />
     <Content Include="Views\Vendas\Details.cshtml" />
     <Content Include="Views\Vendas\Index.cshtml" />
-    <Content Include="Views\Itens\ListarItens.cshtml" />
+    <Content Include="Views\ItensVenda\ListarItens.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -463,6 +468,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712060200491_alteracao_venda.resx">
       <DependentUpon>201712060200491_alteracao_venda.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712062352422_modificacao-vendas.resx">
+      <DependentUpon>201712062352422_modificacao-vendas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Relatorios\Clientes.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

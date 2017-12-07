@@ -9,8 +9,6 @@
 <script type="text/javascript">
 
     function SelectedIndexChanged() {
-        console.log("Funcionou");
-        console.log($('#idCliente').val());
 
         var idCliente = $('#idCliente').val();
 
@@ -29,18 +27,148 @@
 
     function AdicionaLista(idItem) {
 
-        $.ajax({
+         $.ajax({
                 type: 'GET',
-                url: '@Url.Action("AdicionarItem", "Itens")',
+                url: '@Url.Action("QuantidadeMaiorQueEstoque", "ItensVenda")',
+                data: { id: idItem },
+                dataType: 'json',
+                success: function (data) {
+
+                    obj = data;
+                    if (obj.Resultado) {
+                        alert("Quantidade maior que o estoque atual!");
+                        return;
+                    } else {
+
+                        $.ajax({
+                type: 'GET',
+                url: '@Url.Action("AdicionarItem", "ItensVenda")',
                 data: { id: idItem },
                 dataType: 'html',
                 success: function (data) {
 
-                    var divItens = $("#divItens");
-                    divItens.html(data);
+                    $('#divItens').html(data);
                 }
             });
 
+                    }
+                }
+        });
+    }
+
+    function EstoqueVazio(idItem) {
+
+        $.ajax({
+                type: 'GET',
+                url: '@Url.Action("QuantidadeMaiorQueEstoque", "ItensVenda")',
+                data: { id: idItem },
+                dataType: 'json',
+                success: function (data) {
+
+                    obj = data;
+                    if (obj.Resultado) {
+                        return true;
+                    }
+                }
+        });
+        return false
+    }
+
+    function RemoverLista(indice) {
+
+        console.log(indice);
+
+        $.ajax({
+                type: 'GET',
+                url: '@Url.Action("RemoverItem", "ItensVenda")',
+                data: { indice: indice },
+                dataType: 'html',
+                success: function (data) {
+
+                    $('#divItens').html(data);
+                }
+            });
+    }
+
+    function EditarLista(indice) {
+
+        var qtdadeEntrada = prompt("Por favor insira a quantidade do item:", "1");
+        if (isNaN(qtdadeEntrada))
+        {
+            alert("Quantidade inválida!");
+            return;
+        }
+        else
+        {
+            VerificaQuantidade(indice);
+
+            qtdadeEntrada = parseInt(qtdadeEntrada);
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("EditarItem", "ItensVenda")',
+                data: { indice: indice, quantidade: qtdadeEntrada },
+                dataType: 'html',
+                success: function (data) {
+
+                    $('#divItens').html(data);
+                }
+            });
+        }
+    }
+
+    function VerificaQuantidade(indice, qtdadeEntrada) {
+
+        qtdadeEntrada = parseInt(qtdadeEntrada);
+
+        $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("VerificaQuantidadeItem", "ItensVenda")",
+                 data: { indice: indice },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = dados;
+                     console.log(obj.Resultado);
+                     if (obj.Resultado) {
+                         alert("Quantidade maior que o estoque atual!");
+                         return;
+                     }
+                 }
+        });
+
+        return false;
+    }
+
+    function carregaDetalhes(id) {
+
+             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("Detalhes", "ItensVenda")",
+                 data: { id: id },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     preencheModalDetalhes(obj);
+                 }
+        });
+    }
+
+    function preencheModalDetalhes(obj) {
+
+        document.getElementById('nome').innerHTML = obj.nome;
+        document.getElementById('precoCompra').innerHTML = SubstituirCampoNulo(obj.precoCompra);
+        document.getElementById('precoVenda').innerHTML = SubstituirCampoNulo(obj.precoVenda);
+        document.getElementById('quantidadeEstoque').innerHTML = SubstituirCampoNulo(obj.quantidadeEstoque);
+        document.getElementById('estoqueMinimo').innerHTML = SubstituirCampoNulo(obj.estoqueMinimo);
+        document.getElementById('descricao').innerHTML = SubstituirCampoNulo(obj.descricao);
+    }
+
+    function SubstituirCampoNulo(campo) {
+
+        if (campo == null || campo == "")
+            return " - "
+        else
+            return campo;
     }
 
 </script>
@@ -79,7 +207,7 @@
             <div class="row">
                 <div id="divItens" class="input-field col s12">
                     @{
-                        Html.RenderPartial("~/Views/Itens/ListarItens.cshtml", Model.itens);
+                        Html.RenderPartial("~/Views/ItensVenda/ListarItens.cshtml", Model.itensVenda);
                     }
                 </div>
             </div>
@@ -176,7 +304,70 @@
             </div>
         </form>
     </div>
-                        }
+}
+
+<!-- Estrutura do Modal de detalhes -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h5>Informações do registro</h5>
+
+        <div class="row" id="linha-detalhes">
+            <div class="col s6">
+                <label>Nome:</label>
+            </div>
+            <div class="col s3">
+                <label>Preço de venda:</label>
+            </div>
+            <div class="col s3">
+                <label>Preço de Compra:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s6">
+                <label class="texto-detalhes" id="nome">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="precoVenda">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="precoCompra">.</label>
+            </div>
+        </div>
+
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label>Quantidade em estoque:</label>
+            </div>
+            <div class="col s3">
+                <label>Estoque mínimo:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s3">
+                <label class="texto-detalhes" id="quantidadeEstoque">.</label>
+            </div>
+            <div class="col s3">
+                <label class="texto-detalhes" id="estoqueMinimo">.</label>
+            </div>
+        </div>
+
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label>Descrição:</label>
+            </div>
+        </div>
+        <div class="row" id="linha-detalhes">
+            <div class="col s12">
+                <label class="texto-detalhes" id="descricao">.</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <hr />
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -204,7 +395,9 @@
              if (erro != "" && erro != null && erro != undefined)
              {
                  alert("Erro: " + erro);
-             }
+            }
+
+             console.log("oi");
 
             $.ajax({
                 type: 'GET',

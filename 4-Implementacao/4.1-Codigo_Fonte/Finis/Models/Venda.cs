@@ -25,7 +25,7 @@ namespace Finis.Models
     {
         public Venda()
         {
-            this.itens = new Collection<Item>();
+            this.itensVenda = new List<ItemVenda>();
             this.formaPagamento = FormaPagamento.DINHEIRO;
             this.dataCompra = DateTime.Now;
             this.creditoEspecial = 0;
@@ -91,8 +91,9 @@ namespace Finis.Models
         [Display(Name = "Forma de Pagamento")]
         [Required(ErrorMessage = "Por favor selecione uma opção")]
         public FormaPagamento formaPagamento { get; set; }
-        
-        public virtual ICollection<Item> itens { get; set; }
+
+        [ForeignKey("vendaId")]
+        public IList<ItemVenda> itensVenda { get; set; }
 
         [NotMapped]
         [Display(Name = "Cliente")]

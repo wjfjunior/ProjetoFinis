@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Finis.Models.Item>
+﻿@model IEnumerable<Finis.Models.ItemVenda>
 
-<table class="highlight">
+<table class="bordered">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.nome)
+                @Html.DisplayNameFor(model => model.item.nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.precoVenda)
+                @Html.DisplayName("Preço")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.quantidade)
@@ -23,10 +23,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.nome)
+                    @Html.DisplayFor(modelItem => item.item.nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.precoVenda)
+                    @Html.DisplayFor(modelItem => item.item.precoVenda)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.quantidade)
@@ -35,9 +35,11 @@
                     @Html.DisplayFor(modelItem => item.precoTotal)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    <a class="btn-floating blue" onclick="EditarLista(@item.indice)"><i class="material-icons">mode_edit</i></a>
+                    <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </a>
+                    <a class="btn-floating red" onclick="RemoverLista(@item.indice)"><i class="material-icons">delete</i></a>
                 </td>
             </tr>
         }
