@@ -62,6 +62,7 @@ namespace Finis.Models
         public decimal desconto { get; set; }
 
         [Display(Name = "Desconto (%)")]
+        [Range(0, 100, ErrorMessage = "O valor deve ser entre 0 e 100")]
         public int descontoPorcentagem { get; set; }
 
         [Display(Name = "Subtotal")]

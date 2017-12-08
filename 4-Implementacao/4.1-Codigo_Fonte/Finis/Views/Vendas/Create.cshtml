@@ -3,7 +3,7 @@
 @using Finis.Models
 
 @{
-    ViewBag.Title = "Nova Venda";
+    ViewBag.Title = "Novo Registro de Venda";
 }
 
 <script type="text/javascript">
@@ -76,8 +76,6 @@
 
     function RemoverLista(indice) {
 
-        console.log(indice);
-
         $.ajax({
                 type: 'GET',
                 url: '@Url.Action("RemoverItem", "ItensVenda")',
@@ -92,7 +90,7 @@
 
     function EditarLista(indice) {
 
-        var qtdadeEntrada = prompt("Por favor insira a quantidade do item:", "1");
+        var qtdadeEntrada = prompt("Quantidade do item:", "1");
         if (isNaN(qtdadeEntrada))
         {
             alert("Quantidade inválida!");
@@ -100,11 +98,22 @@
         }
         else
         {
-            VerificaQuantidade(indice);
-
             qtdadeEntrada = parseInt(qtdadeEntrada);
 
             $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("VerificaQuantidadeItem", "ItensVenda")",
+                 data: { indice: indice, quantidade: qtdadeEntrada },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = dados;
+                     console.log(obj.Resultado);
+                     if (obj.Resultado) {
+                         alert("Quantidade maior que o estoque atual!");
+                         return;
+                     } else {
+
+                         $.ajax({
                 type: 'GET',
                 url: '@Url.Action("EditarItem", "ItensVenda")',
                 data: { indice: indice, quantidade: qtdadeEntrada },
@@ -114,29 +123,13 @@
                     $('#divItens').html(data);
                 }
             });
-        }
-    }
 
-    function VerificaQuantidade(indice, qtdadeEntrada) {
-
-        qtdadeEntrada = parseInt(qtdadeEntrada);
-
-        $.ajax({
-                 type: "GET",
-                 url: "@Url.Action("VerificaQuantidadeItem", "ItensVenda")",
-                 data: { indice: indice },
-                 dataType: "json",
-                 success: function (dados) {
-                     obj = dados;
-                     console.log(obj.Resultado);
-                     if (obj.Resultado) {
-                         alert("Quantidade maior que o estoque atual!");
-                         return;
                      }
                  }
         });
 
-        return false;
+
+        }
     }
 
     function carregaDetalhes(id) {
@@ -169,6 +162,59 @@
             return " - "
         else
             return campo;
+    }
+
+    function AtualizaValores() {
+
+        var desconto = $('#desconto').val();
+        var descontoPorcentagem = $('#descontoPorcentagem').val();
+        var subtotal = $('#subtotal').val();
+        var creditoParcial = $('#creditoParcial').val();
+        var creditoEspecial = $('#creditoEspecial').val();
+        var total = $('#total').val();
+        var recebido = $('#recebido').val();
+        var troco = $('#troco').val();
+
+        if (isNaN(desconto) || isNaN(descontoPorcentagem) || isNaN(subtotal) || isNaN(creditoParcial) ||
+            isNaN(creditoEspecial) || isNaN(total) || isNaN(recebido) || isNaN(troco)) {
+
+            alert("Valor inválido!");
+            return;
+        }
+        else {
+
+            $.ajax({
+                 type: "GET",
+                 url: "@Url.Action("CalculaValores", "Vendas")",
+                 data: {
+                     desconto: desconto,
+                     descontoPorcentagem: descontoPorcentagem,
+                     subtotal: subtotal,
+                     creditoParcial: creditoParcial,
+                     creditoEspecial: creditoEspecial,
+                     total: total,
+                     recebido: recebido,
+                     troco: troco
+                 },
+                 dataType: "json",
+                 success: function (dados) {
+                     obj = JSON.parse(dados.Resultado);
+                     PreencheValores(obj);
+                 }
+            });
+        }
+    }
+
+    function PreencheValores(obj) {
+
+        $('#desconto').val(obj.desconto);
+        $('#descontoPorcentagem').val(obj.descontoPorcentagem);
+        $('#subtotal').val(obj.subtotal);
+        $('#creditoParcial').val(obj.creditoParcial);
+        $('#creditoEspecial').val(obj.creditoEspecial);
+        $('#total').val(obj.total);
+        $('#recebido').val(obj.recebido);
+        $('#troco').val(obj.creditoParcial);
     }
 
 </script>
@@ -215,7 +261,7 @@
             <div class="row">
                 <div class="input-field col s3">
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.dataCompra, new { htmlAttributes = new { @id = "date", @class = "datepicker", @placeholder = "Data da venda" } })
+                    @Html.EditorFor(model => model.dataCompra, new { htmlAttributes = new { onchange = "AtualizaValores()", @id = "date", @class = "datepicker", @placeholder = "Data da venda" } })
                     @{ Html.EnableClientValidation(true); }
                     @Html.ValidationMessageFor(model => model.dataCompra, "", new { @class = "validate" })
                 </div>
@@ -226,44 +272,44 @@
                 <div class="input-field col s2">
                     @Html.LabelFor(model => model.desconto, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.desconto, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.TextBoxFor(model => model.desconto, new { onchange = "AtualizaValores()", @id = "desconto", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.desconto, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s2">
                     @Html.LabelFor(model => model.descontoPorcentagem, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.descontoPorcentagem, new { htmlAttributes = new { @class = "validate" } })
+                    @Html.TextBoxFor(model => model.descontoPorcentagem, new { onchange = "AtualizaValores()", @id = "descontoPorcentagem", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.descontoPorcentagem, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.subtotal, htmlAttributes: new { @id = "lblCreditoEspecial", @class = "validate" })
+                    @Html.LabelFor(model => model.subtotal, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.subtotal, new { htmlAttributes = new { @id = "creditoEspecial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.subtotal,new { onchange = "AtualizaValores()", @id = "subtotal", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.subtotal, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.creditoParcial, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
+                    @Html.LabelFor(model => model.creditoParcial, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.creditoParcial, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.creditoParcial, new { onchange = "AtualizaValores()", @id = "creditoParcial", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.creditoParcial, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.creditoEspecial, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
+                    @Html.LabelFor(model => model.creditoEspecial, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.creditoEspecial, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.creditoEspecial, new { onchange = "AtualizaValores()", @id = "creditoEspecial", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.creditoEspecial, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.total, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
+                    @Html.LabelFor(model => model.total, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.total, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.total, new { onchange = "AtualizaValores()", @id = "total", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.total, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -273,9 +319,9 @@
                 <div class="input-field col s3"></div>
                 <div class="input-field col s3"></div>
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.recebido, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
+                    @Html.LabelFor(model => model.recebido, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.recebido, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.recebido,  new { @id = "recebido", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.recebido, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -285,9 +331,9 @@
                 <div class="input-field col s3"></div>
                 <div class="input-field col s3"></div>
                 <div class="input-field col s3">
-                    @Html.LabelFor(model => model.troco, htmlAttributes: new { @id = "lblCreditoParcial", @class = "validate" })
+                    @Html.LabelFor(model => model.troco, htmlAttributes: new {@class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.EditorFor(model => model.troco, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
+                    @Html.TextBoxFor(model => model.troco,  new { @id = "troco", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.troco, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -397,8 +443,6 @@
                  alert("Erro: " + erro);
             }
 
-             console.log("oi");
-
             $.ajax({
                 type: 'GET',
                 url: '@Url.Action("DropboxItens", "Vendas")',
@@ -416,7 +460,6 @@
                         onAutocomplete: function (val) {
 
                             $('#itemId').val(RecuperaID(val));
-                            console.log($('#itemId').val());
                             AdicionaLista($('#itemId').val());
                             $('#item').val("");
                         },

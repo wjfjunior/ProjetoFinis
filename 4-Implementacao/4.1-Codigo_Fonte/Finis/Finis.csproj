@@ -263,6 +263,7 @@
     <Content Include="Content\imagens\Fundo_login.png" />
     <Content Include="Content\imagens\Fundo_login_2.png" />
     <Content Include="Content\imagens\logo.png" />
+    <Content Include="Content\imagens\Logo_relatorio.jpg" />
     <Content Include="Content\imagens\office-620822_640.jpg" />
     <Content Include="Content\login.css" />
     <Content Include="Content\materialize\css\materialize.css" />

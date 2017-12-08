@@ -106,7 +106,7 @@ namespace Finis.Controllers
                 }
             }
 
-            if(quantidadeItem > item.quantidadeEstoque)
+            if(quantidadeItem >= item.quantidadeEstoque)
             {
                 resultado = true;
             }
@@ -123,13 +123,14 @@ namespace Finis.Controllers
         }
 
         [HttpGet]
-        public JsonResult VerificaQuantidadeItem(int indice)
+        public JsonResult VerificaQuantidadeItem(int indice, int quantidade)
         {
             int quantidadeItem = 0;
             bool resultado;
 
             listaItens = this.RecuperarLista();
             var item = listaItens[indice - 1].item;
+            listaItens[indice - 1].quantidade = quantidade;
 
             foreach (ItemVenda itemVenda in listaItens)
             {

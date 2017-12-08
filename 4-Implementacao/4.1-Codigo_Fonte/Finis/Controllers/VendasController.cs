@@ -121,6 +121,63 @@ namespace Finis.Controllers
         }
 
         [HttpGet]
+        public JsonResult CalculaValores(string desconto, string descontoPorcentagem, string subtotal, string creditoParcial,
+            string creditoEspecial, string total, string recebido, string troco)
+        {
+            IList<ItemVenda> listaItens = (List<ItemVenda>)Session["ListaItens"];
+
+            bool resultado;
+            Decimal Desconto = Decimal.Parse(desconto);
+            Decimal DescontoPorcentagem = Decimal.Parse(descontoPorcentagem);
+            Decimal Subtotal = Decimal.Parse(subtotal);
+            Decimal CreditoParcial = Decimal.Parse(creditoParcial);
+            Decimal CreditoEspecial = Decimal.Parse(creditoEspecial);
+            Decimal Total = Decimal.Parse(total);
+            Decimal Recebido = Decimal.Parse(recebido);
+            Decimal Troco = Decimal.Parse(troco);
+
+            if (listaItens != null)
+            {
+                foreach(ItemVenda item in listaItens)
+                {
+                    Subtotal += item.precoTotal;
+                }
+            }
+
+            Total = Subtotal;
+            Total -= Convert.ToDecimal(((double)DescontoPorcentagem / 100) * Convert.ToDouble(Total));
+            Total -= Desconto;
+            Total -= CreditoParcial;
+            Total -= CreditoEspecial;
+
+            Troco = Recebido - Total;
+
+            if(Total > 0)
+            {
+                resultado = true;
+            }
+            else
+            {
+                resultado = false;
+            }
+
+            var obj = new
+            {
+                Resultado = resultado,
+                Desconto = Desconto,
+                DescontoPorcentagem = DescontoPorcentagem,
+                Subtotal = Subtotal,
+                CreditoParcial = CreditoParcial,
+                CreditoEspecial = CreditoEspecial,
+                Total = Total,
+                Recebido = Recebido,
+                Troco = Troco
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public JsonResult DropboxItens()
         {
             var listaItens = db.Item.Where((e => e.quantidadeEstoque > 0))
