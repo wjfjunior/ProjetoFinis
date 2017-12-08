@@ -24,6 +24,9 @@ namespace Finis.Models
             
         }
 
+        [Display(Name = "Ativo")]
+        public bool ativo { get; set; }
+
         [Display(Name = "Saldo de crédito parcial")]
         [Required(ErrorMessage = "Por favor insira um valor")]
         [DisplayFormat(DataFormatString = "{0:n2}",
@@ -128,6 +131,20 @@ namespace Finis.Models
             TransacoesController transacaoCreditoParcial = new TransacoesController();
             transacaoCreditoParcial.GeraTransacaoEntrada(creditoParcial, TipoCredito.PARCIAL, this.id);
             this.saldoCreditoParcial += creditoParcial;
+        }
+
+        public void AtualizaSaidaSaldoEspecial(decimal creditoEspecial)
+        {
+            TransacoesController transacaoCreditoEspecial = new TransacoesController();
+            transacaoCreditoEspecial.GeraTransacaoSaida(creditoEspecial, TipoCredito.ESPECIAL, this.id);
+            this.saldoCreditoEspecial -= creditoEspecial;
+        }
+
+        public void AtualizaSaidaSaldoParcial(decimal creditoParcial)
+        {
+            TransacoesController transacaoCreditoParcial = new TransacoesController();
+            transacaoCreditoParcial.GeraTransacaoSaida(creditoParcial, TipoCredito.PARCIAL, this.id);
+            this.saldoCreditoParcial -= creditoParcial;
         }
     }
 }

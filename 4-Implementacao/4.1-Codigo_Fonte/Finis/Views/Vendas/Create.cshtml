@@ -197,21 +197,14 @@
         var recebido = $('#recebido').val();
         var troco = $('#troco').val();
 
-        //var credEsp = $('#credEsp').val();
-        //var credParc = $('#credParc').val();
-        //var idCliente = $('#idCliente').val();
-
-        //console.log(parseFloat(credEsp));
-        //console.log(parseFloat(creditoEspecial));
-
-        //if ((idCliente != "" && idCliente != null) && ((parseFloat(credEsp) < parseFloat(creditoEspecial)) ||
-        //    (parseFloat(credParc) < parseFloat(creditoParcial)))) {
-
-        //    alert("Não é possível realizar um lançamento de desconto de créditos maior que o valor de créditos disponível para o cliente!");
-        //    $('#creditoParcial').val("0");
-        //    $('#creditoEspecial').val("0");
-        //    return;
-        //}
+        desconto = desconto.toString().replace(",", ".");
+        descontoPorcentagem = descontoPorcentagem.toString().replace(",", ".");
+        subtotal = subtotal.toString().replace(",", ".");
+        creditoParcial = creditoParcial.toString().replace(",", ".");
+        creditoEspecial = creditoEspecial.toString().replace(",", ".");
+        total = total.toString().replace(",", ".");
+        recebido = recebido.toString().replace(",", ".");
+        troco = troco.toString().replace(",", ".");
         
         if (isNaN(desconto) || isNaN(descontoPorcentagem) || isNaN(creditoParcial) ||
             isNaN(creditoEspecial)|| isNaN(recebido) || 

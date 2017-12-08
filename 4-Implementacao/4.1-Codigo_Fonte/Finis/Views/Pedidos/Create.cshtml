@@ -1,7 +1,7 @@
 ﻿@model Finis.Models.Pedido
 
 @{
-    ViewBag.Title = "Editar Pedido";
+    ViewBag.Title = "Criar Pedido";
 }
 
 @using (Html.BeginForm())
@@ -13,6 +13,7 @@
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
+                @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
 
                 <div class="row">
                     <div class="input-field col s8">

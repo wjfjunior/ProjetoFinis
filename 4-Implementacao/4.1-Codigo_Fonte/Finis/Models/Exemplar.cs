@@ -113,19 +113,19 @@ namespace Finis.Models
 
         [Display(Name = "Editora")]
         [Required(ErrorMessage = "Por favor selecione uma editora")]
-        public int? editoraId { get; set; }
+        public int editoraId { get; set; }
         [ForeignKey("editoraId")]
         public virtual Editora editora { get; set; }
 
         [Display(Name = "Idioma")]
         [Required(ErrorMessage = "Por favor selecione um idioma")]
-        public int? idiomaId { get; set; }
+        public int idiomaId { get; set; }
         [ForeignKey("idiomaId")]
         public virtual Idioma idioma { get; set; }
         
         [Display(Name = "Sessão")]
         [Required(ErrorMessage = "Por favor selecione uma sessão")]
-        public int? sessaoId { get; set; }
+        public int sessaoId { get; set; }
         [ForeignKey("sessaoId")]
         public virtual Sessao sessao { get; set; }
 

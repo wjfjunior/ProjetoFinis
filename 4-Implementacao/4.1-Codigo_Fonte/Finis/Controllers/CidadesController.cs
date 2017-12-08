@@ -11,6 +11,8 @@ using Finis.Models;
 using Newtonsoft.Json;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -246,7 +248,19 @@ namespace Finis.Controllers
             {
                 Cidade cidade = db.Cidade.Find(id);
                 db.Cidade.Remove(cidade);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

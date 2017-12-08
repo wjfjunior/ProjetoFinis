@@ -11,6 +11,8 @@ using Finis.Models;
 using Newtonsoft.Json;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -22,13 +24,13 @@ namespace Finis.Controllers
         // GET: Clientes
         public ActionResult Index()
         {
-            return View(db.Cliente.ToList().OrderBy(c => c.nome));
+            return View(db.Cliente.Where(c => c.ativo == true).ToList().OrderBy(c => c.nome));
         }
 
         [HttpPost]
-        public ActionResult Index(string pesquisar)
+        public ActionResult Index(string pesquisar, bool ativo)
         {
-            return View("Index", db.Cliente.Where(c => c.nome.Contains(pesquisar) || c.rg.Contains(pesquisar)).ToList());
+            return View("Index", db.Cliente.Where(c => c.ativo.Equals(ativo) && (c.rg.Contains(pesquisar) || c.nome.Contains(pesquisar))).ToList());
         }
 
         public ActionResult Exportar()
@@ -291,11 +293,31 @@ namespace Finis.Controllers
         {
             if(id != null)
             {
-                Cliente cliente = db.Cliente.Find(id);
-                Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
-                db.Cliente.Remove(cliente);
-                db.Endereco.Remove(endereco);
-                db.SaveChanges();
+                Cliente model = db.Cliente.Find(id);
+                //Endereco endereco = this.RecuperaEndereco(cliente.enderecoId);
+                //db.Cliente.Remove(cliente);
+                //db.Endereco.Remove(endereco);
+                model.ativo = false;
+
+                var local = db.Set<Cliente>()
+                         .Local
+                         .FirstOrDefault(f => f.id == model.id);
+
+                db.Entry(local).State = System.Data.Entity.EntityState.Detached;
+                db.Entry(model).State = System.Data.Entity.EntityState.Modified;
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

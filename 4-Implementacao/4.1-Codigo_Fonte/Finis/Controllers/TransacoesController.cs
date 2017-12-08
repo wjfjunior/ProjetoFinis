@@ -188,7 +188,7 @@ namespace Finis.Controllers
         public void GeraTransacaoSaida(decimal? valor, TipoCredito credito, int? clienteId)
         {
             Transacao transacao = new Transacao();
-            transacao.NovaTransacaoEntrada(valor, credito, clienteId);
+            transacao.NovaTransacaoSaida(valor, credito, clienteId);
             transacao.ConfigurarParaSalvar();
             db.Transacao.Add(transacao);
             db.SaveChanges();

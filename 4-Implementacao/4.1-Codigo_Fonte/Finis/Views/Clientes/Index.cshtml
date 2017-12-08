@@ -14,7 +14,15 @@
                  data: { id: id },
                  dataType: "json",
                  success: function (dados) {
-                     location.reload();
+                     console.log(dados);
+                     if (dados) {
+                         location.reload();
+                     } else {
+                         alert("Não foi possível remover porque este registro está sendo utilizado em outros cadastros!");
+                     }
+                 },
+                 error: function (response) {
+                     alert("Erro de execução, por favor recarregue a página!");  // 
                  }
              });
     }
@@ -71,7 +79,16 @@
                 <div class="row">
                     <div class="input-field col s8">
                         @Html.Label("Buscar")
-                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate" } })
+                        @Html.Editor("pesquisar", new { htmlAttributes = new { @class = "validate", @checked = true } })
+                    </div>
+                    <div class="input-field col s2 switch">
+                        @*@Html.LabelFor(m => m.ativo, new { @class = "login-label" })*@
+                        <label>
+                            Inativos
+                            @Html.CheckBox("ativo", new { @type = "checkbox" })
+                            <span class="lever"></span>
+                            Ativos
+                        </label>
                     </div>
                     <div class="col s2">
                         <button type="submit" class="btn-floating" id="botao-busca">
@@ -271,7 +288,7 @@
 <div id="md1" class="modal">
     <div class="modal-content">
         <h4>Confirmação</h4>
-        <p>Tem certeza que deseja remover este cliente?</p>
+        <p>Tem certeza que deseja inativar este cliente?</p>
     </div>
     <div class="modal-footer">
         <a href="#" class="waves-effect waves-red btn-flat" onclick="$('#md1').closeModal(); return false;">Cancelar</a>
@@ -290,6 +307,10 @@
     $(document).ready(function () {
 
         $('.modal-trigger').leanModal();
+
+        $("input[type='hidden']").each(function (index, element) {
+            $(this).appendTo($(element).parent());
+        });
     });
     
 </script>

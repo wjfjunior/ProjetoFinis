@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -162,7 +164,19 @@ namespace Finis.Controllers
             {
                 Servico servico = (Servico)db.Item.Find(id);
                 db.Item.Remove(servico);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

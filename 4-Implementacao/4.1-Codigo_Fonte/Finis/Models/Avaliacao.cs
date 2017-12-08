@@ -19,11 +19,8 @@ namespace Finis.Models
         [Display(Name = "Aguardando retorno do cliente")]
         AGUARDANDO_CLIENTE = 3,
         
-        [Display(Name = "Concluída")]
-        CONCLUIDO = 4,
-
-        [Display(Name = "Cancelada")]
-        CANCELADA = 5,
+        [Display(Name = "Finalizada")]
+        FINALIZADA = 4
     }
 
     public enum statusAvaliacao
@@ -139,8 +136,8 @@ namespace Finis.Models
                     return "Avaliado";
                 else if (situacao == situacaoAvaliacao.AGUARDANDO_CLIENTE)
                     return "Aguardando retorno do cliente";
-                else if (situacao == situacaoAvaliacao.CONCLUIDO)
-                    return "Concluído";
+                else if (situacao == situacaoAvaliacao.FINALIZADA)
+                    return "Finalizada";
 
                 else return "";
             }

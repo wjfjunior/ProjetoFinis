@@ -15,7 +15,15 @@
                  data: { id: id },
                  dataType: "json",
                  success: function (dados) {
-                     location.reload();
+                     console.log(dados);
+                     if (dados) {
+                         location.reload();
+                     } else {
+                         alert("Não foi possível remover porque este registro está sendo utilizado em outros cadastros!");
+                     }
+                 },
+                 error: function (response) {
+                     alert("error!");  // 
                  }
              });
     }
@@ -64,6 +72,13 @@
     <a class="btn-floating btn-large red" href="@Url.Action("Create","Marcas")">
         <i class="material-icons">add</i>
     </a>
+    <ul>
+        <li>
+            <a class="btn-floating btn-large green" href="@Url.Action("Exportar", "Marcas")" , target="_blank">
+                <i class="material-icons">print</i>
+            </a>
+        </li>
+    </ul>
 </div>
 <table class="highlight">
     <thead>

@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -340,7 +342,19 @@ namespace Finis.Controllers
                 Avaliacao avaliacao = db.Avaliacao.Find(id);
                 this.ConfiguraNomeCliente(avaliacao);
                 db.Avaliacao.Remove(avaliacao);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

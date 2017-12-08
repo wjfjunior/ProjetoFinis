@@ -101,19 +101,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s4">
                         @Html.LabelFor(model => model.saldoCreditoParcial)
                         @{ Html.EnableClientValidation(false); }
                         @Html.EditorFor(model => model.saldoCreditoParcial, new { htmlAttributes = new { @id = "creditoParcial", @class = "validate" } })
                         @{ Html.EnableClientValidation(true); }
                         @Html.ValidationMessageFor(model => model.saldoCreditoParcial, "", new { @class = "validate" })
                     </div>
-                    <div class="input-field col s5">
+                    <div class="input-field col s4">
                         @Html.LabelFor(model => model.saldoCreditoEspecial)
                         @{ Html.EnableClientValidation(false); }
                         @Html.EditorFor(model => model.saldoCreditoEspecial, new { htmlAttributes = new { @id = "creditoEspecial", @class = "validate" } })
                         @{ Html.EnableClientValidation(true); }
                         @Html.ValidationMessageFor(model => model.saldoCreditoEspecial, "", new { @class = "validate" })
+                    </div>
+                    <div class="input-field col s4 switch">
+                        @*@Html.LabelFor(m => m.ativo, new { @class = "login-label" })*@
+                        <label>
+                            Inativo
+                            @Html.CheckBoxFor(m => m.ativo, new { @type = "checkbox" })
+                            <span class="lever"></span>
+                            Ativo
+                        </label>
                     </div>
                 </div>
                 <div class="row">
@@ -155,6 +164,10 @@
 
             $("#telefone").mask("(99)9999-9999");
             $("#celular").mask("(99)99999-9999");
+
+            $("input[type='hidden']").each(function (index, element) {
+                $(this).appendTo($(element).parent());
+            });
         });
 
         $('.datepicker').pickadate({

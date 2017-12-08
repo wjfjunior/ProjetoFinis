@@ -220,6 +220,18 @@
     <Compile Include="Migrations\201712062352422_modificacao-vendas.Designer.cs">
       <DependentUpon>201712062352422_modificacao-vendas.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712081038593_alteracao_cliente.cs" />
+    <Compile Include="Migrations\201712081038593_alteracao_cliente.Designer.cs">
+      <DependentUpon>201712081038593_alteracao_cliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712081202119_cascade_delete.cs" />
+    <Compile Include="Migrations\201712081202119_cascade_delete.Designer.cs">
+      <DependentUpon>201712081202119_cascade_delete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712081846283_campos_nulos.cs" />
+    <Compile Include="Migrations\201712081846283_campos_nulos.Designer.cs">
+      <DependentUpon>201712081846283_campos_nulos.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ItemVenda.cs" />
     <Compile Include="Models\Venda.cs" />
@@ -559,7 +571,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\ItensVenda\" />
-    <Folder Include="Views\Relatorios\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -576,6 +587,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712062352422_modificacao-vendas.resx">
       <DependentUpon>201712062352422_modificacao-vendas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712081038593_alteracao_cliente.resx">
+      <DependentUpon>201712081038593_alteracao_cliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712081202119_cascade_delete.resx">
+      <DependentUpon>201712081202119_cascade_delete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712081846283_campos_nulos.resx">
+      <DependentUpon>201712081846283_campos_nulos.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Relatorios\Avaliacoes.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

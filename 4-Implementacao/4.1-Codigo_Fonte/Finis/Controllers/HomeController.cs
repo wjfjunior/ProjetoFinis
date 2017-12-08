@@ -57,16 +57,14 @@ namespace Finis.Controllers
             int avaliacoesAguardando = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.AGUARDANDO_AVALIACAO).Count();
             int avaliacoesAvaliado = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.AVALIADO).Count();
             int avaliacoesAguardCliente = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.AGUARDANDO_CLIENTE).Count();
-            int avaliacoesConcluido = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.CONCLUIDO).Count();
-            int avaliacoesCancelada = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.CANCELADA).Count();
+            int avaliacoesConcluido = db.Avaliacao.Where(p => p.situacao == Models.situacaoAvaliacao.FINALIZADA).Count();
 
             var obj = new
             {
                 AvaliacoesAguardando = avaliacoesAguardando.ToString(),
                 AvaliacoesAvaliado = avaliacoesAvaliado.ToString(),
                 AvaliacoesAguardCliente = avaliacoesAguardCliente.ToString(),
-                AvaliacoesConcluido = avaliacoesConcluido.ToString(),
-                AvaliacoesCancelada = avaliacoesCancelada.ToString()
+                AvaliacoesConcluido = avaliacoesConcluido.ToString()
             };
             return Json(obj, JsonRequestBehavior.AllowGet);
         }

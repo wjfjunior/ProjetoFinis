@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -75,6 +77,23 @@ namespace Finis.Controllers
             Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
             stream.Seek(0, SeekOrigin.Begin);
             return File(stream, "application/pdf", "Exemplares.pdf");
+        }
+
+        public void DescontaQuantidade(List<ItemVenda> lista)
+        {
+            foreach (ItemVenda itemVenda in lista)
+            {
+                var item = db.Item.Find(itemVenda.itemId);
+                item.quantidadeEstoque -= itemVenda.quantidade;
+
+                var local = db.Set<Item>()
+                         .Local
+                         .FirstOrDefault(f => f.id == item.id);
+
+                db.Entry(local).State = System.Data.Entity.EntityState.Detached;
+                db.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         [HttpGet]
@@ -274,7 +293,19 @@ namespace Finis.Controllers
             {
                 Exemplar exemplar = (Exemplar)db.Item.Find(id);
                 db.Item.Remove(exemplar);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

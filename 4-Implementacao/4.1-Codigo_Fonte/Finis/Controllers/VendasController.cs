@@ -114,11 +114,11 @@ namespace Finis.Controllers
             IList<ItemVenda> listaItens = (List<ItemVenda>)Session["ListaItens"];
 
             bool resultado;
-            Decimal Desconto = Decimal.Parse(desconto);
+            Decimal Desconto = Decimal.Parse(desconto.Replace(".", ","));
             Decimal DescontoPorcentagem = Decimal.Parse(descontoPorcentagem);
             Decimal Subtotal = 0;
-            Decimal CreditoParcial = Decimal.Parse(creditoParcial);
-            Decimal CreditoEspecial = Decimal.Parse(creditoEspecial);
+            Decimal CreditoParcial = Decimal.Parse(creditoParcial.Replace(".", ","));
+            Decimal CreditoEspecial = Decimal.Parse(creditoEspecial.Replace(".", ","));
             Decimal Total = 0;
             Decimal Recebido = Decimal.Parse(recebido);
             Decimal Troco = 0;
@@ -138,6 +138,11 @@ namespace Finis.Controllers
             Total -= CreditoEspecial;
 
             Troco = Recebido - Total;
+
+            if(Troco < 0)
+            {
+                Troco = 0;
+            }
 
             if(Total > 0)
             {
@@ -229,18 +234,62 @@ namespace Finis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Venda venda)
         {
-            if (ModelState.IsValid)
+            var itensVenda = (List<ItemVenda>)Session["ListaItens"];
+
+            if(!this.ValidaCreditosCliente(venda))
             {
-                var itensVenda = (List<ItemVenda>)Session["ListaItens"];
-                venda.ConfigurarParaSalvar();
-                db.Venda.Add(venda);
-                db.SaveChanges();
-                this.SalvarItens(venda, itensVenda);
-                return RedirectToAction("Index");
+                ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
+                @ViewBag.Erro = "O valor de lacamento de creditos de desconto do cliente e maior que o saldo disponivel para o mesmo!";
+                return View(venda);
             }
-            ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
-            //this.ConfiguraNomeCliente(venda);
+
+            if (itensVenda != null && itensVenda.Count() != 0)
+            {
+                if (ModelState.IsValid)
+                {
+                    venda.ConfigurarParaSalvar();
+                    db.Venda.Add(venda);
+                    db.SaveChanges();
+                    this.SalvarItens(venda, itensVenda);
+                    this.GeraTransacoesSaida(venda);
+                    this.DescontaQuantidade(itensVenda);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
+                @ViewBag.Erro = "Nao e possivel encerrar o registro de venda sem o lancamento de pelo menos um item!";
+            }
             return View(venda);
+        }
+
+        public void DescontaQuantidade(List<ItemVenda> lista)
+        {
+            ExemplaresController exemplares = new ExemplaresController();
+
+            exemplares.DescontaQuantidade(lista);
+        }
+
+        public void GeraTransacoesSaida(Venda venda)
+        {
+            var cliente = db.Cliente.Find(venda.clienteId);
+
+            if(cliente != null)
+            {
+                cliente.AtualizaSaidaSaldoEspecial(venda.creditoEspecial);
+                cliente.AtualizaSaidaSaldoParcial(venda.creditoParcial);
+            }
+        }
+
+        public bool ValidaCreditosCliente(Venda venda)
+        {
+            var cliente = db.Cliente.Find(venda.clienteId);
+
+            if ((venda.creditoEspecial > cliente.saldoCreditoEspecial) || venda.creditoParcial > cliente.saldoCreditoParcial)
+                return false;
+            else
+                return true;
         }
 
         public void SalvarItens(Venda venda, List<ItemVenda> lista)
@@ -293,6 +342,15 @@ namespace Finis.Controllers
         public void CarregaLista(Venda venda)
         {
             listaItens = db.ItemVenda.Where(e => e.vendaId == venda.id).OrderBy(e => e.indice).ToList();
+
+            foreach(ItemVenda itemVenda in listaItens)
+            {
+                var item = db.Item.Find(itemVenda.itemId);
+
+                itemVenda.item.nome = item.nome;
+                itemVenda.item.precoVenda = item.precoVenda;
+            }
+
             Session["ListaItens"] = listaItens;
             venda.itensVenda = listaItens;
         }

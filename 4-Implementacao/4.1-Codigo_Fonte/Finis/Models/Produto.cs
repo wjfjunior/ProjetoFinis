@@ -42,13 +42,13 @@ namespace Finis.Models
         
         [Display(Name = "Unidade de Medida")]
         [Required(ErrorMessage = "Por favor selecione uma unidade de medida")]
-        public int? unidadeMedidaId { get; set; }
+        public int unidadeMedidaId { get; set; }
         [ForeignKey("unidadeMedidaId")]
         public virtual UnidadeMedida unidadeMedida { get; set; }
 
         [Display(Name = "Marca")]
         [Required(ErrorMessage = "Por favor selecione uma marca")]
-        public int? marcaId { get; set; }
+        public int marcaId { get; set; }
         [ForeignKey("marcaId")]
         public virtual Marca marca { get; set; }
 

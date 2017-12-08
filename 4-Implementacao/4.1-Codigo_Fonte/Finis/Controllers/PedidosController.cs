@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -76,6 +78,29 @@ namespace Finis.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public JsonResult DropboxClientes()
+        {
+            var listaClientes = db.Cliente.Select(e => new { e.id, e.nome, e.rg }).OrderBy(e => e.nome).ToArray();
+
+            var obj = new
+            {
+                lista = listaClientes
+            };
+
+            return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
+        }
+
+        private void ConfiguraNomeCliente(Avaliacao avaliacao)
+        {
+            if (avaliacao.cliente == null)
+            {
+                avaliacao.cliente = db.Cliente.Find(avaliacao.clienteId);
+            }
+            avaliacao.clienteNome = avaliacao.cliente.id + " - " + avaliacao.cliente.nome + " - " + avaliacao.cliente.rg;
+        }
+
 
         [HttpGet]
         public JsonResult DropboxExemplares()
@@ -161,15 +186,28 @@ namespace Finis.Controllers
             return View(pedido);
         }
 
-        // POST: Pedidos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        // GET: Clientes/Delete/5
+        public JsonResult DeletarRegistro(int? id)
         {
-            Pedido pedido = db.Pedido.Find(id);
-            db.Pedido.Remove(pedido);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (id != null)
+            {
+                Pedido pedido = db.Pedido.Find(id);
+                db.Pedido.Remove(pedido);
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

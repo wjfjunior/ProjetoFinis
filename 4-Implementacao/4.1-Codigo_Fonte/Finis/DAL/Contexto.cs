@@ -39,6 +39,7 @@ namespace Finis.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove();
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<Avaliacao>().ToTable("Avaliacoes");
             modelBuilder.Entity<Fornecedor>().ToTable("Fornecedores");

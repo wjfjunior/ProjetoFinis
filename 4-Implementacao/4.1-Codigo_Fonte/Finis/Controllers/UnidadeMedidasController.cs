@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 
 namespace Finis.Controllers
 {
@@ -164,7 +166,19 @@ namespace Finis.Controllers
             {
                 UnidadeMedida unidadeMedida = db.UnidadeMedida.Find(id);
                 db.UnidadeMedida.Remove(unidadeMedida);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }

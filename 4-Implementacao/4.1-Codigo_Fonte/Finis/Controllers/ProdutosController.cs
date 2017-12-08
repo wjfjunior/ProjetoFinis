@@ -10,6 +10,8 @@ using Finis.DAL;
 using Finis.Models;
 using CrystalDecisions.CrystalReports.Engine;
 using System.IO;
+using System.Data.SqlClient;
+using System.Data.Entity.Infrastructure;
 
 namespace Finis.Controllers
 {
@@ -207,7 +209,19 @@ namespace Finis.Controllers
             {
                 Produto produto = (Produto)db.Item.Find(id);
                 db.Item.Remove(produto);
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    var sqlException = ex.GetBaseException() as SqlException;
+
+                    if (sqlException != null)
+                    {
+                        return Json(false, JsonRequestBehavior.AllowGet);
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
