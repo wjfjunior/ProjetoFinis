@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -105,6 +107,24 @@ namespace Finis.Controllers
                     .OrderByDescending(t => t.data)
                     .ToList());
             }
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Transacao> transacao = new List<Transacao>();
+            transacao = db.Transacao.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Transacoes.rpt"));
+            rd.SetDataSource(transacao);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Transacoes.pdf");
         }
 
         [HttpGet]

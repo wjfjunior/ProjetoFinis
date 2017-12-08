@@ -1,7 +1,7 @@
 ﻿@model Finis.Models.Pedido
 
 @{
-    ViewBag.Title = "Novo Pedido";
+    ViewBag.Title = "Editar Pedido";
 }
 
 @using (Html.BeginForm())
@@ -13,7 +13,6 @@
             <div class="row">
 
                 @Html.ValidationSummary(true, "", new { @class = "validate" })
-                @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
 
                 <div class="row">
                     <div class="input-field col s8">
@@ -33,13 +32,11 @@
                         @Html.TextAreaFor(model => model.descricao, new { @class = "materialize-textarea" })
                     </div>
                 </div>
-                <div id="ListaExemplares2">
+                @*<div id="ListaExemplares2">
                     @{
                         Html.RenderPartial("ListaExemplares2", Model.Exemplares);
                      } 
-                </div>
-                <br/>
-                <br />
+                </div>*@
                 <div class="row">
                     <button class="btn waves-effect waves-light" onClick="location.href='@Url.Action("Index","Pedidos")'" type="button" name="action">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>

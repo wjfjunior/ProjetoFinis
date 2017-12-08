@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -20,6 +22,24 @@ namespace Finis.Controllers
         public ActionResult Index()
         {
             return View(db.UnidadeMedida.OrderBy(u => u.grandeza).ToList());
+        }
+
+        public ActionResult Exportar()
+        {
+            List<UnidadeMedida> unidadeMedida = new List<UnidadeMedida>();
+            unidadeMedida = db.UnidadeMedida.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "UnidadesMedida.rpt"));
+            rd.SetDataSource(unidadeMedida);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "UnidadesMedida.pdf");
         }
 
         [HttpPost]

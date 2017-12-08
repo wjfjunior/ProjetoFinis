@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
 using Newtonsoft.Json;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -27,6 +29,24 @@ namespace Finis.Controllers
         public ActionResult Index(string pesquisar)
         {
             return View("Index", db.Cidade.Include(e => e.estado).Where(c => c.nome.Contains(pesquisar)).ToList());
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Cidade> cidade = new List<Cidade>();
+            cidade = db.Cidade.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Cidades.rpt"));
+            rd.SetDataSource(cidade);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Cidades.pdf");
         }
 
         [HttpGet]

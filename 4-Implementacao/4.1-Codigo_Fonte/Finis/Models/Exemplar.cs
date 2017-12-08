@@ -108,7 +108,7 @@ namespace Finis.Models
         
         [NotMapped]
         [Display(Name = "Editora")]
-        [Required(ErrorMessage = "Por favor selecione uma editora")]
+        //[Required(ErrorMessage = "Por favor selecione uma editora")]
         public string editoraNome { get; set; }
 
         [Display(Name = "Editora")]

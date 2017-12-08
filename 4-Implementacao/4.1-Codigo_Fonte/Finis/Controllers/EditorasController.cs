@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -68,6 +70,24 @@ namespace Finis.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Editora> editora = new List<Editora>();
+            editora = db.Fornecedor.OfType<Editora>().ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Editoras.rpt"));
+            rd.SetDataSource(editora);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Editora.pdf");
         }
 
         // POST: Editoras/Create

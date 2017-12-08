@@ -1,0 +1,2 @@
+RELATÓRIO DE ERROS CONHECIDOS
+- Inserir nome do cliente no relatório de transações;

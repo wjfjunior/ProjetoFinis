@@ -96,10 +96,10 @@ namespace Finis.Models
         [ForeignKey("vendaId")]
         public IList<ItemVenda> itensVenda { get; set; }
 
-        [NotMapped]
-        [Display(Name = "Cliente")]
-        [Required(ErrorMessage = "Por favor selecione um cliente")]
-        public string clienteNome { get; set; }
+        //[NotMapped]
+        //[Display(Name = "Cliente")]
+        //[Required(ErrorMessage = "Por favor selecione um cliente")]
+        //public string clienteNome { get; set; }
 
         [Display(Name = "Cliente")]
         [Required(ErrorMessage = "Por favor selecione um cliente")]

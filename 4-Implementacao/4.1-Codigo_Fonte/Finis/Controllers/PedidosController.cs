@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -48,6 +50,24 @@ namespace Finis.Controllers
 
         //    return PartialView("ListaExemplares2", exemplares.ToList());
         //}
+
+        public ActionResult Exportar()
+        {
+            List<Pedido> pedido = new List<Pedido>();
+            pedido = db.Pedido.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Pedidos.rpt"));
+            rd.SetDataSource(pedido);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Pedidos.pdf");
+        }
 
         [HttpPost]
         public ActionResult Atualiza(Exemplar exemplar)

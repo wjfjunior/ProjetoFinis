@@ -47,7 +47,7 @@
         document.getElementById('descricao').innerHTML = SubstituirCampoNulo(obj.descricao);
         document.getElementById('peso').innerHTML = SubstituirCampoNulo(obj.peso);
         document.getElementById('vendaOnline').innerHTML = SubstituirCampoNulo(obj.vendaOnlineString);
-        document.getElementById('quantidade').innerHTML = SubstituirCampoNulo(obj.quantidade);
+        document.getElementById('quantidade').innerHTML = SubstituirCampoNulo(obj.quantidadeEstoque);
         document.getElementById('idioma').innerHTML = SubstituirCampoNulo(obj.idioma.nome);
         document.getElementById('sessao').innerHTML = SubstituirCampoNulo(obj.sessao.nome);
     }
@@ -106,7 +106,7 @@
                 @Html.DisplayNameFor(model => model.conservacao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.quantidade)
+                @Html.DisplayNameFor(model => model.quantidadeEstoque)
             </th>
             <th>Detalhes</th>
         </tr>
@@ -130,7 +130,7 @@
            @Html.DisplayFor(modelItem => item.conservacaoString)
         </td>
         <td>
-           @Html.DisplayFor(modelItem => item.quantidade)
+           @Html.DisplayFor(modelItem => item.quantidadeEstoque)
         </td>
         <td>
             <a class="btn-floating green details modal-trigger" onclick="CarregaDetalhes(@item.id)" href="#modal1">

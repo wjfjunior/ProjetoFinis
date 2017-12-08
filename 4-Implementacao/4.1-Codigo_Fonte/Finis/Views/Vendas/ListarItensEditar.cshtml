@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Finis.Models.ItemVenda>
+
+<table class="bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.item.nome)
+            </th>
+            <th>
+                @Html.DisplayName("Preço")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.quantidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.precoTotal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.item.nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.item.precoVenda)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.quantidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.precoTotal)
+                </td>
+                <td>
+                    <a class="btn-floating green details modal-trigger" onclick="carregaDetalhes(@item.id)" href="#modal1">
+                        <i class="fa fa-info" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+</table>

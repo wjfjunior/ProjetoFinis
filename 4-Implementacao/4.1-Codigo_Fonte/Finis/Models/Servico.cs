@@ -10,7 +10,7 @@ namespace Finis.Models
     {
         public Servico()
         {
-
+            this.quantidadeEstoque = 999;
         }
     }
 }

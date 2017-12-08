@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -99,6 +101,24 @@ namespace Finis.Controllers
                 Resultado = resultado
             };
             return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Idioma> idioma = new List<Idioma>();
+            idioma = db.Idioma.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Idiomas.rpt"));
+            rd.SetDataSource(idioma);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Idiomas.pdf");
         }
 
         // GET: Idiomas/Create

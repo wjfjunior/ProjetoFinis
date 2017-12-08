@@ -21,6 +21,8 @@
 
                     $('#credEsp').val(data.creditoEspecial);
                     $('#credParc').val(data.creditoParcial);
+                    DesabilitaCreditos();
+                    Materialize.updateTextFields();
                 }
             });
     }
@@ -29,7 +31,7 @@
 
          $.ajax({
                 type: 'GET',
-                url: '@Url.Action("QuantidadeMaiorQueEstoque", "ItensVenda")',
+                url: '@Url.Action("QuantidadeMaiorQueEstoque", "Vendas")',
                 data: { id: idItem },
                 dataType: 'json',
                 success: function (data) {
@@ -42,12 +44,13 @@
 
                         $.ajax({
                 type: 'GET',
-                url: '@Url.Action("AdicionarItem", "ItensVenda")',
+                url: '@Url.Action("AdicionarItem", "Vendas")',
                 data: { id: idItem },
                 dataType: 'html',
                 success: function (data) {
 
                     $('#divItens').html(data);
+                    AtualizaValores();
                 }
             });
 
@@ -60,7 +63,7 @@
 
         $.ajax({
                 type: 'GET',
-                url: '@Url.Action("QuantidadeMaiorQueEstoque", "ItensVenda")',
+                url: '@Url.Action("QuantidadeMaiorQueEstoque", "Vendas")',
                 data: { id: idItem },
                 dataType: 'json',
                 success: function (data) {
@@ -78,12 +81,13 @@
 
         $.ajax({
                 type: 'GET',
-                url: '@Url.Action("RemoverItem", "ItensVenda")',
+                url: '@Url.Action("RemoverItem", "Vendas")',
                 data: { indice: indice },
                 dataType: 'html',
                 success: function (data) {
 
                     $('#divItens').html(data);
+                    AtualizaValores();
                 }
             });
     }
@@ -102,7 +106,7 @@
 
             $.ajax({
                  type: "GET",
-                 url: "@Url.Action("VerificaQuantidadeItem", "ItensVenda")",
+                 url: "@Url.Action("VerificaQuantidadeItem", "Vendas")",
                  data: { indice: indice, quantidade: qtdadeEntrada },
                  dataType: "json",
                  success: function (dados) {
@@ -115,12 +119,13 @@
 
                          $.ajax({
                 type: 'GET',
-                url: '@Url.Action("EditarItem", "ItensVenda")',
+                url: '@Url.Action("EditarItem", "Vendas")',
                 data: { indice: indice, quantidade: qtdadeEntrada },
                 dataType: 'html',
                 success: function (data) {
 
                     $('#divItens').html(data);
+                    AtualizaValores();
                 }
             });
 
@@ -136,7 +141,7 @@
 
              $.ajax({
                  type: "GET",
-                 url: "@Url.Action("Detalhes", "ItensVenda")",
+                 url: "@Url.Action("Detalhes", "Vendas")",
                  data: { id: id },
                  dataType: "json",
                  success: function (dados) {
@@ -164,6 +169,23 @@
             return campo;
     }
 
+    function DesabilitaCreditos() {
+
+        var idCliente = $('#idCliente').val();
+
+        if (idCliente == "" || idCliente == null) {
+
+            $("#creditoParcial").prop("readonly", true);
+            $("#creditoEspecial").prop("readonly", true);
+
+        } else {
+
+            $("#creditoParcial").prop("readonly", false);
+            $("#creditoEspecial").prop("readonly", false);
+
+        }
+    }
+
     function AtualizaValores() {
 
         var desconto = $('#desconto').val();
@@ -175,8 +197,28 @@
         var recebido = $('#recebido').val();
         var troco = $('#troco').val();
 
-        if (isNaN(desconto) || isNaN(descontoPorcentagem) || isNaN(subtotal) || isNaN(creditoParcial) ||
-            isNaN(creditoEspecial) || isNaN(total) || isNaN(recebido) || isNaN(troco)) {
+        //var credEsp = $('#credEsp').val();
+        //var credParc = $('#credParc').val();
+        //var idCliente = $('#idCliente').val();
+
+        //console.log(parseFloat(credEsp));
+        //console.log(parseFloat(creditoEspecial));
+
+        //if ((idCliente != "" && idCliente != null) && ((parseFloat(credEsp) < parseFloat(creditoEspecial)) ||
+        //    (parseFloat(credParc) < parseFloat(creditoParcial)))) {
+
+        //    alert("Não é possível realizar um lançamento de desconto de créditos maior que o valor de créditos disponível para o cliente!");
+        //    $('#creditoParcial').val("0");
+        //    $('#creditoEspecial').val("0");
+        //    return;
+        //}
+        
+        if (isNaN(desconto) || isNaN(descontoPorcentagem) || isNaN(creditoParcial) ||
+            isNaN(creditoEspecial)|| isNaN(recebido) || 
+            (desconto == "") || (desconto == null) || (descontoPorcentagem == "") || (descontoPorcentagem == null) ||
+            (creditoParcial == "") || (creditoParcial == null) ||
+            (creditoEspecial == "") || (creditoEspecial == null) || 
+            (recebido == "") || (recebido == null) ) {
 
             alert("Valor inválido!");
             return;
@@ -198,23 +240,36 @@
                  },
                  dataType: "json",
                  success: function (dados) {
-                     obj = JSON.parse(dados.Resultado);
-                     PreencheValores(obj);
+                     if (dados.Resultado) {
+                         PreencheValores(dados);
+                     } else {
+                         alert("O valor final não pode ser negativo!");
+                         ZeraValores();
+                     }
+                     
                  }
             });
         }
     }
 
+    function ZeraValores() {
+
+        $('#desconto').val("0");
+        $('#descontoPorcentagem').val("0");
+        $('#creditoParcial').val("0");
+        $('#creditoEspecial').val("0");
+    }
+
     function PreencheValores(obj) {
 
-        $('#desconto').val(obj.desconto);
-        $('#descontoPorcentagem').val(obj.descontoPorcentagem);
-        $('#subtotal').val(obj.subtotal);
-        $('#creditoParcial').val(obj.creditoParcial);
-        $('#creditoEspecial').val(obj.creditoEspecial);
-        $('#total').val(obj.total);
-        $('#recebido').val(obj.recebido);
-        $('#troco').val(obj.creditoParcial);
+        $('#desconto').val((obj.Desconto).toString().replace(".", ","));
+        $('#descontoPorcentagem').val((obj.DescontoPorcentagem).toString().replace(".", ","));
+        $('#subtotal').val((obj.Subtotal).toString().replace(".", ","));
+        $('#creditoParcial').val((obj.CreditoParcial).toString().replace(".", ","));
+        $('#creditoEspecial').val((obj.CreditoEspecial).toString().replace(".", ","));
+        $('#total').val((obj.Total).toString().replace(".", ","));
+        $('#recebido').val((obj.Recebido).toString().replace(".", ","));
+        $('#troco').val((obj.Troco).toString().replace(".", ","));
     }
 
 </script>
@@ -226,7 +281,6 @@
     <div class="container" id="formulario">
 
         @Html.ValidationSummary(true, "", new { @class = "validate" })
-        @Html.HiddenFor(a => a.clienteId, new { id = "clienteId" })
         @Html.Hidden("itemId", new { id = "itemId" })
 
         <form class="col s12">
@@ -236,11 +290,11 @@
                     @Html.ValidationMessageFor(model => model.clienteId, "", new { @class = "text-danger" })
                 </div>
                 <div class="input-field col s2">
-                    @Html.Label("Crédito especial", htmlAttributes: new { @id = "lblcredEsp", @class = "validate" })
+                    <label class="active" for="credEsp">Crédito especial</label>
                     <input type="text" name="credEsp" id="credEsp" readonly>
                 </div>
                 <div class="input-field col s2">
-                    @Html.Label("Crédito parcial", htmlAttributes: new { @id = "lblcredParc", @class = "validate" })
+                    <label class="active" for="credParc">Crédito parcial</label>
                     <input type="text" name="credParc" id="credParc" readonly>
                 </div>
             </div>
@@ -253,7 +307,7 @@
             <div class="row">
                 <div id="divItens" class="input-field col s12">
                     @{
-                        Html.RenderPartial("~/Views/ItensVenda/ListarItens.cshtml", Model.itensVenda);
+                        Html.RenderPartial("~/Views/Vendas/ListarItens.cshtml", Model.itensVenda);
                     }
                 </div>
             </div>
@@ -288,8 +342,7 @@
                 <div class="input-field col s3">
                     @Html.LabelFor(model => model.subtotal, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(model => model.subtotal,new { onchange = "AtualizaValores()", @id = "subtotal", @class = "validate" } )
-                    @Html.ValidationMessageFor(model => model.subtotal, "", new { @class = "validate" })
+                    @Html.TextBoxFor(model => model.subtotal,new { onchange = "AtualizaValores()", @id = "subtotal", @class = "validate", @readonly = "readonly", Style = "color:#000000;" } )
                     @{ Html.EnableClientValidation(true); }
                 </div>
                 <div class="input-field col s3">
@@ -309,8 +362,7 @@
                 <div class="input-field col s3">
                     @Html.LabelFor(model => model.total, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(model => model.total, new { onchange = "AtualizaValores()", @id = "total", @class = "validate" } )
-                    @Html.ValidationMessageFor(model => model.total, "", new { @class = "validate" })
+                    @Html.TextBoxFor(model => model.total, new { onchange = "AtualizaValores()", @id = "total", @class = "validate", @readonly = "readonly", Style = "color:#000000;" } )
                     @{ Html.EnableClientValidation(true); }
                 </div>
             </div>
@@ -321,7 +373,7 @@
                 <div class="input-field col s3">
                     @Html.LabelFor(model => model.recebido, htmlAttributes: new { @class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(model => model.recebido,  new { @id = "recebido", @class = "validate" } )
+                    @Html.TextBoxFor(model => model.recebido,  new { onchange = "AtualizaValores()", @id = "recebido", @class = "validate" } )
                     @Html.ValidationMessageFor(model => model.recebido, "", new { @class = "validate" })
                     @{ Html.EnableClientValidation(true); }
                 </div>
@@ -333,9 +385,9 @@
                 <div class="input-field col s3">
                     @Html.LabelFor(model => model.troco, htmlAttributes: new {@class = "validate" })
                     @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(model => model.troco,  new { @id = "troco", @class = "validate" } )
-                    @Html.ValidationMessageFor(model => model.troco, "", new { @class = "validate" })
+                    @Html.TextBoxFor(model => model.troco,  new { onchange = "AtualizaValores()", @id = "troco", @class = "validate", @readonly = "readonly", Style = "color:#000000;" } )
                     @{ Html.EnableClientValidation(true); }
+                    
                 </div>
             </div>
             <div class="row">
@@ -494,9 +546,8 @@
         });
 
         window.onload = function () {
-            document.getElementById("formaPagamento").onchange = function () {
 
-            }
+            DesabilitaCreditos();
         }
 
     </script>

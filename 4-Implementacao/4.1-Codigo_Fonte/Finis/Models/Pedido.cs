@@ -52,7 +52,8 @@ namespace Finis.Models
         [StringLength(200, ErrorMessage = "A descrição é muito longa")]
         [DataType(DataType.MultilineText)]
         public string descricao { get; set; }
-        
+
+        [Display(Name = "Data de pedido")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime dataPedido { get; set; }
 

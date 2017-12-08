@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -104,22 +106,7 @@ namespace Finis.Controllers
                     .ToList());
             }
         }
-
-        // GET: Vendas/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Venda venda = db.Venda.Find(id);
-            if (venda == null)
-            {
-                return HttpNotFound();
-            }
-            return View(venda);
-        }
-
+        
         [HttpGet]
         public JsonResult CalculaValores(string desconto, string descontoPorcentagem, string subtotal, string creditoParcial,
             string creditoEspecial, string total, string recebido, string troco)
@@ -129,12 +116,12 @@ namespace Finis.Controllers
             bool resultado;
             Decimal Desconto = Decimal.Parse(desconto);
             Decimal DescontoPorcentagem = Decimal.Parse(descontoPorcentagem);
-            Decimal Subtotal = Decimal.Parse(subtotal);
+            Decimal Subtotal = 0;
             Decimal CreditoParcial = Decimal.Parse(creditoParcial);
             Decimal CreditoEspecial = Decimal.Parse(creditoEspecial);
-            Decimal Total = Decimal.Parse(total);
+            Decimal Total = 0;
             Decimal Recebido = Decimal.Parse(recebido);
-            Decimal Troco = Decimal.Parse(troco);
+            Decimal Troco = 0;
 
             if (listaItens != null)
             {
@@ -164,14 +151,14 @@ namespace Finis.Controllers
             var obj = new
             {
                 Resultado = resultado,
-                Desconto = Desconto,
-                DescontoPorcentagem = DescontoPorcentagem,
-                Subtotal = Subtotal,
-                CreditoParcial = CreditoParcial,
-                CreditoEspecial = CreditoEspecial,
-                Total = Total,
-                Recebido = Recebido,
-                Troco = Troco
+                Desconto = Desconto.ToString(),
+                DescontoPorcentagem = DescontoPorcentagem.ToString(),
+                Subtotal = Subtotal.ToString(),
+                CreditoParcial = CreditoParcial.ToString(),
+                CreditoEspecial = CreditoEspecial.ToString(),
+                Total = Total.ToString(),
+                Recebido = Recebido.ToString(),
+                Troco = Troco.ToString()
             };
 
             return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
@@ -218,14 +205,14 @@ namespace Finis.Controllers
             return Json(obj, "text/html", JsonRequestBehavior.AllowGet);
         }
 
-        private void ConfiguraNomeCliente(Venda venda)
-        {
-            if (venda.cliente == null)
-            {
-                venda.cliente = db.Cliente.Find(venda.clienteId);
-            }
-            venda.clienteNome = venda.cliente.id + " - " + venda.cliente.nome + " - " + venda.cliente.rg;
-        }
+        //private void ConfiguraNomeCliente(Venda venda)
+        //{
+        //    if (venda.cliente == null)
+        //    {
+        //        venda.cliente = db.Cliente.Find(venda.clienteId);
+        //    }
+        //    venda.clienteNome = venda.cliente.id + " - " + venda.cliente.nome + " - " + venda.cliente.rg;
+        //}
 
         // GET: Vendas/Create
         public ActionResult Create()
@@ -244,18 +231,50 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                var itensVenda = (List<ItemVenda>)Session["ListaItens"];
                 venda.ConfigurarParaSalvar();
                 db.Venda.Add(venda);
                 db.SaveChanges();
+                this.SalvarItens(venda, itensVenda);
                 return RedirectToAction("Index");
             }
             ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
-            this.ConfiguraNomeCliente(venda);
+            //this.ConfiguraNomeCliente(venda);
             return View(venda);
         }
 
+        public void SalvarItens(Venda venda, List<ItemVenda> lista)
+        {
+            foreach(ItemVenda item in lista)
+            {
+                item.vendaId = venda.id;
+                item.venda = venda;
+
+                db.ItemVenda.Add(item);
+                db.SaveChanges();
+            }
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Venda> venda = new List<Venda>();
+            venda = db.Venda.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Vendas.rpt"));
+            rd.SetDataSource(venda);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Vendas.pdf");
+        }
+
         // GET: Vendas/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -267,8 +286,15 @@ namespace Finis.Controllers
                 return HttpNotFound();
             }
             ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
-            this.ConfiguraNomeCliente(venda);
+            this.CarregaLista(venda);
             return View(venda);
+        }
+
+        public void CarregaLista(Venda venda)
+        {
+            listaItens = db.ItemVenda.Where(e => e.vendaId == venda.id).OrderBy(e => e.indice).ToList();
+            Session["ListaItens"] = listaItens;
+            venda.itensVenda = listaItens;
         }
 
         // POST: Vendas/Edit/5
@@ -280,14 +306,29 @@ namespace Finis.Controllers
         {
             if (ModelState.IsValid)
             {
+                var itensVenda = (List<ItemVenda>)Session["ListaItens"];
                 venda.ConfigurarParaSalvar();
                 db.Entry(venda).State = EntityState.Modified;
+                this.SalvarEditarItens(venda, itensVenda);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             ViewBag.Clientes = new SelectList(db.Cliente, "id", "nome", venda.clienteId);
-            this.ConfiguraNomeCliente(venda);
+            //this.ConfiguraNomeCliente(venda);
             return View(venda);
+        }
+
+        public void SalvarEditarItens(Venda venda, List<ItemVenda> lista)
+        {
+            foreach (ItemVenda item in lista)
+            {
+                item.vendaId = venda.id;
+                item.venda = venda;
+
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         // GET: Vendas/Delete/5
@@ -323,6 +364,191 @@ namespace Finis.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //------------------------------------------------------
+        private List<ItemVenda> listaItens = new List<ItemVenda>();
+
+        public ActionResult ListarItens()
+        {
+            return PartialView("ListarItens", listaItens);
+        }
+
+        public void IncializarLista()
+        {
+            List<ItemVenda> listaItens = new List<ItemVenda>();
+            Session["ListaItens"] = listaItens;
+        }
+
+        public List<ItemVenda> RecuperarLista()
+        {
+            listaItens = (List<ItemVenda>)Session["ListaItens"];
+
+            if (listaItens == null)
+            {
+                listaItens = new List<ItemVenda>();
+            }
+
+            return listaItens;
+        }
+
+        public List<ItemVenda> InsereLista(ItemVenda item)
+        {
+            listaItens = this.RecuperarLista();
+            listaItens.Add(item);
+            this.AtualizaIndiceItem(listaItens);
+            Session["ListaItens"] = listaItens;
+
+            return listaItens;
+        }
+
+        public void AtualizaIndiceItem(List<ItemVenda> lista)
+        {
+            for (int i = 0; i < lista.Count; i++)
+            {
+                lista[i].indice = i + 1;
+            }
+        }
+
+        [HttpGet]
+        public ActionResult AdicionarItem(int id)
+        {
+            var item = db.Item.Find(id);
+            ItemVenda itemVenda = new ItemVenda();
+            itemVenda.item = item;
+            itemVenda.precoTotal = itemVenda.item.precoVenda * itemVenda.quantidade;
+            this.InsereLista(itemVenda);
+
+            return PartialView("ListarItens", listaItens);
+        }
+
+        [HttpGet]
+        public ActionResult EditarItem(int indice, int quantidade)
+        {
+            listaItens = this.RecuperarLista();
+            listaItens[indice - 1].quantidade = quantidade;
+            listaItens[indice - 1].precoTotal = listaItens[indice - 1].item.precoVenda * listaItens[indice - 1].quantidade;
+            Session["ListaItens"] = listaItens;
+
+            return PartialView("ListarItens", listaItens);
+        }
+
+        [HttpGet]
+        public ActionResult RemoverItem(int indice)
+        {
+            listaItens = this.RecuperarLista();
+            listaItens.RemoveAt(indice - 1);
+            this.AtualizaIndiceItem(listaItens);
+            Session["ListaItens"] = listaItens;
+
+            return PartialView("ListarItens", listaItens);
+        }
+
+        [HttpGet]
+        public JsonResult QuantidadeMaiorQueEstoque(int id)
+        {
+            int quantidadeItem = 0;
+            bool resultado;
+
+            var item = db.Item.Find(id);
+            listaItens = this.RecuperarLista();
+
+            foreach (ItemVenda itemVenda in listaItens)
+            {
+                if (item.id == itemVenda.item.id)
+                {
+                    quantidadeItem += itemVenda.quantidade;
+                }
+            }
+
+            if (quantidadeItem >= item.quantidadeEstoque)
+            {
+                resultado = true;
+            }
+            else
+            {
+                resultado = false;
+            }
+
+            var obj = new
+            {
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult VerificaQuantidadeItem(int indice, int quantidade)
+        {
+            int quantidadeItem = 0;
+            bool resultado;
+
+            listaItens = this.RecuperarLista();
+            var item = listaItens[indice - 1].item;
+            listaItens[indice - 1].quantidade = quantidade;
+
+            foreach (ItemVenda itemVenda in listaItens)
+            {
+                if (item.id == itemVenda.item.id)
+                {
+                    quantidadeItem += itemVenda.quantidade;
+                }
+            }
+
+            if (quantidadeItem > item.quantidadeEstoque)
+            {
+                resultado = true;
+            }
+            else
+            {
+                resultado = false;
+            }
+
+            var obj = new
+            {
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Detalhes(int? id)
+        {
+            bool sucesso;
+            string resultado;
+
+            if (id == null)
+            {
+                sucesso = false;
+                resultado = "Não encontrado!";
+            }
+            else
+            {
+                Item item = db.Item.Find(id);
+                if (item == null)
+                {
+                    sucesso = false;
+                    resultado = "Não encontrado!";
+                }
+                else
+                {
+                    sucesso = true;
+                    resultado = item.Serializar();
+                }
+            }
+            var obj = new
+            {
+                Sucesso = sucesso,
+                Resultado = resultado
+            };
+            return Json(obj, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult DropboxItens(string item)
+        {
+            var listaItens = db.Item.Where(i => i.nome.Contains(item) || i.id.Equals(item)).ToList();
+
+            return Json(listaItens, "text/html", JsonRequestBehavior.AllowGet);
         }
     }
 }

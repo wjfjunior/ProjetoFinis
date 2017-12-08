@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -26,6 +28,24 @@ namespace Finis.Controllers
         public ActionResult Index(string pesquisar)
         {
             return View("Index", db.Marca.Where(c => c.nome.Contains(pesquisar)).ToList());
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Marca> marca = new List<Marca>();
+            marca = db.Marca.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Marcas.rpt"));
+            rd.SetDataSource(marca);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Marcas.pdf");
         }
 
         // GET: Marcas/Details/5

@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Finis.DAL;
 using Finis.Models;
+using CrystalDecisions.CrystalReports.Engine;
+using System.IO;
 
 namespace Finis.Controllers
 {
@@ -20,6 +22,24 @@ namespace Finis.Controllers
         public ActionResult Index()
         {
             return View(db.Estado.Include(p => p.pais).OrderBy(e => e.nome).ToList());
+        }
+
+        public ActionResult Exportar()
+        {
+            List<Estado> estado = new List<Estado>();
+            estado = db.Estado.ToList();
+
+            ReportDocument rd = new ReportDocument();
+            rd.Load(Path.Combine(Server.MapPath("~/Relatorios"), "Estados.rpt"));
+            rd.SetDataSource(estado);
+
+            Response.Buffer = false;
+            Response.ClearContent();
+            Response.ClearHeaders();
+
+            Stream stream = rd.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            stream.Seek(0, SeekOrigin.Begin);
+            return File(stream, "application/pdf", "Estados.pdf");
         }
 
         [HttpPost]

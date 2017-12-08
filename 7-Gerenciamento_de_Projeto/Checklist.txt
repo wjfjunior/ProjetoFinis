@@ -1,15 +1,7 @@
 
 ( X ) Relatórios
 (   ) Finalizar Dashboard
-(   ) Finalizar venda
-(   ) Finalizar pedidos
+( X ) Finalizar venda
+( X ) Finalizar pedidos
 (   ) Lançamento de créditos
 (   ) Melhorar o Fluxo de avaliação
-
-=> Para inserir um novo objeto inserir popup com busca
-
-Onde precisa de lista:
-
-=> Exemplares (autores)
-=> Pedidos (Exemplares)
-=> Vendas (Itens)
